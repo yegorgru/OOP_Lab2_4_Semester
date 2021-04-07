@@ -63,11 +63,11 @@ namespace Sortings{
                 [](typename std::iterator_traits<typename Container::iterator>::value_type x,
                    typename std::iterator_traits<typename Container::iterator>::value_type y) ->
                 bool { return x < y; }) override {
-            using ValueType = typename std::iterator_traits<typename Container::iterator>::value_type;
             using Iterator = typename Container::iterator;
+            using ValueType = typename std::iterator_traits<typename Container::iterator>::value_type;
             for ( Iterator i = begin+1; i < end; i++) {
-                ValueType key = *i;
                 Iterator j= i;
+                ValueType key = *i;
                 while (j > begin && cmp(key,*(j-1))) {
                     *j = *(j-1);
                     j--;
@@ -90,11 +90,11 @@ namespace Sortings{
                    typename std::iterator_traits<typename Container::iterator>::value_type y) ->
                 bool { return x < y; }) override {
             using Iterator = typename Container::iterator;
-            for (Iterator i = 0; i < end-1; i++) {
+            for (Iterator i = begin; i < end-1; i++) {
                 Iterator min = i;
                 for (Iterator j = i + 1; j < end; j++)
                 {
-                    if (cmp(*j, *i))
+                    if (cmp(*j, *min))
                     {
                         min = j;
                     }
@@ -102,6 +102,53 @@ namespace Sortings{
                 if (min != i)
                 {
                     std::swap(*i, *min);
+                }
+            }
+        }
+    };
+
+    template<
+        typename Container,
+        typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
+    class CycleSort : public Sorting<Container>{
+    public:
+        void Sort(typename Container::iterator begin, typename Container::iterator end,
+                  std::function<bool (
+                  typename std::iterator_traits<typename Container::iterator>::value_type,
+                  typename std::iterator_traits<typename Container::iterator>::value_type)> cmp =
+                [](typename std::iterator_traits<typename Container::iterator>::value_type x,
+                   typename std::iterator_traits<typename Container::iterator>::value_type y) ->
+                bool { return x < y; }) override {
+            using Iterator = typename Container::iterator;
+            using ValueType = typename std::iterator_traits<typename Container::iterator>::value_type;
+            using ValueType = typename std::iterator_traits<typename Container::iterator>::value_type;
+            for( Iterator i = begin; i < end - 1; i++ )
+            {
+                ValueType cur = *i;
+                size_t pos = i-begin;
+                for( Iterator j = i + 1; j < end; j++ ){
+                    if( cmp(*j,cur)){
+                        pos++;
+                    }
+                }
+                if( i-begin == pos ){
+                    continue;
+                }
+                while( *(begin+pos) == cur ){
+                    pos++;
+                }
+                std::swap( cur, *(begin+pos));
+                while( i-begin != pos ){
+                    pos = i-begin;
+                    for( Iterator j = i + 1; j < end; j++ ){
+                        if( cmp(*j, cur)) {
+                            pos++;
+                        }
+                    }
+                    while( *(begin+pos) == cur ){
+                        pos++;
+                    }
+                    std::swap( cur, *(begin+pos) );
                 }
             }
         }

@@ -21,6 +21,7 @@ SOURCES += \
 
 HEADERS += \
     Sorting.h \
+    doctest.h \
     mainwindow.h
 
 FORMS += \
