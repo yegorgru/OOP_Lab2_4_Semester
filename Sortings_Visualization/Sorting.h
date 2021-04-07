@@ -40,11 +40,11 @@ namespace Sortings{
                 [](typename std::iterator_traits<typename Container::iterator>::value_type x,
                    typename std::iterator_traits<typename Container::iterator>::value_type y) ->
                 bool { return x < y; }) override {
-            size_t size = end-begin;
-            for (size_t i = 0; i < size-1; i++){
-                for (size_t j = 0; j < size-i-1; j++){
-                    if (cmp(*(begin + j + 1), *(begin +j))){
-                        std::swap(*(begin+j), *(begin + j + 1));
+            using Iterator = typename Container::iterator;
+            for (Iterator i = begin; i < end-1; i++){
+                for (Iterator j = begin; j < end-i+begin-1; j++){
+                    if (cmp(*(j + 1), *j)){
+                        std::swap(*j, *(j + 1));
                     }
                 }
             }
@@ -240,6 +240,28 @@ namespace Sortings{
                     if(i==begin){
                         i = j;
                         j = j < end ? j+1 : j;
+                    }
+                }
+            }
+        }
+    };
+
+    template<
+        typename Container,
+        typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
+    class OddEvenSort : public Sorting<Container>{
+    public:
+        void Sort(typename Container::iterator begin, typename Container::iterator end,
+                  std::function<bool (
+                  typename std::iterator_traits<typename Container::iterator>::value_type,
+                  typename std::iterator_traits<typename Container::iterator>::value_type)> cmp =
+                [](typename std::iterator_traits<typename Container::iterator>::value_type x,
+                   typename std::iterator_traits<typename Container::iterator>::value_type y) ->
+                bool { return x < y; }) override {
+            for (size_t i = 0; i < end-begin; i++) {
+                for (size_t j = (i % 2) ? 0 : 1; j + 1 < end-begin; j += 2) {
+                    if (cmp(*(begin+j+1), *(begin+j))) {
+                        std::swap(*(begin+j+1), *(begin+j));
                     }
                 }
             }

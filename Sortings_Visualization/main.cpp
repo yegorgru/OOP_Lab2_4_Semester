@@ -23,6 +23,14 @@ void TestSorting(Sortings::Sorting<std::vector<int>>& sorting){
     sorting.Sort(vv.begin(), vv.end(), [](int x, int y){ return x > y;});
     std::sort(copy_vv.begin(), copy_vv.end(), [](int x, int y){ return x > y;});
     CHECK(vv == copy_vv);
+
+    /*for(auto i:v){
+        std::cout << i << std::endl;
+    }
+    std::cout << std::endl;
+    for(auto i:vv){
+        std::cout << i << std::endl;
+    }*/
 }
 
 TEST_CASE("testing sortings"){
@@ -40,6 +48,8 @@ TEST_CASE("testing sortings"){
     TestSorting(comb);
     Sortings::GnomeSort<std::vector<int>>gnome;
     TestSorting(gnome);
+    Sortings::OddEvenSort<std::vector<int>>oddEven;
+    TestSorting(oddEven);
 }
 
 int main(int argc, char *argv[])
