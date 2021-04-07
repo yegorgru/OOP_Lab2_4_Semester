@@ -76,4 +76,34 @@ namespace Sortings{
             }
         }
     };
+
+    template<
+        typename Container,
+        typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
+    class SelectionSort : public Sorting<Container>{
+    public:
+        void Sort(typename Container::iterator begin, typename Container::iterator end,
+                  std::function<bool (
+                  typename std::iterator_traits<typename Container::iterator>::value_type,
+                  typename std::iterator_traits<typename Container::iterator>::value_type)> cmp =
+                [](typename std::iterator_traits<typename Container::iterator>::value_type x,
+                   typename std::iterator_traits<typename Container::iterator>::value_type y) ->
+                bool { return x < y; }) override {
+            using Iterator = typename Container::iterator;
+            for (Iterator i = 0; i < end-1; i++) {
+                Iterator min = i;
+                for (Iterator j = i + 1; j < end; j++)
+                {
+                    if (cmp(*j, *i))
+                    {
+                        min = j;
+                    }
+                }
+                if (min != i)
+                {
+                    std::swap(*i, *min);
+                }
+            }
+        }
+    };
 }
