@@ -38,6 +38,8 @@ TEST_CASE("testing sortings"){
     TestSorting(shaker);
     Sortings::CombSort<std::vector<int>>comb;
     TestSorting(comb);
+    Sortings::GnomeSort<std::vector<int>>gnome;
+    TestSorting(gnome);
 }
 
 int main(int argc, char *argv[])

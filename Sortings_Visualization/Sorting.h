@@ -213,4 +213,36 @@ namespace Sortings{
             }
         }
     };
+
+    template<
+        typename Container,
+        typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
+    class GnomeSort : public Sorting<Container>{
+    public:
+        void Sort(typename Container::iterator begin, typename Container::iterator end,
+                  std::function<bool (
+                  typename std::iterator_traits<typename Container::iterator>::value_type,
+                  typename std::iterator_traits<typename Container::iterator>::value_type)> cmp =
+                [](typename std::iterator_traits<typename Container::iterator>::value_type x,
+                   typename std::iterator_traits<typename Container::iterator>::value_type y) ->
+                bool { return x < y; }) override {
+            using Iterator = typename Container::iterator;
+            Iterator i = begin+1;
+            Iterator j = begin+2;
+            while(i < end){
+                if(cmp(*(i-1), *i)){
+                    i = j;
+                    j = j < end ? j+1 : j;
+                }
+                else{
+                    std::swap(*(i-1), *i);
+                    i--;
+                    if(i==begin){
+                        i = j;
+                        j = j < end ? j+1 : j;
+                    }
+                }
+            }
+        }
+    };
 }
