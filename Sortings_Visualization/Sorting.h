@@ -121,7 +121,6 @@ namespace Sortings{
                 bool { return x < y; }) override {
             using Iterator = typename Container::iterator;
             using ValueType = typename std::iterator_traits<typename Container::iterator>::value_type;
-            using ValueType = typename std::iterator_traits<typename Container::iterator>::value_type;
             for( Iterator i = begin; i < end - 1; i++ )
             {
                 ValueType cur = *i;
@@ -151,6 +150,41 @@ namespace Sortings{
                     std::swap( cur, *(begin+pos) );
                 }
             }
+        }
+    };
+
+    template<
+        typename Container,
+        typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
+    class ShakerSort : public Sorting<Container>{
+    public:
+        void Sort(typename Container::iterator begin, typename Container::iterator end,
+                  std::function<bool (
+                  typename std::iterator_traits<typename Container::iterator>::value_type,
+                  typename std::iterator_traits<typename Container::iterator>::value_type)> cmp =
+                [](typename std::iterator_traits<typename Container::iterator>::value_type x,
+                   typename std::iterator_traits<typename Container::iterator>::value_type y) ->
+                bool { return x < y; }) override {
+            using Iterator = typename Container::iterator;
+            size_t border=end-begin;
+            Iterator left = begin;
+            Iterator right = end - 1;
+            do {
+                for (Iterator i = left; i < right; i++) {
+                    if (cmp(*(i+1), *i)) {
+                        std::swap(*i, *(i+1));
+                        border=i-begin;
+                    }
+                }
+                right=begin+border;
+                for (Iterator i = right; i > left; i--) {
+                    if (cmp(*i, *(i-1))) {
+                        std::swap(*i, *(i-1));
+                        border=i-begin;
+                    }
+                }
+                left=begin+border;
+            } while (left < right);
         }
     };
 }
