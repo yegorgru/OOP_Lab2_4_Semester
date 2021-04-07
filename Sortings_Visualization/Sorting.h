@@ -187,4 +187,30 @@ namespace Sortings{
             } while (left < right);
         }
     };
+
+    template<
+        typename Container,
+        typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
+    class CombSort : public Sorting<Container>{
+    public:
+        void Sort(typename Container::iterator begin, typename Container::iterator end,
+                  std::function<bool (
+                  typename std::iterator_traits<typename Container::iterator>::value_type,
+                  typename std::iterator_traits<typename Container::iterator>::value_type)> cmp =
+                [](typename std::iterator_traits<typename Container::iterator>::value_type x,
+                   typename std::iterator_traits<typename Container::iterator>::value_type y) ->
+                bool { return x < y; }) override {
+            using Iterator = typename Container::iterator;
+            const double factor = 1.2473309;
+            size_t step = end-begin;
+            while (step >= 1) {
+                for (Iterator i = begin; i + step < end; i++) {
+                    if (cmp(*(i+step),*i)) {
+                        std::swap(*i, *(i + step));
+                    }
+                }
+                step /= factor;
+            }
+        }
+    };
 }

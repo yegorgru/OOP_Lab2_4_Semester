@@ -36,6 +36,8 @@ TEST_CASE("testing sortings"){
     TestSorting(cycle);
     Sortings::ShakerSort<std::vector<int>>shaker;
     TestSorting(shaker);
+    Sortings::CombSort<std::vector<int>>comb;
+    TestSorting(comb);
 }
 
 int main(int argc, char *argv[])
