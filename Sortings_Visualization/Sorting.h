@@ -14,19 +14,6 @@ using HaveRandomAccessIterator =
     std::is_base_of<std::random_access_iterator_tag, IteratorCategoryOf<Container>>;
 
 namespace Sortings{
-
-    /*template<
-        typename Container,
-        typename std::enable_if<!HaveRandomAccessIterator<Container>::value>::type* = nullptr>
-    class Sorting{
-        //typename??
-        void Sort(Container::iterator begin, Container::iterator end) {
-            //do generic version of algorithm
-        }
-    };*/
-
-    //typename std::iterator_traits<BidirIt>::value_type
-
     template<
         typename Container,
         typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
@@ -60,6 +47,32 @@ namespace Sortings{
                         std::swap(*(begin+j), *(begin + j + 1));
                     }
                 }
+            }
+        }
+    };
+
+    template<
+        typename Container,
+        typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
+    class InsertionSort : public Sorting<Container>{
+    public:
+        void Sort(typename Container::iterator begin, typename Container::iterator end,
+                  std::function<bool (
+                  typename std::iterator_traits<typename Container::iterator>::value_type,
+                  typename std::iterator_traits<typename Container::iterator>::value_type)> cmp =
+                [](typename std::iterator_traits<typename Container::iterator>::value_type x,
+                   typename std::iterator_traits<typename Container::iterator>::value_type y) ->
+                bool { return x < y; }) override {
+            using ValueType = typename std::iterator_traits<typename Container::iterator>::value_type;
+            using Iterator = typename Container::iterator;
+            for ( Iterator i = begin+1; i < end; i++) {
+                ValueType key = *i;
+                Iterator j= i;
+                while (j > begin && cmp(key,*(j-1))) {
+                    *j = *(j-1);
+                    j--;
+                }
+                *j = key;
             }
         }
     };
