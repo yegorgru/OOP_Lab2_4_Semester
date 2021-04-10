@@ -1,3 +1,5 @@
+#pragma once
+
 #include <type_traits>
 #include <iterator>
 #include <algorithm>
@@ -14,6 +16,12 @@ using HaveRandomAccessIterator =
     std::is_base_of<std::random_access_iterator_tag, IteratorCategoryOf<Container>>;
 
 namespace Sortings{
+    enum class Operation{
+        COMPARISON = 0,
+        ACCESS,
+        CHANGE
+    };
+
     template<
         typename Container,
         typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
@@ -25,7 +33,8 @@ namespace Sortings{
                      typename std::iterator_traits<typename Container::iterator>::value_type)> cmp =
                 [](typename std::iterator_traits<typename Container::iterator>::value_type x,
                    typename std::iterator_traits<typename Container::iterator>::value_type y) ->
-                bool { return x < y; }) = 0;
+                bool { return x < y; },
+                std::function <void(Operation, size_t)> visualize = nullptr) = 0;
     };
 
     template<
@@ -39,7 +48,8 @@ namespace Sortings{
                   typename std::iterator_traits<typename Container::iterator>::value_type)> cmp =
                 [](typename std::iterator_traits<typename Container::iterator>::value_type x,
                    typename std::iterator_traits<typename Container::iterator>::value_type y) ->
-                bool { return x < y; }) override {
+                bool { return x < y; },
+                  std::function <void(Operation, size_t)> visualize = nullptr) override {
             using Iterator = typename Container::iterator;
             for (Iterator i = begin; i < end-1; i++){
                 for (Iterator j = begin; j < end-i+begin-1; j++){
@@ -62,7 +72,8 @@ namespace Sortings{
                   typename std::iterator_traits<typename Container::iterator>::value_type)> cmp =
                 [](typename std::iterator_traits<typename Container::iterator>::value_type x,
                    typename std::iterator_traits<typename Container::iterator>::value_type y) ->
-                bool { return x < y; }) override {
+                bool { return x < y; },
+                  std::function <void(Operation, size_t)> visualize = nullptr) override {
             using Iterator = typename Container::iterator;
             using ValueType = typename std::iterator_traits<typename Container::iterator>::value_type;
             for ( Iterator i = begin+1; i < end; i++) {
@@ -88,7 +99,8 @@ namespace Sortings{
                   typename std::iterator_traits<typename Container::iterator>::value_type)> cmp =
                 [](typename std::iterator_traits<typename Container::iterator>::value_type x,
                    typename std::iterator_traits<typename Container::iterator>::value_type y) ->
-                bool { return x < y; }) override {
+                bool { return x < y; },
+                  std::function <void(Operation, size_t)> visualize = nullptr) override {
             using Iterator = typename Container::iterator;
             for (Iterator i = begin; i < end-1; i++) {
                 Iterator min = i;
@@ -118,7 +130,8 @@ namespace Sortings{
                   typename std::iterator_traits<typename Container::iterator>::value_type)> cmp =
                 [](typename std::iterator_traits<typename Container::iterator>::value_type x,
                    typename std::iterator_traits<typename Container::iterator>::value_type y) ->
-                bool { return x < y; }) override {
+                bool { return x < y; },
+                  std::function <void(Operation, size_t)> visualize = nullptr) override {
             using Iterator = typename Container::iterator;
             using ValueType = typename std::iterator_traits<typename Container::iterator>::value_type;
             for( Iterator i = begin; i < end - 1; i++ )
@@ -164,7 +177,8 @@ namespace Sortings{
                   typename std::iterator_traits<typename Container::iterator>::value_type)> cmp =
                 [](typename std::iterator_traits<typename Container::iterator>::value_type x,
                    typename std::iterator_traits<typename Container::iterator>::value_type y) ->
-                bool { return x < y; }) override {
+                bool { return x < y; },
+                  std::function <void(Operation, size_t)> visualize = nullptr) override {
             using Iterator = typename Container::iterator;
             size_t border=end-begin;
             Iterator left = begin;
@@ -199,7 +213,8 @@ namespace Sortings{
                   typename std::iterator_traits<typename Container::iterator>::value_type)> cmp =
                 [](typename std::iterator_traits<typename Container::iterator>::value_type x,
                    typename std::iterator_traits<typename Container::iterator>::value_type y) ->
-                bool { return x < y; }) override {
+                bool { return x < y; },
+                  std::function <void(Operation, size_t)> visualize = nullptr) override {
             using Iterator = typename Container::iterator;
             const double factor = 1.2473309;
             size_t step = end-begin;
@@ -225,7 +240,8 @@ namespace Sortings{
                   typename std::iterator_traits<typename Container::iterator>::value_type)> cmp =
                 [](typename std::iterator_traits<typename Container::iterator>::value_type x,
                    typename std::iterator_traits<typename Container::iterator>::value_type y) ->
-                bool { return x < y; }) override {
+                bool { return x < y; },
+                  std::function <void(Operation, size_t)> visualize = nullptr) override {
             using Iterator = typename Container::iterator;
             Iterator i = begin+1;
             Iterator j = begin+2;
@@ -257,7 +273,8 @@ namespace Sortings{
                   typename std::iterator_traits<typename Container::iterator>::value_type)> cmp =
                 [](typename std::iterator_traits<typename Container::iterator>::value_type x,
                    typename std::iterator_traits<typename Container::iterator>::value_type y) ->
-                bool { return x < y; }) override {
+                bool { return x < y; },
+                  std::function <void(Operation, size_t)> visualize = nullptr) override {
             for (size_t i = 0; i < end-begin; i++) {
                 for (size_t j = (i % 2) ? 0 : 1; j + 1 < end-begin; j += 2) {
                     if (cmp(*(begin+j+1), *(begin+j))) {

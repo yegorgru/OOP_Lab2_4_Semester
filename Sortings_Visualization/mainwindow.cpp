@@ -2,7 +2,6 @@
 #include "ui_mainwindow.h"
 
 #include <QDesktopWidget>
-#include <QGraphicsRectItem>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -10,10 +9,10 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    scene=new QGraphicsScene;
+    m_Scene=new QGraphicsScene;
 
     auto size = ui->graphicsView->size();
-    scene->setSceneRect ( 0,0,size.width()*0.95, size.height()*0.95);
+    m_Scene->setSceneRect ( 0,0,size.width()*0.95, size.height()*0.95);
 
     /*QGraphicsRectItem* item1 = new QGraphicsRectItem(0,0,100,100);
     QGraphicsRectItem* item2 = new QGraphicsRectItem(0,100,100,100);
@@ -30,7 +29,7 @@ MainWindow::MainWindow(QWidget *parent)
     scene->addItem(item3);
     scene->addItem(item4);*/
 
-    ui->graphicsView->setScene(scene);
+    ui->graphicsView->setScene(m_Scene);
 }
 
 MainWindow::~MainWindow()
@@ -43,6 +42,10 @@ void MainWindow::resizeEvent(QResizeEvent *event)
     //MainWindow::resizeEvent(event);
 
     auto size = ui->graphicsView->size();
-    scene->setSceneRect ( 0,0,size.width()*0.95, size.height()*0.95);
+    m_Scene->setSceneRect ( 0,0,size.width()*0.95, size.height()*0.95);
 }
 
+void MainWindow::on_SortButton_clicked()
+{
+    //m_Sorting->Sort(m_Numbers.begin(), m_Numbers.end());
+}
