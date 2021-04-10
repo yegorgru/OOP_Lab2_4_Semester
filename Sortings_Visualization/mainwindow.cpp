@@ -47,5 +47,6 @@ void MainWindow::resizeEvent(QResizeEvent *event)
 
 void MainWindow::on_SortButton_clicked()
 {
-    //m_Sorting->Sort(m_Numbers.begin(), m_Numbers.end());
+    m_Sorting->Sort(m_Numbers.begin(), m_Numbers.end(), [](int x, int y) { return x < y; },
+    [this](Sortings::Operation operation, size_t pos){this->VisualizeChanges(operation, pos);});
 }

@@ -53,8 +53,12 @@ namespace Sortings{
             using Iterator = typename Container::iterator;
             for (Iterator i = begin; i < end-1; i++){
                 for (Iterator j = begin; j < end-i+begin-1; j++){
+                    visualize(Operation::COMPARISON, j-begin);
+                    visualize(Operation::COMPARISON, j+1-begin);
                     if (cmp(*(j + 1), *j)){
                         std::swap(*j, *(j + 1));
+                        visualize(Operation::CHANGE, j-begin);
+                        visualize(Operation::CHANGE, j+1-begin);
                     }
                 }
             }
