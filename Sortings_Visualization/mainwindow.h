@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QMainWindow>
+#include <QGraphicsScene>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -14,6 +15,11 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+protected:
+    void resizeEvent(QResizeEvent* event);
+
 private:
     Ui::MainWindow *ui;
+
+    QGraphicsScene *scene;
 };

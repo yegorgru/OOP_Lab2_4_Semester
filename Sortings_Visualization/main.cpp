@@ -54,12 +54,12 @@ TEST_CASE("testing sortings"){
 
 int main(int argc, char *argv[])
 {
-    //QApplication a(argc, argv);
-    //MainWindow w;
-
     doctest::Context context;
     int res = context.run();
 
-    //w.show();
-    //return a.exec();
+    QApplication a(argc, argv);
+    MainWindow w;
+    w.setWindowState(Qt::WindowMaximized);
+    w.show();
+    return a.exec();
 }
