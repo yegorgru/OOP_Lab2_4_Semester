@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include <QDesktopWidget>
+//#include <QDesktopWidget>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -10,12 +10,17 @@ MainWindow::MainWindow(QWidget *parent)
       m_Sorting(new Sortings::BubbleSort<std::vector<int>,Visualizer>(&m_Visualizer)),
       mersenne(rd())
 {
+
     ui->setupUi(this);
 
     ui->graphicsView->scale(1, -1);
 
     m_MaxValue = 1000;
     m_Visualizer.SetMaxValue(1000);
+
+    keyCtrl_D = new QShortcut(this);
+    keyCtrl_D->setKey(Qt::CTRL + Qt::Key_D);
+    connect(keyCtrl_D, SIGNAL(activated()), this, SLOT(on_SortButton_clicked()));
 }
 
 MainWindow::~MainWindow()
@@ -42,6 +47,14 @@ void MainWindow::showEvent(QShowEvent *event){
 
 void MainWindow::on_SortButton_clicked()
 {
+    QString str = ui->comboBox->currentText();
+    if (str == "BubbleSort") {
+         m_Sorting = new Sortings::BubbleSort<std::vector<int>,Visualizer>(&m_Visualizer);
+    }
+    else if (str == "InsertionSort") {
+        m_Sorting = new Sortings::InsertionSort<std::vector<int>,Visualizer>(&m_Visualizer);
+    }
+
     m_Sorting->Sort(m_Numbers.begin(), m_Numbers.end(), [](int x, int y) { return x < y; });
     m_Visualizer.Play();
 }
