@@ -5,6 +5,7 @@
 #include <QGraphicsRectItem>
 
 #include <vector>
+#include <random>
 
 #include "Sorting.h"
 
@@ -22,6 +23,7 @@ public:
 
 protected:
     void resizeEvent(QResizeEvent* event);
+    void showEvent(QShowEvent* event);
 
 private slots:
 
@@ -29,17 +31,8 @@ private slots:
     void on_SortButton_clicked();
 
 private:
-    void VisualizeChanges(Sortings::Operation operation, size_t pos){
-        if(operation == Sortings::Operation::ACCESS){
-
-        }
-        else if(operation == Sortings::Operation::COMPARISON){
-
-        }
-        else if(operation == Sortings::Operation::CHANGE){
-
-        }
-    }
+    void VisualizeChanges(Sortings::Operation operation, size_t pos);
+    void FormRandomScene(int numberOfRectangles);
 
     Ui::MainWindow *ui;
 
@@ -49,4 +42,8 @@ private:
 
     std::vector<QGraphicsRectItem*>m_Rects;
     std::vector<int>m_Numbers;
+    int m_MaxValue;
+
+    std::random_device rd;
+    std::mt19937 mersenne;
 };

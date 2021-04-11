@@ -5,31 +5,15 @@
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
+    , ui(new Ui::MainWindow),
+      mersenne(rd())
 {
     ui->setupUi(this);
 
     m_Scene=new QGraphicsScene;
+    ui->graphicsView->scale(1, -1);
 
-    auto size = ui->graphicsView->size();
-    m_Scene->setSceneRect ( 0,0,size.width()*0.95, size.height()*0.95);
-
-    /*QGraphicsRectItem* item1 = new QGraphicsRectItem(0,0,100,100);
-    QGraphicsRectItem* item2 = new QGraphicsRectItem(0,100,100,100);
-    QGraphicsRectItem* item3 = new QGraphicsRectItem(100,0,100,100);
-    QGraphicsRectItem* item4 = new QGraphicsRectItem(100,100,100,100);
-
-    item1->setBrush(QBrush(Qt::red));
-    item2->setBrush(QBrush(Qt::green));
-    item3->setBrush(QBrush(Qt::blue));
-    item4->setBrush(QBrush(Qt::yellow));
-
-    scene->addItem(item1);
-    scene->addItem(item2);
-    scene->addItem(item3);
-    scene->addItem(item4);*/
-
-    ui->graphicsView->setScene(m_Scene);
+    m_MaxValue = 1000;
 }
 
 MainWindow::~MainWindow()
@@ -43,10 +27,58 @@ void MainWindow::resizeEvent(QResizeEvent *event)
 
     auto size = ui->graphicsView->size();
     m_Scene->setSceneRect ( 0,0,size.width()*0.95, size.height()*0.95);
+
+    double width = double(m_Scene->width())/m_Rects.size();
+    for(size_t i=0;i<m_Rects.size();i++){
+        double height = double(m_Numbers[i])/m_MaxValue*m_Scene->height()*0.9;
+        m_Rects[i]->setRect(i*width,m_Scene->height()*0.05, width, height);
+    }
+    m_Scene->update();
+}
+
+void MainWindow::showEvent(QShowEvent *event){
+    auto size = ui->graphicsView->size();
+    m_Scene->setSceneRect( 0,0,size.width()*0.95, size.height()*0.95);
+
+    FormRandomScene(100);
+
+    ui->graphicsView->setScene(m_Scene);
 }
 
 void MainWindow::on_SortButton_clicked()
 {
     m_Sorting->Sort(m_Numbers.begin(), m_Numbers.end(), [](int x, int y) { return x < y; },
     [this](Sortings::Operation operation, size_t pos){this->VisualizeChanges(operation, pos);});
+}
+
+void MainWindow::VisualizeChanges(Sortings::Operation operation, size_t pos){
+    if(operation == Sortings::Operation::ACCESS){
+
+    }
+    else if(operation == Sortings::Operation::COMPARISON){
+
+    }
+    else if(operation == Sortings::Operation::CHANGE){
+
+    }
+}
+
+void MainWindow::FormRandomScene(int numberOfRectangles){
+    for(auto i:m_Rects){
+        delete i;
+    }
+    double width = double(m_Scene->width())/numberOfRectangles;
+    m_Rects.clear();
+    m_Numbers.clear();
+    for(int i=0;i<numberOfRectangles;i++){
+        m_Numbers.push_back(mersenne()%m_MaxValue);
+        double height = double(m_Numbers.back())/m_MaxValue*m_Scene->height()*0.9;
+        QGraphicsRectItem* cur =
+                new QGraphicsRectItem(m_Rects.size()*width,m_Scene->height()*0.95,
+                                      width, height);
+        cur->setBrush(QBrush(Qt::red));
+        m_Rects.push_back(cur);
+        m_Scene->addItem(m_Rects.back());
+    }
+    m_Scene->update();
 }
