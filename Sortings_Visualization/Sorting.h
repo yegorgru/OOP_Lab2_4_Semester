@@ -22,11 +22,20 @@ namespace Sortings{
         CHANGE
     };
 
+    class DefaultVisualizer{
+    public:
+        void Visualize(Operation operation, size_t position);
+    };
+
     template<
         typename Container,
+        typename Visualizer = DefaultVisualizer,
         typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
     class Sorting{
     public:
+        Sorting(Visualizer* visualizer = nullptr):
+            visualizer(visualizer){}
+
         virtual void Sort(typename Container::iterator begin, typename Container::iterator end,
                      std::function<bool (
                      typename std::iterator_traits<typename Container::iterator>::value_type,
@@ -34,14 +43,21 @@ namespace Sortings{
                 [](typename std::iterator_traits<typename Container::iterator>::value_type x,
                    typename std::iterator_traits<typename Container::iterator>::value_type y) ->
                 bool { return x < y; },
-                std::function <void(Operation, size_t)> visualize = nullptr) = 0;
+                          std::function <void(Operation, size_t)> visualize =
+                [](Operation operation, size_t pos) -> void{}) = 0;
+    private:
+        Visualizer* visualizer;
     };
 
     template<
         typename Container,
+        typename Visualizer = DefaultVisualizer,
         typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
     class BubbleSort : public Sorting<Container>{
     public:
+        BubbleSort(Visualizer* visualizer = nullptr):
+            Sorting<Container, Visualizer>(visualizer){}
+
         void Sort(typename Container::iterator begin, typename Container::iterator end,
                   std::function<bool (
                   typename std::iterator_traits<typename Container::iterator>::value_type,
@@ -49,7 +65,8 @@ namespace Sortings{
                 [](typename std::iterator_traits<typename Container::iterator>::value_type x,
                    typename std::iterator_traits<typename Container::iterator>::value_type y) ->
                 bool { return x < y; },
-                  std::function <void(Operation, size_t)> visualize = nullptr) override {
+                  std::function <void(Operation, size_t)> visualize =
+        [](Operation operation, size_t pos) -> void{}) override {
             using Iterator = typename Container::iterator;
             for (Iterator i = begin; i < end-1; i++){
                 for (Iterator j = begin; j < end-i+begin-1; j++){
@@ -67,9 +84,13 @@ namespace Sortings{
 
     template<
         typename Container,
+        typename Visualizer = DefaultVisualizer,
         typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
     class InsertionSort : public Sorting<Container>{
     public:
+        InsertionSort(Visualizer* visualizer = nullptr):
+            Sorting<Container, Visualizer>(visualizer){}
+
         void Sort(typename Container::iterator begin, typename Container::iterator end,
                   std::function<bool (
                   typename std::iterator_traits<typename Container::iterator>::value_type,
@@ -77,7 +98,8 @@ namespace Sortings{
                 [](typename std::iterator_traits<typename Container::iterator>::value_type x,
                    typename std::iterator_traits<typename Container::iterator>::value_type y) ->
                 bool { return x < y; },
-                  std::function <void(Operation, size_t)> visualize = nullptr) override {
+                  std::function <void(Operation, size_t)> visualize =
+        [](Operation operation, size_t pos) -> void{}) override {
             using Iterator = typename Container::iterator;
             using ValueType = typename std::iterator_traits<typename Container::iterator>::value_type;
             for ( Iterator i = begin+1; i < end; i++) {
@@ -92,7 +114,7 @@ namespace Sortings{
         }
     };
 
-    template<
+    /*template<
         typename Container,
         typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
     class SelectionSort : public Sorting<Container>{
@@ -287,5 +309,5 @@ namespace Sortings{
                 }
             }
         }
-    };
+    };*/
 }

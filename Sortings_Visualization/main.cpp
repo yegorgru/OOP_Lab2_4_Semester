@@ -38,7 +38,7 @@ TEST_CASE("testing sortings"){
     TestSorting(bubble);
     Sortings::InsertionSort<std::vector<int>>insertion;
     TestSorting(insertion);
-    Sortings::SelectionSort<std::vector<int>>selection;
+    /*Sortings::SelectionSort<std::vector<int>>selection;
     TestSorting(selection);
     Sortings::CycleSort<std::vector<int>>cycle;
     TestSorting(cycle);
@@ -49,7 +49,7 @@ TEST_CASE("testing sortings"){
     Sortings::GnomeSort<std::vector<int>>gnome;
     TestSorting(gnome);
     Sortings::OddEvenSort<std::vector<int>>oddEven;
-    TestSorting(oddEven);
+    TestSorting(oddEven);*/
 }
 
 int main(int argc, char *argv[])
