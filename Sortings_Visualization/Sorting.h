@@ -19,7 +19,8 @@ namespace Sortings{
     enum class Operation{
         COMPARISON = 0,
         ACCESS,
-        CHANGE
+        CHANGE,
+        END
     };
 
     class DefaultVisualizer{

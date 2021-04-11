@@ -20,6 +20,7 @@ public:
     void UpdateScene(QSize size);
 
     void SetMaxValue(int value);
+
     void Play();
     void PlayItem();
 
@@ -37,6 +38,7 @@ private:
     std::vector<QGraphicsRectItem*>m_Rects;
     std::vector<int>&m_Data;
     int m_MaxValue;
+    double m_Width;
     size_t m_CurPos;
 
     std::vector<VisualizeItem>m_VisualizeQueue;

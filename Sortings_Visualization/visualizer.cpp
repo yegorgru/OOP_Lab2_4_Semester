@@ -29,6 +29,7 @@ void Visualizer::Visualize(Sortings::Operation operation, size_t first, size_t s
 }
 
 void Visualizer::Play(){
+    m_VisualizeQueue.push_back({Sortings::Operation::END, 0, 0, 0, 0});
     m_CurPos = 0;
     timeLine = new QTimeLine(m_VisualizeQueue.size()*100);
     timeLine->setFrameRange(0, m_VisualizeQueue.size());
@@ -38,7 +39,16 @@ void Visualizer::Play(){
 }
 
 void Visualizer::PlayItem(){
-    std::cout<<m_CurPos<<std::endl;
+    if(m_CurPos > 0){
+        auto& lastItem = m_VisualizeQueue[m_CurPos-1];
+        if(lastItem.operation == Sortings::Operation::ACCESS){
+            m_Rects[lastItem.first]->setBrush(QBrush(Qt::red));
+        }
+        else {
+            m_Rects[lastItem.first]->setBrush(QBrush(Qt::red));
+            m_Rects[lastItem.second]->setBrush(QBrush(Qt::red));
+        }
+    }
     auto& item = m_VisualizeQueue[m_CurPos++];
     if(item.operation == Sortings::Operation::COMPARISON){
         m_Rects[item.first]->setBrush(QBrush(Qt::blue));
@@ -49,14 +59,12 @@ void Visualizer::PlayItem(){
     }
     else if(item.operation == Sortings::Operation::CHANGE){
         m_Rects[item.first]->setBrush(QBrush(Qt::green));
-        auto firstRect = m_Rects[item.first]->boundingRect();
-        m_Rects[item.first]->setRect(firstRect.x(), 10,
-                                     firstRect.width(), item.firstHeight);
+        m_Rects[item.first]->setRect(item.first*m_Width, 10,
+                                     m_Width, item.firstHeight);
 
         m_Rects[item.second]->setBrush(QBrush(Qt::green));
-        auto secondRect = m_Rects[item.second]->boundingRect();
-        m_Rects[item.second]->setRect(secondRect.x(), 10,
-                                     secondRect.width(), item.secondHeight);
+        m_Rects[item.second]->setRect(item.second*m_Width, 10,
+                                     m_Width, item.secondHeight);
     }
     m_Scene->update();
 }
@@ -69,13 +77,13 @@ void Visualizer::FormScene(QSize size){
     for(auto i:m_Rects){
         delete i;
     }
-    double width = double(m_Scene->width())/m_Data.size();
+    m_Width = double(m_Scene->width())/m_Data.size();
     m_Rects.clear();
     for(size_t i=0;i<m_Data.size();i++){
         double height = double(m_Data[i])/m_MaxValue*m_Scene->height()*0.9;
         QGraphicsRectItem* cur =
-                new QGraphicsRectItem(m_Rects.size()*width,10,
-                                      width, height);
+                new QGraphicsRectItem(m_Rects.size()*m_Width,10,
+                                      m_Width, height);
         cur->setBrush(QBrush(Qt::red));
         m_Rects.push_back(cur);
         m_Scene->addItem(m_Rects.back());
@@ -86,10 +94,10 @@ void Visualizer::FormScene(QSize size){
 void Visualizer::UpdateScene(QSize size){
     m_Scene->setSceneRect ( 0,0,size.width()*0.95, size.height()*0.95);
 
-    double width = double(m_Scene->width())/m_Rects.size();
+    m_Width = double(m_Scene->width())/m_Rects.size();
     for(size_t i=0;i<m_Rects.size();i++){
         double height = double(m_Data[i])/m_MaxValue*m_Scene->height()*0.9;
-        m_Rects[i]->setRect(i*width,10, width, height);
+        m_Rects[i]->setRect(i*m_Width,10, m_Width, height);
     }
     m_Scene->update();
 }
