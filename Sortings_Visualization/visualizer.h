@@ -2,27 +2,43 @@
 
 #include <QGraphicsScene>
 #include <QGraphicsRectItem>
+#include <QObject>
+#include <QTimeLine>
 
 #include <vector>
 
 #include "Sorting.h"
 
-class Visualizer
+class Visualizer : public QObject
 {
 public:
     Visualizer(std::vector<int>& data);
 
-    void Visualize(Sortings::Operation operation, size_t position);
+    void Visualize(Sortings::Operation operation, size_t first, size_t second = INT_MAX);
 
     void FormScene(QSize size);
     void UpdateScene(QSize size);
 
     void SetMaxValue(int value);
+    void Play();
+    void PlayItem();
 
     QGraphicsScene* GetScene();
 private:
+    struct VisualizeItem{
+        Sortings::Operation operation;
+        size_t first;
+        size_t second;
+        double firstHeight;
+        double secondHeight;
+    };
+
     QGraphicsScene* m_Scene;
     std::vector<QGraphicsRectItem*>m_Rects;
     std::vector<int>&m_Data;
     int m_MaxValue;
+    size_t m_CurPos;
+
+    std::vector<VisualizeItem>m_VisualizeQueue;
+    QTimeLine *timeLine;
 };

@@ -24,7 +24,7 @@ namespace Sortings{
 
     class DefaultVisualizer{
     public:
-        void Visualize(Operation operation, size_t position);
+        void Visualize(Operation operation, size_t first, size_t second = INT_MAX);
     };
 
     template<
@@ -66,12 +66,10 @@ namespace Sortings{
             using Iterator = typename Container::iterator;
             for (Iterator i = begin; i < end-1; i++){
                 for (Iterator j = begin; j < end-i+begin-1; j++){
-                    if(this->visualizer) this->visualizer->Visualize(Operation::COMPARISON, j-begin);
-                    if(this->visualizer) this->visualizer->Visualize(Operation::COMPARISON, j+1-begin);
+                    if(this->visualizer) this->visualizer->Visualize(Operation::COMPARISON, j-begin, j+1-begin);
                     if (cmp(*(j + 1), *j)){
                         std::swap(*j, *(j + 1));
-                        if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, j-begin);
-                        if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, j+1-begin);
+                        if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, j-begin, j+1-begin);
                     }
                 }
             }
