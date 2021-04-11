@@ -26,22 +26,18 @@ protected:
     void showEvent(QShowEvent* event);
 
 private slots:
-
     void on_SortButton_clicked();
 
 private:
-    void VisualizeChanges(Sortings::Operation operation, size_t pos);
-    void FormRandomScene(int numberOfRectangles);
+    void RandomizeNumbers(int numberOfRectangles);
 
     Ui::MainWindow *ui;
 
-    QGraphicsScene *m_Scene;
+    std::vector<int>m_Numbers;
 
     Visualizer m_Visualizer;
 
     Sortings::Sorting<std::vector<int>,Visualizer>* m_Sorting;
-
-    std::vector<int>m_Numbers;
     int m_MaxValue;
 
     std::random_device rd;

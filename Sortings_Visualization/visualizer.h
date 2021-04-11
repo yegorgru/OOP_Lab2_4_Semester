@@ -10,12 +10,19 @@
 class Visualizer
 {
 public:
-    Visualizer(QGraphicsScene& scene);
+    Visualizer(std::vector<int>& data);
 
     void Visualize(Sortings::Operation operation, size_t position);
 
-    std::vector<QGraphicsRectItem*>& GetRects();
+    void FormScene(QSize size);
+    void UpdateScene(QSize size);
+
+    void SetMaxValue(int value);
+
+    QGraphicsScene* GetScene();
 private:
-    QGraphicsScene& m_Scene;
+    QGraphicsScene* m_Scene;
     std::vector<QGraphicsRectItem*>m_Rects;
+    std::vector<int>&m_Data;
+    int m_MaxValue;
 };
