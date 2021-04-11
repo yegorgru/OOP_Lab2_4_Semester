@@ -1,5 +1,7 @@
 #include "visualizer.h"
 
+#include <iostream>
+
 Visualizer::Visualizer(std::vector<int>& data):
     m_Scene(new QGraphicsScene),
     m_Data(data){}
@@ -15,7 +17,7 @@ void Visualizer::Visualize(Sortings::Operation operation, size_t position){
         m_Rects[position]->setBrush(QBrush(Qt::green));
         double height = double(m_Data[position])/m_MaxValue*m_Scene->height()*0.9;
         auto rect = m_Rects[position]->boundingRect();
-        m_Rects[position]->setRect(rect.x(), rect.y(), rect.width(), height);
+        m_Rects[position]->setRect(rect.x(), 10, rect.width(), height);
     }
     m_Scene->update();
 }
@@ -33,7 +35,7 @@ void Visualizer::FormScene(QSize size){
     for(size_t i=0;i<m_Data.size();i++){
         double height = double(m_Data[i])/m_MaxValue*m_Scene->height()*0.9;
         QGraphicsRectItem* cur =
-                new QGraphicsRectItem(m_Rects.size()*width,m_Scene->height()*0.95,
+                new QGraphicsRectItem(m_Rects.size()*width,10,
                                       width, height);
         cur->setBrush(QBrush(Qt::red));
         m_Rects.push_back(cur);
@@ -48,7 +50,7 @@ void Visualizer::UpdateScene(QSize size){
     double width = double(m_Scene->width())/m_Rects.size();
     for(size_t i=0;i<m_Rects.size();i++){
         double height = double(m_Data[i])/m_MaxValue*m_Scene->height()*0.9;
-        m_Rects[i]->setRect(i*width,m_Scene->height()*0.05, width, height);
+        m_Rects[i]->setRect(i*width,10, width, height);
     }
     m_Scene->update();
 }

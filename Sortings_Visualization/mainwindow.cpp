@@ -32,7 +32,7 @@ void MainWindow::resizeEvent(QResizeEvent *event)
 }
 
 void MainWindow::showEvent(QShowEvent *event){
-    RandomizeNumbers(100);
+    RandomizeNumbers(10);
 
     auto size = ui->graphicsView->size();
     m_Visualizer.FormScene(size);
