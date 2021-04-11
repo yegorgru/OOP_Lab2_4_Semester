@@ -6,9 +6,10 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow),
-      mersenne(rd()),
       m_Scene(new QGraphicsScene),
-      m_Visualizer(*m_Scene)
+      m_Visualizer(*m_Scene),
+      m_Sorting(new Sortings::BubbleSort<std::vector<int>,Visualizer>(&m_Visualizer)),
+      mersenne(rd())
 {
     ui->setupUi(this);
 
@@ -48,8 +49,7 @@ void MainWindow::showEvent(QShowEvent *event){
 
 void MainWindow::on_SortButton_clicked()
 {
-    m_Sorting->Sort(m_Numbers.begin(), m_Numbers.end(), [](int x, int y) { return x < y; },
-    [this](Sortings::Operation operation, size_t pos){this->VisualizeChanges(operation, pos);});
+    m_Sorting->Sort(m_Numbers.begin(), m_Numbers.end(), [](int x, int y) { return x < y; });
 }
 
 void MainWindow::VisualizeChanges(Sortings::Operation operation, size_t pos){

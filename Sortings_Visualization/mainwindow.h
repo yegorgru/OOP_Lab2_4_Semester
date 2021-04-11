@@ -37,13 +37,13 @@ private:
 
     QGraphicsScene *m_Scene;
 
-    Sortings::Sorting<std::vector<int>>* m_Sorting;
+    Visualizer m_Visualizer;
+
+    Sortings::Sorting<std::vector<int>,Visualizer>* m_Sorting;
 
     std::vector<int>m_Numbers;
     int m_MaxValue;
 
     std::random_device rd;
     std::mt19937 mersenne;
-
-    Visualizer m_Visualizer;
 };

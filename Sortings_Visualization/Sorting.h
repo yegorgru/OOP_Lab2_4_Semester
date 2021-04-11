@@ -42,10 +42,8 @@ namespace Sortings{
                      typename std::iterator_traits<typename Container::iterator>::value_type)> cmp =
                 [](typename std::iterator_traits<typename Container::iterator>::value_type x,
                    typename std::iterator_traits<typename Container::iterator>::value_type y) ->
-                bool { return x < y; },
-                          std::function <void(Operation, size_t)> visualize =
-                [](Operation operation, size_t pos) -> void{}) = 0;
-    private:
+                bool { return x < y; }) = 0;
+    protected:
         Visualizer* visualizer;
     };
 
@@ -53,7 +51,7 @@ namespace Sortings{
         typename Container,
         typename Visualizer = DefaultVisualizer,
         typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
-    class BubbleSort : public Sorting<Container>{
+    class BubbleSort : public Sorting<Container, Visualizer>{
     public:
         BubbleSort(Visualizer* visualizer = nullptr):
             Sorting<Container, Visualizer>(visualizer){}
@@ -64,18 +62,16 @@ namespace Sortings{
                   typename std::iterator_traits<typename Container::iterator>::value_type)> cmp =
                 [](typename std::iterator_traits<typename Container::iterator>::value_type x,
                    typename std::iterator_traits<typename Container::iterator>::value_type y) ->
-                bool { return x < y; },
-                  std::function <void(Operation, size_t)> visualize =
-        [](Operation operation, size_t pos) -> void{}) override {
+                bool { return x < y; }) override {
             using Iterator = typename Container::iterator;
             for (Iterator i = begin; i < end-1; i++){
                 for (Iterator j = begin; j < end-i+begin-1; j++){
-                    visualize(Operation::COMPARISON, j-begin);
-                    visualize(Operation::COMPARISON, j+1-begin);
+                    if(this->visualizer) this->visualizer->Visualize(Operation::COMPARISON, j-begin);
+                    if(this->visualizer) this->visualizer->Visualize(Operation::COMPARISON, j+1-begin);
                     if (cmp(*(j + 1), *j)){
                         std::swap(*j, *(j + 1));
-                        visualize(Operation::CHANGE, j-begin);
-                        visualize(Operation::CHANGE, j+1-begin);
+                        if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, j-begin);
+                        if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, j+1-begin);
                     }
                 }
             }
@@ -86,7 +82,7 @@ namespace Sortings{
         typename Container,
         typename Visualizer = DefaultVisualizer,
         typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
-    class InsertionSort : public Sorting<Container>{
+    class InsertionSort : public Sorting<Container, Visualizer>{
     public:
         InsertionSort(Visualizer* visualizer = nullptr):
             Sorting<Container, Visualizer>(visualizer){}
@@ -97,9 +93,7 @@ namespace Sortings{
                   typename std::iterator_traits<typename Container::iterator>::value_type)> cmp =
                 [](typename std::iterator_traits<typename Container::iterator>::value_type x,
                    typename std::iterator_traits<typename Container::iterator>::value_type y) ->
-                bool { return x < y; },
-                  std::function <void(Operation, size_t)> visualize =
-        [](Operation operation, size_t pos) -> void{}) override {
+                bool { return x < y; }) override {
             using Iterator = typename Container::iterator;
             using ValueType = typename std::iterator_traits<typename Container::iterator>::value_type;
             for ( Iterator i = begin+1; i < end; i++) {
