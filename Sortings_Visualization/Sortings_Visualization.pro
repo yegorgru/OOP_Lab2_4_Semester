@@ -17,12 +17,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    visualizer.cpp
 
 HEADERS += \
     Sorting.h \
     doctest.h \
-    mainwindow.h
+    mainwindow.h \
+    visualizer.h
 
 FORMS += \
     mainwindow.ui

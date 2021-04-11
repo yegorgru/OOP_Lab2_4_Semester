@@ -2,12 +2,12 @@
 
 #include <QMainWindow>
 #include <QGraphicsScene>
-#include <QGraphicsRectItem>
 
 #include <vector>
 #include <random>
 
 #include "Sorting.h"
+#include "visualizer.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -27,7 +27,6 @@ protected:
 
 private slots:
 
-
     void on_SortButton_clicked();
 
 private:
@@ -40,10 +39,11 @@ private:
 
     Sortings::Sorting<std::vector<int>>* m_Sorting;
 
-    std::vector<QGraphicsRectItem*>m_Rects;
     std::vector<int>m_Numbers;
     int m_MaxValue;
 
     std::random_device rd;
     std::mt19937 mersenne;
+
+    Visualizer m_Visualizer;
 };
