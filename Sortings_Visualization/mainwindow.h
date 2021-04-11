@@ -2,6 +2,7 @@
 
 #include <QMainWindow>
 #include <QGraphicsScene>
+#include <QShortcut>
 
 #include <vector>
 #include <random>
@@ -32,6 +33,7 @@ private:
     void RandomizeNumbers(int numberOfRectangles);
 
     Ui::MainWindow *ui;
+    QShortcut  *keyCtrl_D;
 
     std::vector<int>m_Numbers;
 
