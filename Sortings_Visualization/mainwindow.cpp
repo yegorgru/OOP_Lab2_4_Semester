@@ -66,3 +66,15 @@ void MainWindow::RandomizeNumbers(int size){
         m_Numbers.push_back(mersenne()%m_MaxValue);
     }
 }
+
+void MainWindow::on_comboBox_currentTextChanged(const QString &sorting)
+{
+    /*if(m_Sorting) {
+        delete m_Sorting;
+    }
+    switch(sorting){
+    case QString("BubbleSort") :{
+
+    }
+    }*/
+}

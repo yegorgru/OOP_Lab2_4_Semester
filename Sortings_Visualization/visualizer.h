@@ -14,7 +14,7 @@ class Visualizer : public QObject
 public:
     Visualizer(std::vector<int>& data);
 
-    void Visualize(Sortings::Operation operation, size_t first, size_t second = INT_MAX);
+    bool Visualize(Sortings::Operation operation, size_t first, size_t second = INT_MAX);
 
     void FormScene(QSize size);
     void UpdateScene(QSize size);

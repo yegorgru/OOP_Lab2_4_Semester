@@ -9,10 +9,11 @@ Visualizer::Visualizer(std::vector<int>& data):
     m_Data(data),
     m_CurPos(0){}
 
-void Visualizer::Visualize(Sortings::Operation operation, size_t first, size_t second){
+bool Visualizer::Visualize(Sortings::Operation operation, size_t first, size_t second){
     m_VisualizeQueue.push_back({operation, first, second,
                                 double(m_Data[first])/m_MaxValue*m_Scene->height()*0.9,
                                 double(m_Data[second])/m_MaxValue*m_Scene->height()*0.9});
+    return true;
     /*if(operation == Sortings::Operation::COMPARISON){
         m_Rects[position]->setBrush(QBrush(Qt::blue));
     }
@@ -32,7 +33,7 @@ void Visualizer::Play(){
     m_VisualizeQueue.push_back({Sortings::Operation::END, 0, 0, 0, 0});
     m_CurPos = 0;
     timeLine = new QTimeLine(m_VisualizeQueue.size()*500);
-    timeLine->setCurveShape(QTimeLine::LinearCurve);
+    timeLine->setEasingCurve(QEasingCurve::Linear);
     timeLine->setFrameRange(0, m_VisualizeQueue.size());
     connect (timeLine,&QTimeLine::frameChanged,this,&Visualizer::PlayItem);
     //connect(timeLine, SIGNAL(frameChanged(int)), this, SLOT(&Visualizer::PlayItem));

@@ -29,6 +29,8 @@ protected:
 private slots:
     void on_SortButton_clicked();
 
+    void on_comboBox_currentTextChanged(const QString &arg1);
+
 private:
     void RandomizeNumbers(int numberOfRectangles);
 

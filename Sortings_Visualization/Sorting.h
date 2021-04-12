@@ -5,8 +5,6 @@
 #include <algorithm>
 #include <functional>
 
-//https://www.javaer101.com/en/article/86426841.html
-
 template<typename Container>
 using IteratorCategoryOf =
     typename std::iterator_traits<typename Container::iterator>::iterator_category;
@@ -25,7 +23,7 @@ namespace Sortings{
 
     class DefaultVisualizer{
     public:
-        void Visualize(Operation operation, size_t first, size_t second = INT_MAX);
+        bool Visualize(Operation operation, size_t first, size_t second = INT_MAX);
     };
 
     template<
@@ -98,11 +96,15 @@ namespace Sortings{
             for ( Iterator i = begin+1; i < end; i++) {
                 Iterator j= i;
                 ValueType key = *i;
-                while (j > begin && cmp(key,*(j-1))) {
+                while (j > begin && (this->visualizer != nullptr ?
+                       this->visualizer->Visualize(Operation::COMPARISON, i-begin, j-1-begin) :true) &&
+                       cmp(key,*(j-1))) {
                     *j = *(j-1);
+                    if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, j-begin, j-1-begin);
                     j--;
                 }
                 *j = key;
+                if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, i-begin, j-begin);
             }
         }
     };
