@@ -16,9 +16,6 @@ MainWindow::MainWindow(QWidget *parent)
     ui->graphicsView->scale(1, -1);
     ui->graphicsView->setScene(m_Visualizer.GetScene());
 
-    m_MaxValue = ui->verticalSlider->value();
-    m_Visualizer.SetMaxValue( ui->verticalSlider->value());
-
     keyCtrl_D = new QShortcut(this);
     keyCtrl_D->setKey(Qt::CTRL + Qt::Key_D);
     connect(keyCtrl_D, SIGNAL(activated()), this, SLOT(on_SortButton_clicked()));
@@ -72,6 +69,9 @@ void MainWindow::RandomizeNumbers(int size){
 
 void MainWindow::on_InitiateButton_clicked()
 {
+    m_MaxValue = ui->verticalSlider->value();
+    m_Visualizer.SetMaxValue( ui->verticalSlider->value());
+
     RandomizeNumbers(ui->spinBox->value());
 
     auto size = ui->graphicsView->size();
