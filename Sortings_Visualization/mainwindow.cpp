@@ -37,11 +37,6 @@ void MainWindow::resizeEvent(QResizeEvent *event)
 }
 
 void MainWindow::showEvent(QShowEvent *event){
-    RandomizeNumbers(10);
-
-    auto size = ui->graphicsView->size();
-    m_Visualizer.FormScene(size);
-
     ui->graphicsView->setScene(m_Visualizer.GetScene());
 }
 
@@ -76,6 +71,10 @@ void MainWindow::RandomizeNumbers(int size){
     }
 }
 
-void MainWindow::on_MixButton_clicked() {
-      RandomizeNumbers(10);
+void MainWindow::on_InitiateButton_clicked()
+{
+    RandomizeNumbers(10);
+
+    auto size = ui->graphicsView->size();
+    m_Visualizer.FormScene(size);
 }

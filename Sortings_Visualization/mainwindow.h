@@ -28,7 +28,8 @@ protected:
 
 private slots:
     void on_SortButton_clicked();
-    void on_MixButton_clicked();
+
+    void on_InitiateButton_clicked();
 
 private:
     void RandomizeNumbers(int numberOfRectangles);
