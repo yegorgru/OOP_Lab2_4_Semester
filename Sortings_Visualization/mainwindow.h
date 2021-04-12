@@ -29,8 +29,6 @@ protected:
 private slots:
     void on_SortButton_clicked();
 
-    void on_comboBox_currentTextChanged(const QString &arg1);
-
 private:
     void RandomizeNumbers(int numberOfRectangles);
 
@@ -42,6 +40,8 @@ private:
     Visualizer m_Visualizer;
 
     Sortings::Sorting<std::vector<int>,Visualizer>* m_Sorting;
+    Sortings::SortingName m_CurrentSortingName;
+
     int m_MaxValue;
 
     std::random_device rd;

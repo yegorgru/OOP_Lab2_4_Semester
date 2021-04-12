@@ -47,12 +47,22 @@ void MainWindow::showEvent(QShowEvent *event){
 
 void MainWindow::on_SortButton_clicked()
 {
-    QString str = ui->comboBox->currentText();
-    if (str == "BubbleSort") {
-         m_Sorting = new Sortings::BubbleSort<std::vector<int>,Visualizer>(&m_Visualizer);
-    }
-    else if (str == "InsertionSort") {
-        m_Sorting = new Sortings::InsertionSort<std::vector<int>,Visualizer>(&m_Visualizer);
+    Sortings::SortingName name =
+            static_cast<Sortings::SortingName>(ui->SortingNameComboBox->currentIndex());
+    if(m_CurrentSortingName != name){
+        if(m_Sorting){
+            delete m_Sorting;
+        }
+        switch(name){
+        case Sortings::SortingName::BUBBLESORT:{
+            m_Sorting = new Sortings::BubbleSort<std::vector<int>,Visualizer>(&m_Visualizer);
+            break;
+        }
+        case Sortings::SortingName::INSERTIONSORT:{
+            m_Sorting = new Sortings::InsertionSort<std::vector<int>,Visualizer>(&m_Visualizer);
+            break;
+        }
+        }
     }
 
     m_Visualizer.ClearQueue();
@@ -65,16 +75,4 @@ void MainWindow::RandomizeNumbers(int size){
     for(int i=0;i<size;i++){
         m_Numbers.push_back(mersenne()%m_MaxValue);
     }
-}
-
-void MainWindow::on_comboBox_currentTextChanged(const QString &sorting)
-{
-    /*if(m_Sorting) {
-        delete m_Sorting;
-    }
-    switch(sorting){
-    case QString("BubbleSort") :{
-
-    }
-    }*/
 }

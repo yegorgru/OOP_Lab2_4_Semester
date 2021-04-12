@@ -21,6 +21,12 @@ namespace Sortings{
         END
     };
 
+    enum class SortingName{
+        BUBBLESORT,
+        INSERTIONSORT,
+        SELECTIONSORT
+    };
+
     class DefaultVisualizer{
     public:
         bool Visualize(Operation operation, size_t first, size_t second = INT_MAX);
