@@ -24,6 +24,8 @@ public:
     void Play();
     void PlayItem();
 
+    void ClearQueue();
+
     QGraphicsScene* GetScene();
 private:
     struct VisualizeItem{

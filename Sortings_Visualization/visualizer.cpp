@@ -31,7 +31,8 @@ void Visualizer::Visualize(Sortings::Operation operation, size_t first, size_t s
 void Visualizer::Play(){
     m_VisualizeQueue.push_back({Sortings::Operation::END, 0, 0, 0, 0});
     m_CurPos = 0;
-    timeLine = new QTimeLine(m_VisualizeQueue.size()*100);
+    timeLine = new QTimeLine(m_VisualizeQueue.size()*500);
+    timeLine->setCurveShape(QTimeLine::LinearCurve);
     timeLine->setFrameRange(0, m_VisualizeQueue.size());
     connect (timeLine,&QTimeLine::frameChanged,this,&Visualizer::PlayItem);
     //connect(timeLine, SIGNAL(frameChanged(int)), this, SLOT(&Visualizer::PlayItem));
@@ -67,6 +68,10 @@ void Visualizer::PlayItem(){
                                      m_Width, item.secondHeight);
     }
     m_Scene->update();
+}
+
+void Visualizer::ClearQueue(){
+    m_VisualizeQueue.clear();
 }
 
 QGraphicsScene* Visualizer::GetScene(){

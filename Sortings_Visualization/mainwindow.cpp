@@ -55,6 +55,7 @@ void MainWindow::on_SortButton_clicked()
         m_Sorting = new Sortings::InsertionSort<std::vector<int>,Visualizer>(&m_Visualizer);
     }
 
+    m_Visualizer.ClearQueue();
     m_Sorting->Sort(m_Numbers.begin(), m_Numbers.end(), [](int x, int y) { return x < y; });
     m_Visualizer.Play();
 }
