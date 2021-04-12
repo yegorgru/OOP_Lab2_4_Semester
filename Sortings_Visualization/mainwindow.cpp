@@ -14,6 +14,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     ui->graphicsView->scale(1, -1);
+    ui->graphicsView->setScene(m_Visualizer.GetScene());
 
     m_MaxValue = 1000;
     m_Visualizer.SetMaxValue(1000);
@@ -30,14 +31,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
-    //MainWindow::resizeEvent(event);
-
     auto size = ui->graphicsView->size();
     m_Visualizer.UpdateScene(size);
-}
-
-void MainWindow::showEvent(QShowEvent *event){
-    ui->graphicsView->setScene(m_Visualizer.GetScene());
 }
 
 void MainWindow::on_SortButton_clicked() {
