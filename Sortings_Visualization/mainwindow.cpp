@@ -45,8 +45,7 @@ void MainWindow::showEvent(QShowEvent *event){
     ui->graphicsView->setScene(m_Visualizer.GetScene());
 }
 
-void MainWindow::on_SortButton_clicked()
-{
+void MainWindow::on_SortButton_clicked() {
     Sortings::SortingName name =
             static_cast<Sortings::SortingName>(ui->SortingNameComboBox->currentIndex());
     if(m_CurrentSortingName != name){
@@ -75,4 +74,8 @@ void MainWindow::RandomizeNumbers(int size){
     for(int i=0;i<size;i++){
         m_Numbers.push_back(mersenne()%m_MaxValue);
     }
+}
+
+void MainWindow::on_MixButton_clicked() {
+      RandomizeNumbers(10);
 }
