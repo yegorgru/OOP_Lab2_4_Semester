@@ -29,10 +29,10 @@ bool Visualizer::Visualize(Sortings::Operation operation, size_t first, size_t s
     m_Scene->update();*/
 }
 
-void Visualizer::Play(){
+void Visualizer::Play(int speedOfVisualization){
     m_VisualizeQueue.push_back({Sortings::Operation::END, 0, 0, 0, 0});
     m_CurPos = 0;
-    m_TimeLine = new QTimeLine(m_VisualizeQueue.size()*500);
+    m_TimeLine = new QTimeLine(m_VisualizeQueue.size()*speedOfVisualization);
     m_TimeLine->setEasingCurve(QEasingCurve::Linear);
     m_TimeLine->setFrameRange(0, m_VisualizeQueue.size());
     connect (m_TimeLine,&QTimeLine::frameChanged,this,&Visualizer::PlayItem);

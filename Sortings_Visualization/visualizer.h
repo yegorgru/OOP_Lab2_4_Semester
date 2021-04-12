@@ -21,7 +21,7 @@ public:
 
     void SetMaxValue(int value);
 
-    void Play();
+    void Play(int speedOfVisualization);
     void PlayItem();
 
     void ClearQueue();

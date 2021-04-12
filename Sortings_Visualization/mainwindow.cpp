@@ -58,7 +58,7 @@ void MainWindow::on_SortButton_clicked() {
     m_Sorting->Sort(m_Numbers.begin(), m_Numbers.end(), [](int x, int y) { return x < y; });
 
     ui->groupBox->setEnabled(false);
-    m_Visualizer.Play();
+    m_Visualizer.Play(ui->Slider->value());
     connect(m_Visualizer.GetTimeLine(), &QTimeLine::finished, this, [this] { this->ui->groupBox->setEnabled(true); });
 
 }
@@ -72,7 +72,7 @@ void MainWindow::RandomizeNumbers(int size){
 
 void MainWindow::on_InitiateButton_clicked()
 {
-    RandomizeNumbers(10);
+    RandomizeNumbers(ui->spinBox->value());
 
     auto size = ui->graphicsView->size();
     m_Visualizer.FormScene(size);
