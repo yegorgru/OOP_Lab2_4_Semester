@@ -25,7 +25,7 @@
       </property>
       <property name="maximumSize">
        <size>
-        <width>400</width>
+        <width>16777215</width>
         <height>16777215</height>
        </size>
       </property>
@@ -37,7 +37,7 @@
         <widget class="QSpinBox" name="spinBox">
          <property name="maximumSize">
           <size>
-           <width>50</width>
+           <width>16777215</width>
            <height>16777215</height>
           </size>
          </property>
@@ -59,7 +59,7 @@
          </property>
          <property name="maximumSize">
           <size>
-           <width>300</width>
+           <width>16777215</width>
            <height>16777215</height>
           </size>
          </property>
@@ -103,7 +103,7 @@
         <widget class="QPushButton" name="InitiateButton">
          <property name="maximumSize">
           <size>
-           <width>300</width>
+           <width>16777215</width>
            <height>16777215</height>
           </size>
          </property>
@@ -122,7 +122,7 @@
          </property>
          <property name="maximumSize">
           <size>
-           <width>300</width>
+           <width>16777215</width>
            <height>16777215</height>
           </size>
          </property>
@@ -152,7 +152,7 @@
         <widget class="QPushButton" name="SortButton">
          <property name="maximumSize">
           <size>
-           <width>300</width>
+           <width>16777215</width>
            <height>16777215</height>
           </size>
          </property>
