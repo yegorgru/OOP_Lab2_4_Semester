@@ -56,7 +56,11 @@ void MainWindow::on_SortButton_clicked() {
 
     m_Visualizer.ClearQueue();
     m_Sorting->Sort(m_Numbers.begin(), m_Numbers.end(), [](int x, int y) { return x < y; });
+
+    ui->groupBox->setEnabled(false);
     m_Visualizer.Play();
+    connect(m_Visualizer.GetTimeLine(), &QTimeLine::finished, this, [this] { this->ui->groupBox->setEnabled(true); });
+
 }
 
 void MainWindow::RandomizeNumbers(int size){

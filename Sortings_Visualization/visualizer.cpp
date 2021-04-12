@@ -32,12 +32,12 @@ bool Visualizer::Visualize(Sortings::Operation operation, size_t first, size_t s
 void Visualizer::Play(){
     m_VisualizeQueue.push_back({Sortings::Operation::END, 0, 0, 0, 0});
     m_CurPos = 0;
-    timeLine = new QTimeLine(m_VisualizeQueue.size()*500);
-    timeLine->setEasingCurve(QEasingCurve::Linear);
-    timeLine->setFrameRange(0, m_VisualizeQueue.size());
-    connect (timeLine,&QTimeLine::frameChanged,this,&Visualizer::PlayItem);
+    m_TimeLine = new QTimeLine(m_VisualizeQueue.size()*500);
+    m_TimeLine->setEasingCurve(QEasingCurve::Linear);
+    m_TimeLine->setFrameRange(0, m_VisualizeQueue.size());
+    connect (m_TimeLine,&QTimeLine::frameChanged,this,&Visualizer::PlayItem);
     //connect(timeLine, SIGNAL(frameChanged(int)), this, SLOT(&Visualizer::PlayItem));
-    timeLine->start();
+    m_TimeLine->start();
 }
 
 void Visualizer::PlayItem(){
@@ -77,6 +77,10 @@ void Visualizer::ClearQueue(){
 
 QGraphicsScene* Visualizer::GetScene(){
     return m_Scene;
+}
+
+QTimeLine* Visualizer::GetTimeLine(){
+    return m_TimeLine;
 }
 
 void Visualizer::FormScene(QSize size){

@@ -27,6 +27,7 @@ public:
     void ClearQueue();
 
     QGraphicsScene* GetScene();
+    QTimeLine* GetTimeLine();
 private:
     struct VisualizeItem{
         Sortings::Operation operation;
@@ -44,5 +45,5 @@ private:
     size_t m_CurPos;
 
     std::vector<VisualizeItem>m_VisualizeQueue;
-    QTimeLine *timeLine;
+    QTimeLine *m_TimeLine;
 };

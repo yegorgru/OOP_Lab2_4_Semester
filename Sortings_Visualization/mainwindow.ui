@@ -15,53 +15,55 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="2" column="0">
-     <widget class="QComboBox" name="SortingNameComboBox">
-      <item>
-       <property name="text">
-        <string>BubbleSort</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>InsertionSort</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>SelectionSort</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>CycleSort</string>
-       </property>
-      </item>
-     </widget>
-    </item>
-    <item row="0" column="1" rowspan="4">
-     <widget class="QGraphicsView" name="graphicsView"/>
-    </item>
     <item row="3" column="0">
-     <widget class="QPushButton" name="SortButton">
-      <property name="text">
-       <string>Sort</string>
+     <widget class="QGroupBox" name="groupBox">
+      <property name="title">
+       <string>GroupBox</string>
       </property>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QPushButton" name="InitiateButton">
+         <property name="text">
+          <string>Initiate</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="SortingNameComboBox">
+         <item>
+          <property name="text">
+           <string>BubbleSort</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>InsertionSort</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>SelectionSort</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>CycleSort</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="SortButton">
+         <property name="text">
+          <string>Sort</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </item>
-    <item row="0" column="0">
-     <widget class="QLabel" name="label">
-      <property name="text">
-       <string>TextLabel                                                                         </string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="0">
-     <widget class="QPushButton" name="InitiateButton">
-      <property name="text">
-       <string>Initiate</string>
-      </property>
-     </widget>
+    <item row="0" column="1" rowspan="4" colspan="2">
+     <widget class="QGraphicsView" name="graphicsView"/>
     </item>
    </layout>
   </widget>
