@@ -13,10 +13,18 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="autoFillBackground">
+   <bool>false</bool>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">
+
+background: qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.5, fx:0.5, fy:0.5, stop:0 rgba(255, 235, 235, 206), stop:0.35 rgba(255, 188, 188, 80), stop:0.4 rgba(255, 162, 162, 80), stop:0.425 rgba(255, 132, 132, 156), stop:0.44 rgba(252, 128, 128, 80), stop:1 rgba(255, 255, 255, 0))</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="3" column="2">
-     <spacer name="horizontalSpacer_2">
+    <item row="4" column="2">
+     <spacer name="horizontalSpacer_3">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
@@ -28,7 +36,7 @@
       </property>
      </spacer>
     </item>
-    <item row="2" column="0">
+    <item row="3" column="1">
      <widget class="QGroupBox" name="groupBox">
       <property name="minimumSize">
        <size>
@@ -42,12 +50,25 @@
         <height>16777215</height>
        </size>
       </property>
+      <property name="styleSheet">
+       <string notr="true">background: rgb(34,193,195);
+background: linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(149,45,253,0.38728995015975143) 100%);</string>
+      </property>
       <property name="title">
-       <string>GroupBox</string>
+       <string/>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
         <widget class="QLabel" name="label_3">
+         <property name="maximumSize">
+          <size>
+           <width>130</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(255, 255, 255);</string>
+         </property>
          <property name="text">
           <string>Amount of rectangles</string>
          </property>
@@ -61,6 +82,9 @@
            <height>16777215</height>
           </size>
          </property>
+         <property name="styleSheet">
+          <string notr="true">background: rgb(255, 255, 255)</string>
+         </property>
          <property name="minimum">
           <number>1</number>
          </property>
@@ -73,15 +97,24 @@
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="label">
-         <property name="maximumSize">
-          <size>
-           <width>110</width>
-           <height>30</height>
-          </size>
+        <widget class="QSlider" name="verticalSlider">
+         <property name="layoutDirection">
+          <enum>Qt::LeftToRight</enum>
          </property>
-         <property name="text">
-          <string>Visualization Delay</string>
+         <property name="minimum">
+          <number>100</number>
+         </property>
+         <property name="maximum">
+          <number>1000</number>
+         </property>
+         <property name="singleStep">
+          <number>10</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="tickInterval">
+          <number>10</number>
          </property>
         </widget>
        </item>
@@ -99,8 +132,12 @@
            <height>16777215</height>
           </size>
          </property>
+         <property name="styleSheet">
+          <string notr="true">
+</string>
+         </property>
          <property name="minimum">
-          <number>60</number>
+          <number>100</number>
          </property>
          <property name="maximum">
           <number>1000</number>
@@ -122,6 +159,22 @@
          </property>
          <property name="tickInterval">
           <number>100</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label">
+         <property name="maximumSize">
+          <size>
+           <width>110</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(255, 255, 255);</string>
+         </property>
+         <property name="text">
+          <string>Visualization Delay</string>
          </property>
         </widget>
        </item>
@@ -190,8 +243,8 @@
       </layout>
      </widget>
     </item>
-    <item row="3" column="3">
-     <spacer name="horizontalSpacer">
+    <item row="4" column="3">
+     <spacer name="horizontalSpacer_2">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
@@ -203,7 +256,7 @@
       </property>
      </spacer>
     </item>
-    <item row="1" column="0">
+    <item row="1" column="1">
      <spacer name="verticalSpacer">
       <property name="orientation">
        <enum>Qt::Vertical</enum>
@@ -216,8 +269,8 @@
       </property>
      </spacer>
     </item>
-    <item row="3" column="1">
-     <spacer name="horizontalSpacer_3">
+    <item row="4" column="4">
+     <spacer name="horizontalSpacer">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
@@ -229,8 +282,12 @@
       </property>
      </spacer>
     </item>
-    <item row="0" column="1" rowspan="3" colspan="4">
-     <widget class="QGraphicsView" name="graphicsView"/>
+    <item row="0" column="2" rowspan="4" colspan="4">
+     <widget class="QGraphicsView" name="graphicsView">
+      <property name="styleSheet">
+       <string notr="true">background: rgb(255, 255, 255)</string>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>

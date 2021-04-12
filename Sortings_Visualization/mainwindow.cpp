@@ -16,8 +16,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->graphicsView->scale(1, -1);
     ui->graphicsView->setScene(m_Visualizer.GetScene());
 
-    m_MaxValue = 1000;
-    m_Visualizer.SetMaxValue(1000);
+    m_MaxValue = ui->verticalSlider->value();
+    m_Visualizer.SetMaxValue( ui->verticalSlider->value());
 
     keyCtrl_D = new QShortcut(this);
     keyCtrl_D->setKey(Qt::CTRL + Qt::Key_D);
