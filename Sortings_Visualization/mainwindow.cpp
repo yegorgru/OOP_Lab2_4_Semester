@@ -15,6 +15,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->graphicsView->scale(1, -1);
     ui->graphicsView->setScene(m_Visualizer.GetScene());
+    ui->SortButton->setEnabled(false);
 
     keyCtrl_D = new QShortcut(this);
     keyCtrl_D->setKey(Qt::CTRL + Qt::Key_D);
@@ -100,4 +101,6 @@ void MainWindow::on_InitiateButton_clicked()
 
     auto size = ui->graphicsView->size();
     m_Visualizer.FormScene(size);
+
+    ui->SortButton->setEnabled(true);
 }
