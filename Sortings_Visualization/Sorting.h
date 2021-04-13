@@ -28,7 +28,8 @@ namespace Sortings{
         CYCLESORT,
         SHAKERSORT,
         COMBSORT,
-        GNOMESORT
+        GNOMESORT,
+        ODDEVENSORT
     };
 
     class DefaultVisualizer{
@@ -332,26 +333,31 @@ namespace Sortings{
         }
     };
 
-    /*template<
+    template<
         typename Container,
+        typename Visualizer = DefaultVisualizer,
         typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
-    class OddEvenSort : public Sorting<Container>{
+    class OddEvenSort : public Sorting<Container, Visualizer>{
     public:
+        OddEvenSort(Visualizer* visualizer = nullptr):
+            Sorting<Container, Visualizer>(visualizer){}
+
         void Sort(typename Container::iterator begin, typename Container::iterator end,
                   std::function<bool (
                   typename std::iterator_traits<typename Container::iterator>::value_type,
                   typename std::iterator_traits<typename Container::iterator>::value_type)> cmp =
                 [](typename std::iterator_traits<typename Container::iterator>::value_type x,
                    typename std::iterator_traits<typename Container::iterator>::value_type y) ->
-                bool { return x < y; },
-                  std::function <void(Operation, size_t)> visualize = nullptr) override {
+                bool { return x < y; }) override {
             for (size_t i = 0; i < end-begin; i++) {
                 for (size_t j = (i % 2) ? 0 : 1; j + 1 < end-begin; j += 2) {
+                    if(this->visualizer) this->visualizer->Visualize(Operation::COMPARISON, j+1, j);
                     if (cmp(*(begin+j+1), *(begin+j))) {
                         std::swap(*(begin+j+1), *(begin+j));
+                        if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, j+1, j);
                     }
                 }
             }
         }
-    };*/
+    };
 }
