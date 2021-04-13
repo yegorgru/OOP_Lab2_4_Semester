@@ -60,6 +60,10 @@ void MainWindow::on_SortButton_clicked() {
             m_Sorting = new Sortings::ShakerSort<std::vector<int>,Visualizer>(&m_Visualizer);
             break;
         }
+        case Sortings::SortingName::COMBSORT:{
+            m_Sorting = new Sortings::CombSort<std::vector<int>,Visualizer>(&m_Visualizer);
+            break;
+        }
         }
         m_CurrentSortingName = name;
     }

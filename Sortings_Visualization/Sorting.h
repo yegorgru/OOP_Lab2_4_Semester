@@ -26,7 +26,8 @@ namespace Sortings{
         INSERTIONSORT,
         SELECTIONSORT,
         CYCLESORT,
-        SHAKERSORT
+        SHAKERSORT,
+        COMBSORT
     };
 
     class DefaultVisualizer{
@@ -260,26 +261,31 @@ namespace Sortings{
         }
     };
 
-    /*template<
+    template<
         typename Container,
+        typename Visualizer = DefaultVisualizer,
         typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
-    class CombSort : public Sorting<Container>{
+    class CombSort : public Sorting<Container, Visualizer>{
     public:
+        CombSort(Visualizer* visualizer = nullptr):
+            Sorting<Container, Visualizer>(visualizer){}
+
         void Sort(typename Container::iterator begin, typename Container::iterator end,
                   std::function<bool (
                   typename std::iterator_traits<typename Container::iterator>::value_type,
                   typename std::iterator_traits<typename Container::iterator>::value_type)> cmp =
                 [](typename std::iterator_traits<typename Container::iterator>::value_type x,
                    typename std::iterator_traits<typename Container::iterator>::value_type y) ->
-                bool { return x < y; },
-                  std::function <void(Operation, size_t)> visualize = nullptr) override {
+                bool { return x < y; }) override {
             using Iterator = typename Container::iterator;
             const double factor = 1.2473309;
             size_t step = end-begin;
             while (step >= 1) {
                 for (Iterator i = begin; i + step < end; i++) {
+                    if(this->visualizer) this->visualizer->Visualize(Operation::COMPARISON, i+step-begin, i-begin);
                     if (cmp(*(i+step),*i)) {
                         std::swap(*i, *(i + step));
+                        if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, i-begin, i+step-begin);
                     }
                 }
                 step /= factor;
@@ -287,7 +293,7 @@ namespace Sortings{
         }
     };
 
-    template<
+    /*template<
         typename Container,
         typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
     class GnomeSort : public Sorting<Container>{
