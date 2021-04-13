@@ -89,7 +89,7 @@ background: linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(149,45,253,0.38728
           <number>2</number>
          </property>
          <property name="maximum">
-          <number>200</number>
+          <number>100</number>
          </property>
          <property name="value">
           <number>100</number>
@@ -109,6 +109,9 @@ background: linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(149,45,253,0.38728
          </property>
          <property name="singleStep">
           <number>10</number>
+         </property>
+         <property name="value">
+          <number>1000</number>
          </property>
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -139,7 +142,7 @@ background: linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(149,45,253,0.38728
           <number>100</number>
          </property>
          <property name="maximum">
-          <number>1000</number>
+          <number>10000</number>
          </property>
          <property name="singleStep">
           <number>10</number>
@@ -148,7 +151,7 @@ background: linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(149,45,253,0.38728
           <number>10</number>
          </property>
          <property name="value">
-          <number>100</number>
+          <number>500</number>
          </property>
          <property name="orientation">
           <enum>Qt::Horizontal</enum>

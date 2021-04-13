@@ -1,9 +1,9 @@
 #pragma once
 
 #include <QGraphicsScene>
-#include <QGraphicsRectItem>
 #include <QObject>
-#include <QTimeLine>
+#include <QGraphicsRectItem>
+#include <QTimer>
 
 #include <vector>
 
@@ -11,6 +11,8 @@
 
 class Visualizer : public QObject
 {
+    Q_OBJECT
+
 public:
     Visualizer(std::vector<int>& data);
 
@@ -27,7 +29,10 @@ public:
     void ClearQueue();
 
     QGraphicsScene* GetScene();
-    QTimeLine* GetTimeLine();
+    QTimer* GetTimer();
+
+signals:
+    void Sorted();
 private:
     struct VisualizeItem{
         Sortings::Operation operation;
@@ -45,5 +50,5 @@ private:
     size_t m_CurPos;
 
     std::vector<VisualizeItem>m_VisualizeQueue;
-    QTimeLine *m_TimeLine;
+    QTimer *m_Timer;
 };

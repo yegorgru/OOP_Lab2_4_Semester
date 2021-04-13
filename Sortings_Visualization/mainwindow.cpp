@@ -48,7 +48,12 @@ void MainWindow::on_SortButton_clicked() {
             m_Sorting = new Sortings::InsertionSort<std::vector<int>,Visualizer>(&m_Visualizer);
             break;
         }
+        case Sortings::SortingName::SELECTIONSORT:{
+            m_Sorting = new Sortings::SelectionSort<std::vector<int>,Visualizer>(&m_Visualizer);
+            break;
         }
+        }
+        m_CurrentSortingName = name;
     }
 
     m_Visualizer.ClearQueue();
@@ -56,8 +61,7 @@ void MainWindow::on_SortButton_clicked() {
 
     ui->groupBox->setEnabled(false);
     m_Visualizer.Play(ui->Slider->value());
-    connect(m_Visualizer.GetTimeLine(), &QTimeLine::finished, this, [this] { this->ui->groupBox->setEnabled(true); });
-
+    connect(&m_Visualizer, &Visualizer::Sorted, this, [this] { this->ui->groupBox->setEnabled(true); });
 }
 
 void MainWindow::RandomizeNumbers(int size){
