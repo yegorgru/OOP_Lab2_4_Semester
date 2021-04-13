@@ -139,17 +139,21 @@ namespace Sortings{
                 Iterator min = i;
                 for (Iterator j = i + 1; j < end; j++)
                 {
-                    if(this->visualizer) this->visualizer->Visualize(Operation::COMPARISON, j-begin);
+                    if(this->visualizer) this->visualizer->Visualize(Operation::COMPARISON, j-begin, min-begin);
                     if (cmp(*j, *min))
                     {
                         min = j;
-                        if(this->visualizer) this->visualizer->Visualize(Operation::ACCESS, j-begin);
+                        if(this->visualizer){
+                            this->visualizer->Visualize(Operation::ACCESS, j-begin);
+                            this->visualizer->Visualize(Operation::CHANGE, min-begin);
+                        }
                     }
                 }
+                if(this->visualizer) this->visualizer->Visualize(Operation::COMPARISON, i-begin, min-begin);
                 if (min != i)
                 {
                     std::swap(*i, *min);
-                    if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, i-begin);
+                    if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, i-begin, min-begin);
                 }
             }
         }

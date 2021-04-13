@@ -11,7 +11,7 @@
 #define DOCTEST_CONFIG_IMPLEMENT
 #include "doctest.h"
 
-void TestSorting(Sortings::Sorting<std::vector<int>>& sorting){
+void TestSorting(Sortings::Sorting<std::vector<int>>& sorting, uint32_t number){
     std::vector<int> v = {5,2,1,4,3};
     std::vector<int> copy_v = v;
     sorting.Sort(v.begin(), v.end());
@@ -24,6 +24,26 @@ void TestSorting(Sortings::Sorting<std::vector<int>>& sorting){
     std::sort(copy_vv.begin(), copy_vv.end(), [](int x, int y){ return x > y;});
     CHECK(vv == copy_vv);
 
+    std::random_device rd;
+    std::mt19937 mersenne(rd());
+    std::vector<int>random_v;
+    for(uint32_t i=0;i<number; i++){
+        random_v.push_back(mersenne() % number);
+    }
+    auto copy_random_v = random_v;
+    std::sort(copy_random_v.begin(), copy_random_v.end());
+    sorting.Sort(random_v.begin(), random_v.end());
+    CHECK(random_v == copy_random_v);
+
+    std::vector<int>random_vv;
+    for(uint32_t i=0;i<number; i++){
+        random_vv.push_back(mersenne() % number);
+    }
+    auto copy_random_vv = random_vv;
+    std::sort(copy_random_vv.begin(), copy_random_vv.end(), [](int x, int y){ return x > y;});
+    sorting.Sort(random_vv.begin(), random_vv.end(), [](int x, int y){ return x > y;});
+    CHECK(random_vv == copy_random_vv);
+
     /*for(auto i:v){
         std::cout << i << std::endl;
     }
@@ -35,12 +55,12 @@ void TestSorting(Sortings::Sorting<std::vector<int>>& sorting){
 
 TEST_CASE("testing sortings"){
     Sortings::BubbleSort<std::vector<int>>bubble;
-    TestSorting(bubble);
+    TestSorting(bubble, 1000);
     Sortings::InsertionSort<std::vector<int>>insertion;
-    TestSorting(insertion);
-    /*Sortings::SelectionSort<std::vector<int>>selection;
-    TestSorting(selection);
-    Sortings::CycleSort<std::vector<int>>cycle;
+    TestSorting(insertion, 1000);
+    Sortings::SelectionSort<std::vector<int>>selection;
+    TestSorting(selection, 1000);
+    /*Sortings::CycleSort<std::vector<int>>cycle;
     TestSorting(cycle);
     Sortings::ShakerSort<std::vector<int>>shaker;
     TestSorting(shaker);
