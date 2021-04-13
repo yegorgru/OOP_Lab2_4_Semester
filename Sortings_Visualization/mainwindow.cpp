@@ -64,6 +64,10 @@ void MainWindow::on_SortButton_clicked() {
             m_Sorting = new Sortings::CombSort<std::vector<int>,Visualizer>(&m_Visualizer);
             break;
         }
+        case Sortings::SortingName::GNOMESORT:{
+            m_Sorting = new Sortings::GnomeSort<std::vector<int>,Visualizer>(&m_Visualizer);
+            break;
+        }
         }
         m_CurrentSortingName = name;
     }
