@@ -52,6 +52,10 @@ void MainWindow::on_SortButton_clicked() {
             m_Sorting = new Sortings::SelectionSort<std::vector<int>,Visualizer>(&m_Visualizer);
             break;
         }
+        case Sortings::SortingName::CYCLESORT:{
+            m_Sorting = new Sortings::CycleSort<std::vector<int>,Visualizer>(&m_Visualizer);
+            break;
+        }
         }
         m_CurrentSortingName = name;
     }

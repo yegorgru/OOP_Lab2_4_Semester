@@ -24,7 +24,8 @@ namespace Sortings{
     enum class SortingName{
         BUBBLESORT,
         INSERTIONSORT,
-        SELECTIONSORT
+        SELECTIONSORT,
+        CYCLESORT
     };
 
     class DefaultVisualizer{
@@ -101,6 +102,7 @@ namespace Sortings{
             using ValueType = typename std::iterator_traits<typename Container::iterator>::value_type;
             for ( Iterator i = begin+1; i < end; i++) {
                 Iterator j= i;
+                this->visualizer->Visualize(Operation::ACCESS, i-begin);
                 ValueType key = *i;
                 while (j > begin && (this->visualizer != nullptr ?
                        this->visualizer->Visualize(Operation::COMPARISON, j-1-begin) :true) &&
@@ -159,26 +161,31 @@ namespace Sortings{
         }
     };
 
-    /*template<
+    template<
         typename Container,
+        typename Visualizer = DefaultVisualizer,
         typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
-    class CycleSort : public Sorting<Container>{
+    class CycleSort : public Sorting<Container, Visualizer>{
     public:
+        CycleSort(Visualizer* visualizer = nullptr):
+            Sorting<Container, Visualizer>(visualizer){}
+
         void Sort(typename Container::iterator begin, typename Container::iterator end,
                   std::function<bool (
                   typename std::iterator_traits<typename Container::iterator>::value_type,
                   typename std::iterator_traits<typename Container::iterator>::value_type)> cmp =
                 [](typename std::iterator_traits<typename Container::iterator>::value_type x,
                    typename std::iterator_traits<typename Container::iterator>::value_type y) ->
-                bool { return x < y; },
-                  std::function <void(Operation, size_t)> visualize = nullptr) override {
+                bool { return x < y; }) override {
             using Iterator = typename Container::iterator;
             using ValueType = typename std::iterator_traits<typename Container::iterator>::value_type;
             for( Iterator i = begin; i < end - 1; i++ )
             {
+                if(this->visualizer) this->visualizer->Visualize(Operation::ACCESS, i-begin);
                 ValueType cur = *i;
                 size_t pos = i-begin;
                 for( Iterator j = i + 1; j < end; j++ ){
+                    if(this->visualizer) this->visualizer->Visualize(Operation::COMPARISON, j-begin);
                     if( cmp(*j,cur)){
                         pos++;
                     }
@@ -186,27 +193,30 @@ namespace Sortings{
                 if( i-begin == pos ){
                     continue;
                 }
-                while( *(begin+pos) == cur ){
+                while((this->visualizer ? this->visualizer->Visualize(Operation::COMPARISON, pos) : true) && *(begin+pos) == cur){
                     pos++;
                 }
                 std::swap( cur, *(begin+pos));
+                if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, pos);
                 while( i-begin != pos ){
                     pos = i-begin;
                     for( Iterator j = i + 1; j < end; j++ ){
+                        if(this->visualizer) this->visualizer->Visualize(Operation::COMPARISON, j-begin);
                         if( cmp(*j, cur)) {
                             pos++;
                         }
                     }
-                    while( *(begin+pos) == cur ){
+                    while((this->visualizer ? this->visualizer->Visualize(Operation::COMPARISON, pos) : true) && *(begin+pos) == cur){
                         pos++;
                     }
                     std::swap( cur, *(begin+pos) );
+                    if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, pos);
                 }
             }
         }
     };
 
-    template<
+    /*template<
         typename Container,
         typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
     class ShakerSort : public Sorting<Container>{
