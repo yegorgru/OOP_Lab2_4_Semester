@@ -10,7 +10,7 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow),
       m_Visualizer(m_Numbers),
-      m_Sorting(new Sortings::BubbleSort<std::vector<int>,Visualizer>(&m_Visualizer)),
+      m_SortingAndTiming(new Sortings::BubbleSort<std::vector<int>,Visualizer>(&m_Visualizer)),
       mersenne(rd())
 {
 
@@ -44,52 +44,13 @@ void MainWindow::on_SortButton_clicked() {
     Sortings::SortingName name =
             static_cast<Sortings::SortingName>(ui->SortingNameComboBox->currentIndex());
     if(m_CurrentSortingName != name){
-        if(m_Sorting){
-            delete m_Sorting;
-        }
-        switch(name){
-        case Sortings::SortingName::BUBBLESORT:{
-            m_Sorting = new Sortings::BubbleSort<std::vector<int>,Visualizer>(&m_Visualizer);
-            break;
-        }
-        case Sortings::SortingName::INSERTIONSORT:{
-            m_Sorting = new Sortings::InsertionSort<std::vector<int>,Visualizer>(&m_Visualizer);
-            break;
-        }
-        case Sortings::SortingName::SELECTIONSORT:{
-            m_Sorting = new Sortings::SelectionSort<std::vector<int>,Visualizer>(&m_Visualizer);
-            break;
-        }
-        case Sortings::SortingName::CYCLESORT:{
-            m_Sorting = new Sortings::CycleSort<std::vector<int>,Visualizer>(&m_Visualizer);
-            break;
-        }
-        case Sortings::SortingName::SHAKERSORT:{
-            m_Sorting = new Sortings::ShakerSort<std::vector<int>,Visualizer>(&m_Visualizer);
-            break;
-        }
-        case Sortings::SortingName::COMBSORT:{
-            m_Sorting = new Sortings::CombSort<std::vector<int>,Visualizer>(&m_Visualizer);
-            break;
-        }
-        case Sortings::SortingName::GNOMESORT:{
-            m_Sorting = new Sortings::GnomeSort<std::vector<int>,Visualizer>(&m_Visualizer);
-            break;
-        }
-        case Sortings::SortingName::ODDEVENSORT:{
-            m_Sorting = new Sortings::OddEvenSort<std::vector<int>,Visualizer>(&m_Visualizer);
-            break;
-        }
-        }
+        m_SortingAndTiming.SetSorting(name, m_Visualizer);
         m_CurrentSortingName = name;
     }
 
     m_Visualizer.ClearQueue();
 
-    QElapsedTimer time;
-    time.start();
-    m_Sorting->Sort(m_Numbers.begin(), m_Numbers.end(), [](int x, int y) { return x < y; });
-    qDebug() << Qt::endl << "Time of sorting: " <<  time.nsecsElapsed()<< "milliseconds" << Qt::endl;
+    qDebug() << Qt::endl << "Time of sorting: " <<  m_SortingAndTiming.Run(m_Numbers) << "milliseconds" << Qt::endl;
 
     ui->groupBox->setEnabled(false);
     m_Visualizer.Play(ui->Slider->value());

@@ -22,6 +22,7 @@ SOURCES += \
     visualizer.cpp
 
 HEADERS += \
+    Decorator.h \
     Sorting.h \
     doctest.h \
     mainwindow.h \

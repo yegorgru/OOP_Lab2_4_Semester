@@ -9,6 +9,7 @@
 
 #include "Sorting.h"
 #include "visualizer.h"
+#include "Decorator.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -40,7 +41,8 @@ private:
 
     Visualizer m_Visualizer;
 
-    Sortings::Sorting<std::vector<int>,Visualizer>* m_Sorting;
+    Sortings::SortingAndTiming m_SortingAndTiming;
+
     Sortings::SortingName m_CurrentSortingName;
 
     int m_MaxValue;
