@@ -4,7 +4,6 @@
 //#include <QDesktopWidget>
 #include <QElapsedTimer>
 #include <QDebug>
-#include <QResizeEvent>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)

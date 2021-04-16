@@ -3,6 +3,7 @@
 #include <QMainWindow>
 #include <QGraphicsScene>
 #include <QShortcut>
+#include <QResizeEvent>
 
 #include <vector>
 #include <random>
