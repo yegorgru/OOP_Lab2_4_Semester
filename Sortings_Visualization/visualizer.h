@@ -18,8 +18,8 @@ public:
 
     bool Visualize(Sortings::Operation operation, size_t first, size_t second = INT_MAX);
 
-    void FormScene(QSize size);
-    void UpdateScene(QSize size);
+    void FormScene(const QSize& size);
+    void UpdateScene(double widthCoef, double heightCoef);
 
     void SetMaxValue(int value);
 
@@ -38,8 +38,8 @@ private:
         Sortings::Operation operation;
         size_t first;
         size_t second;
-        double firstHeight;
-        double secondHeight;
+        double firstHeightCoef;
+        double secondHeightCoef;
     };
 
     QGraphicsScene* m_Scene;

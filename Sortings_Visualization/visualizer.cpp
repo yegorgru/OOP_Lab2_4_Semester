@@ -11,10 +11,11 @@ Visualizer::Visualizer(std::vector<int>& data):
 }
 
 bool Visualizer::Visualize(Sortings::Operation operation, size_t first, size_t second){
-    double secondHeight = second == INT_MAX ? 0 : double(m_Data[second])/m_MaxValue*m_Scene->height()*0.9;
+    double secondHeight = second == INT_MAX ? 0 : double(m_Data[second])/m_MaxValue;
     m_VisualizeQueue.push_back({operation, first, second,
-                                double(m_Data[first])/m_MaxValue*m_Scene->height()*0.9,
+                                double(m_Data[first])/m_MaxValue,
                                 secondHeight});
+
     return true;
     /*if(operation == Sortings::Operation::COMPARISON){
         m_Rects[position]->setBrush(QBrush(Qt::blue));
@@ -69,12 +70,12 @@ void Visualizer::PlayItem(){
     else if(item.operation == Sortings::Operation::CHANGE){
         m_Rects[item.first]->setBrush(QBrush(Qt::green));
         m_Rects[item.first]->setRect(item.first*m_Width, 10,
-                                     m_Width, item.firstHeight);
+                                     m_Width, item.firstHeightCoef*m_Scene->height()*0.9);
 
         if(item.second != INT_MAX){
             m_Rects[item.second]->setBrush(QBrush(Qt::green));
             m_Rects[item.second]->setRect(item.second*m_Width, 10,
-                                         m_Width, item.secondHeight);
+                                         m_Width, item.secondHeightCoef*m_Scene->height()*0.9);
         }
     }
     std::cout << "Update" << m_CurPos-1 << std::endl;
@@ -93,10 +94,11 @@ QTimer* Visualizer::GetTimer(){
     return m_Timer;
 }
 
-void Visualizer::FormScene(QSize size){
+void Visualizer::FormScene(const QSize& size){
     for(auto i:m_Rects){
         delete i;
     }
+    m_Scene->setSceneRect(0,0,size.width()*0.95, size.height()*0.95);
     m_Width = double(m_Scene->width())/m_Data.size();
     m_Rects.clear();
     for(size_t i=0;i<m_Data.size();i++){
@@ -111,12 +113,16 @@ void Visualizer::FormScene(QSize size){
     m_Scene->update();
 }
 
-void Visualizer::UpdateScene(QSize size){
-    m_Scene->setSceneRect ( 0,0,size.width()*0.95, size.height()*0.95);
+void Visualizer::UpdateScene(double widthCoef, double heightCoef){
+    auto oldSceneRect = m_Scene->sceneRect();
+    m_Scene->setSceneRect ( 0,0,widthCoef*oldSceneRect.width(), heightCoef*oldSceneRect.height());
 
     m_Width = double(m_Scene->width())/m_Rects.size();
+
+    //double heightCoef = double(size.height())/oldSize.height();
     for(size_t i=0;i<m_Rects.size();i++){
-        double height = double(m_Data[i])/m_MaxValue*m_Scene->height()*0.9;
+        double height = m_Rects[i]->boundingRect().size().height() * heightCoef;
+        //(m_Data[i])/m_MaxValue*m_Scene->height()*0.9;
         m_Rects[i]->setRect(i*m_Width,10, m_Width, height);
     }
     m_Scene->update();

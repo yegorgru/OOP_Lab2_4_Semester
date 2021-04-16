@@ -60,16 +60,16 @@ TEST_CASE("testing sortings"){
     TestSorting(insertion, 1000);
     Sortings::SelectionSort<std::vector<int>>selection;
     TestSorting(selection, 1000);
-    /*Sortings::CycleSort<std::vector<int>>cycle;
-    TestSorting(cycle);
+    Sortings::CycleSort<std::vector<int>>cycle;
+    TestSorting(cycle, 1000);
     Sortings::ShakerSort<std::vector<int>>shaker;
-    TestSorting(shaker);
-    Sortings::CombSort<std::vector<int>>comb;
-    TestSorting(comb);
+    TestSorting(shaker, 1000);
+    /*Sortings::CombSort<std::vector<int>>comb;
+    TestSorting(comb, 1000);*/
     Sortings::GnomeSort<std::vector<int>>gnome;
-    TestSorting(gnome);
+    TestSorting(gnome, 1000);
     Sortings::OddEvenSort<std::vector<int>>oddEven;
-    TestSorting(oddEven);*/
+    TestSorting(oddEven, 1000);
 }
 
 int main(int argc, char *argv[])

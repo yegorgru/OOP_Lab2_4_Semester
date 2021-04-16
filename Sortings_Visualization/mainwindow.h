@@ -45,6 +45,8 @@ private:
 
     int m_MaxValue;
 
+    bool m_IsInitiated;
+
     std::random_device rd;
     std::mt19937 mersenne;
 };

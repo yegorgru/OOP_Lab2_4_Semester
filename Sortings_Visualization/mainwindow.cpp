@@ -4,6 +4,7 @@
 //#include <QDesktopWidget>
 #include <QElapsedTimer>
 #include <QDebug>
+#include <QResizeEvent>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -22,6 +23,8 @@ MainWindow::MainWindow(QWidget *parent)
     keyCtrl_D = new QShortcut(this);
     keyCtrl_D->setKey(Qt::CTRL + Qt::Key_D);
     connect(keyCtrl_D, SIGNAL(activated()), this, SLOT(on_SortButton_clicked()));
+
+    m_IsInitiated = false;
 }
 
 MainWindow::~MainWindow()
@@ -31,8 +34,10 @@ MainWindow::~MainWindow()
 
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
-    auto size = ui->graphicsView->size();
-    m_Visualizer.UpdateScene(size);
+    if(m_IsInitiated){
+        m_Visualizer.UpdateScene(double(event->size().width())/event->oldSize().width(),
+                                 double(event->size().height())/event->oldSize().height());
+    }
 }
 
 void MainWindow::on_SortButton_clicked() {
@@ -109,4 +114,6 @@ void MainWindow::on_InitiateButton_clicked()
     m_Visualizer.FormScene(size);
 
     ui->SortButton->setEnabled(true);
+
+    m_IsInitiated = true;
 }
