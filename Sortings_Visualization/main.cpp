@@ -11,11 +11,12 @@
 #define DOCTEST_CONFIG_IMPLEMENT
 #include "doctest.h"
 
-void TestSortingBasic(Sortings::Sorting<std::vector<int>>& sorting,
-                      std::function<bool (int,int)> cmp =
-                    [](int x, int y) -> bool { return x < y; }){
-    std::vector<int> v = {5,2,1,4,3};
-    std::vector<int> copy_v = v;
+template <typename T>
+void TestSortingBasic(Sortings::Sorting<std::vector<T>>& sorting,
+                      std::function<bool (T,T)> cmp =
+                    [](T x, T y) -> bool { return x < y; }){
+    std::vector<T> v = {5,2,1,4,3};
+    std::vector<T> copy_v = v;
     sorting.Sort(v.begin(), v.end(), cmp);
     std::sort(copy_v.begin(), copy_v.end(), cmp);
     CHECK(v == copy_v);
@@ -27,13 +28,14 @@ void TestSortingBasic(Sortings::Sorting<std::vector<int>>& sorting,
     CHECK(vv == copy_vv);*/
 }
 
-void TestSortingRandom(Sortings::Sorting<std::vector<int>>& sorting, uint32_t number,
-                       std::function<bool (int,int)> cmp =
-                     [](int x, int y) -> bool { return x < y; }){
+template <typename T>
+void TestSortingRandom(Sortings::Sorting<std::vector<T>>& sorting, T number,
+                       std::function<bool (T,T)> cmp =
+                     [](T x, T y) -> bool { return x < y; }){
     std::random_device rd;
     std::mt19937 mersenne(rd());
-    std::vector<int>random_v;
-    for(uint32_t i=0;i<number; i++){
+    std::vector<T>random_v;
+    for(T i=0;i<number; i++){
         random_v.push_back(mersenne() % number);
     }
     auto copy_random_v = random_v;
@@ -59,18 +61,19 @@ void TestSortingRandom(Sortings::Sorting<std::vector<int>>& sorting, uint32_t nu
     }*/
 }
 
-void TestSortingAlmostSorted(Sortings::Sorting<std::vector<int>>& sorting, uint32_t number,
-                             std::function<bool (int,int)> cmp =
-                           [](int x, int y) -> bool { return x < y; }){
+template <typename T>
+void TestSortingAlmostSorted(Sortings::Sorting<std::vector<T>>& sorting, T number,
+                             std::function<bool (T,T)> cmp =
+                           [](T x, T y) -> bool { return x < y; }){
     std::random_device rd;
     std::mt19937 mersenne(rd());
-    std::vector<int>random_v;
-    for(uint32_t i=0;i<number; i++){
+    std::vector<T>random_v;
+    for(T i=0;i<number; i++){
         random_v.push_back(mersenne() % number);
     }
     auto copy_random_v = random_v;
     std::sort(copy_random_v.begin(), copy_random_v.end(), cmp);
-    for(uint32_t i = 0; i < number/100; i++){
+    for(T i = 0; i < number/100; i++){
         std::swap(*(copy_random_v.begin() + mersenne()%copy_random_v.size()),
                   *(copy_random_v.begin() + mersenne()%copy_random_v.size()));
     }
@@ -81,18 +84,19 @@ void TestSortingAlmostSorted(Sortings::Sorting<std::vector<int>>& sorting, uint3
     CHECK(random_v == copy_random_v);
 }
 
-void TestSortingAlmostReverseSorted(Sortings::Sorting<std::vector<int>>& sorting, uint32_t number,
-                             std::function<bool (int,int)> cmp =
-                           [](int x, int y) -> bool { return x < y; }){
+template <typename T>
+void TestSortingAlmostReverseSorted(Sortings::Sorting<std::vector<T>>& sorting, T number,
+                             std::function<bool (T,T)> cmp =
+                           [](T x, T y) -> bool { return x < y; }){
     std::random_device rd;
     std::mt19937 mersenne(rd());
-    std::vector<int>random_v;
-    for(uint32_t i=0;i<number; i++){
+    std::vector<T>random_v;
+    for(T i=0;i<number; i++){
         random_v.push_back(mersenne() % number);
     }
     auto copy_random_v = random_v;
     std::sort(copy_random_v.rbegin(), copy_random_v.rend(), cmp);
-    for(uint32_t i = 0; i < number/100; i++){
+    for(T i = 0; i < number/100; i++){
         std::swap(*(copy_random_v.begin() + mersenne()%copy_random_v.size()),
                   *(copy_random_v.begin() + mersenne()%copy_random_v.size()));
     }
@@ -103,40 +107,46 @@ void TestSortingAlmostReverseSorted(Sortings::Sorting<std::vector<int>>& sorting
     CHECK(random_v == copy_random_v);
 }
 
-void TestSorting(Sortings::Sorting<std::vector<int>>& sorting, uint32_t number,
-                 std::function<bool (int,int)> cmp =
-               [](int x, int y) -> bool { return x < y; }){
-    TestSortingBasic(sorting, cmp);
-    TestSortingRandom(sorting,number,cmp);
-    TestSortingAlmostSorted(sorting, number, cmp);
-    TestSortingAlmostReverseSorted(sorting, number, cmp);
+template <typename T>
+void TestSorting(Sortings::Sorting<std::vector<T>>& sorting, T number,
+                 std::function<bool (T,T)> cmp =
+               [](T x, T y) -> bool { return x < y; }){
+    TestSortingBasic<T>(sorting, cmp);
+    TestSortingRandom<T>(sorting,number,cmp);
+    TestSortingAlmostSorted<T>(sorting, number, cmp);
+    TestSortingAlmostReverseSorted<T>(sorting, number, cmp);
 }
 
 TEST_CASE("testing sortings"){
-    Sortings::BubbleSort<std::vector<int>>bubble;
-    TestSorting(bubble, 1000);
-    TestSorting(bubble, 1000, [](int x, int y){return x > y;});
-    Sortings::InsertionSort<std::vector<int>>insertion;
-    TestSorting(insertion, 1000);
-    TestSorting(insertion, 1000, [](int x, int y){return x > y;});
-    Sortings::SelectionSort<std::vector<int>>selection;
-    TestSorting(selection, 1000);
-    TestSorting(selection, 1000, [](int x, int y){return x > y;});
-    Sortings::CycleSort<std::vector<int>>cycle;
-    TestSorting(cycle, 1000);
-    TestSorting(cycle, 1000, [](int x, int y){return x > y;});
-    Sortings::ShakerSort<std::vector<int>>shaker;
-    TestSorting(shaker, 1000);
-    TestSorting(shaker, 1000, [](int x, int y){return x > y;});
-    Sortings::CombSort<std::vector<int>>comb;
-    TestSorting(comb, 1000);
-    TestSorting(comb, 1000, [](int x, int y){return x > y;});
-    Sortings::GnomeSort<std::vector<int>>gnome;
-    TestSorting(gnome, 1000);
-    TestSorting(gnome, 1000, [](int x, int y){return x > y;});
-    Sortings::OddEvenSort<std::vector<int>>oddEven;
-    TestSorting(oddEven, 1000);
-    TestSorting(oddEven, 1000, [](int x, int y){return x > y;});
+    Sortings::BubbleSort<std::vector<long>>bubble;
+    TestSorting<long>(bubble, 10000);
+    TestSorting<long>(bubble, 10000, [](long x, long y){return x > y;});
+    Sortings::InsertionSort<std::vector<long>>insertion;
+    TestSorting<long>(insertion, 10000);
+    TestSorting<long>(insertion, 10000, [](long x, long y){return x > y;});
+    Sortings::SelectionSort<std::vector<long>>selection;
+    TestSorting<long>(selection, 10000);
+    TestSorting<long>(selection, 10000, [](long x, long y){return x > y;});
+    Sortings::CycleSort<std::vector<long>>cycle;
+    TestSorting<long>(cycle, 10000);
+    TestSorting<long>(cycle, 10000, [](long x, long y){return x > y;});
+
+    Sortings::ShakerSort<std::vector<long>>shaker;
+    TestSorting<long>(shaker, 10000);
+    TestSorting<long>(shaker, 10000, [](long x, long y){return x > y;});
+    Sortings::CombSort<std::vector<long>>comb;
+    TestSorting<long>(comb, 10000);
+    TestSorting<long>(comb, 10000, [](long x, long y){return x > y;});
+    Sortings::GnomeSort<std::vector<long>>gnome;
+    TestSorting<long>(gnome, 10000);
+    TestSorting<long>(gnome, 10000, [](long x, long y){return x > y;});
+    Sortings::OddEvenSort<std::vector<long>>oddEven;
+    TestSorting<long>(oddEven, 10000);
+    TestSorting<long>(oddEven, 10000, [](long x, long y){return x > y;});
+    Sortings::QuickSort<std::vector<long>>quick;
+    TestSorting<long>(quick, 100000);
+    TestSorting<long>(quick, 100000, [](long x, long y){return x > y;});
+
 }
 
 int main(int argc, char *argv[])

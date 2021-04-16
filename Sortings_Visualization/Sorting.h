@@ -15,14 +15,6 @@ using HaveRandomAccessIterator =
 
 namespace Sortings{
 
-    /*inline void swap (std::_Bit_reference __x, std::_Bit_reference __y) {
-      bool __tmp = __x;
-      __x = __y;
-      __y = __tmp;
-
-    }
-        //считать количество елементов
-    }*/
     enum class Operation{
         COMPARISON = 0,
         ACCESS,
@@ -38,7 +30,8 @@ namespace Sortings{
         SHAKERSORT,
         COMBSORT,
         GNOMESORT,
-        ODDEVENSORT
+        ODDEVENSORT,
+        QUICKSORT
     };
 
     class DefaultVisualizer{
@@ -291,15 +284,20 @@ namespace Sortings{
             using Iterator = typename Container::iterator;
             const double factor = 1.2473309;
             size_t step = end-begin;
-            while (step >= 1) {
+            bool swapped = true;
+            while (step > 1 || swapped) {
+                if (step > 1){
+                    step /= factor;
+                }
+                swapped = false;
                 for (Iterator i = begin; i + step < end; i++) {
                     if(this->visualizer) this->visualizer->Visualize(Operation::COMPARISON, i+step-begin, i-begin);
                     if (cmp(*(i+step),*i)) {
                         std::swap(*i, *(i + step));
                         if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, i-begin, i+step-begin);
+                        swapped = true;
                     }
                 }
-                step /= factor;
             }
         }
     };
@@ -368,5 +366,75 @@ namespace Sortings{
                 }
             }
         }
+    };
+
+    template<
+        typename Container,
+        typename Visualizer = DefaultVisualizer,
+        typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
+    class QuickSort : public Sorting<Container, Visualizer>{
+    public:
+        QuickSort(Visualizer* visualizer = nullptr):
+            Sorting<Container, Visualizer>(visualizer){}
+
+        void Sort(typename Container::iterator begin, typename Container::iterator end,
+                  std::function<bool (
+                  typename std::iterator_traits<typename Container::iterator>::value_type,
+                  typename std::iterator_traits<typename Container::iterator>::value_type)> cmp =
+                [](typename std::iterator_traits<typename Container::iterator>::value_type x,
+                   typename std::iterator_traits<typename Container::iterator>::value_type y) ->
+                bool { return x < y; }) override {
+            using Iterator = typename Container::iterator;
+            if (begin != end){
+                Iterator left  = begin;
+                Iterator right = end;
+                if(this->visualizer) this->visualizer->Visualize(Operation::ACCESS, left-begin);
+                Iterator pivot = left++;
+                while( left != right ) {
+                  if( (this->visualizer ? this->visualizer->Visualize(Operation::COMPARISON, left-begin) : true) && cmp( *left, *pivot ) ) {
+                     ++left;
+                  } else {
+                     while( left != --right &&
+                            (this->visualizer ?
+                             this->visualizer->Visualize(Operation::COMPARISON, right-begin)
+                             : true) && cmp( *pivot, *right ) );
+                     std::swap( *left, *right );
+                     if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, left-begin, right-begin);
+                  }
+                }
+                --left;
+                std::swap( *begin, *left );
+                if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, left-begin, 0);
+                Sort( begin, left, cmp );
+                Sort( right, end, cmp );
+            }
+        }
+    /*private:
+        size_t Partition(
+                typename Container::iterator begin, typename Container::iterator end,
+                std::function<bool (
+                typename std::iterator_traits<typename Container::iterator>::value_type,
+                typename std::iterator_traits<typename Container::iterator>::value_type)> cmp =
+                [](typename std::iterator_traits<typename Container::iterator>::value_type x,
+                typename std::iterator_traits<typename Container::iterator>::value_type y) ->
+                bool { return x < y; }) {
+            using Iterator = typename Container::iterator;
+            using ValueType = typename std::iterator_traits<typename Container::iterator>::value_type;
+            ValueType pivot = *begin;
+            Iterator i = begin;
+            Iterator j = end;
+            j--;
+            while(i < j){
+                while(i < end && *i < pivot) i++;
+                while(j >= begin && *j > pivot) j--;
+                if(i >= j){
+                    break;
+                }
+                else{
+                    std::swap(*(i++), *(j--));
+                }
+            }
+            return j-begin;
+        }*/
     };
 }

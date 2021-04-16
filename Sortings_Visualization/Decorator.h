@@ -50,6 +50,10 @@ namespace Sortings {
                     m_Sorting = new Sortings::OddEvenSort<std::vector<int>,Visualizer>(&m_Visualizer);
                     break;
                 }
+                case Sortings::SortingName::QUICKSORT:{
+                    m_Sorting = new Sortings::QuickSort<std::vector<int>,Visualizer>(&m_Visualizer);
+                    break;
+                }
             }
         }
         qint64 Run(std::vector<int>m_Numbers) {
