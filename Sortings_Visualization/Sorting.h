@@ -14,6 +14,15 @@ using HaveRandomAccessIterator =
     std::is_base_of<std::random_access_iterator_tag, IteratorCategoryOf<Container>>;
 
 namespace Sortings{
+
+    inline void swap (std::_Bit_reference __x, std::_Bit_reference __y) {
+      bool __tmp = __x;
+      __x = __y;
+      __y = __tmp;
+
+    }
+        //считать количество елементов
+    }
     enum class Operation{
         COMPARISON = 0,
         ACCESS,
