@@ -57,6 +57,10 @@ namespace Sortings {
                     m_Sorting = new Sortings::MergeSort<std::vector<int>,Visualizer>(&m_Visualizer);
                     break;
                 }
+                case Sortings::SortingName::MERGESORTINPLACE:{
+                    m_Sorting = new Sortings::MergeSortInPlace<std::vector<int>,Visualizer>(&m_Visualizer);
+                    break;
+                }
                 case Sortings::SortingName::HEAPSORT:{
                     m_Sorting = new Sortings::HeapSort<std::vector<int>,Visualizer>(&m_Visualizer);
                     break;

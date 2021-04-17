@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <functional>
 #include <optional>
+#include <stack>
 
 template<typename Container>
 using IteratorCategoryOf =
@@ -34,6 +35,7 @@ namespace Sortings{
         ODDEVENSORT,
         QUICKSORT,
         MERGESORT,
+        MERGESORTINPLACE,
         HEAPSORT,
         TIMSORT,
         INTROSORT,
@@ -482,6 +484,61 @@ namespace Sortings{
             for(; j<right.end(); j++, current++){
                 *current = *j;
                 if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, current);
+            }
+        }
+    };
+
+    template<
+        typename Container,
+        typename Visualizer = DefaultVisualizer<Container>,
+        typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
+    class MergeSortInPlace : public Sorting<Container, Visualizer>{
+    public:
+        MergeSortInPlace(Visualizer* visualizer = nullptr):
+            Sorting<Container, Visualizer>(visualizer){}
+
+        void Sort(typename Container::iterator begin, typename Container::iterator end,
+                  std::function<bool (
+                  typename std::iterator_traits<typename Container::iterator>::value_type,
+                  typename std::iterator_traits<typename Container::iterator>::value_type)> cmp =
+                [](typename std::iterator_traits<typename Container::iterator>::value_type x,
+                   typename std::iterator_traits<typename Container::iterator>::value_type y) ->
+                bool { return x < y; }) override {
+            using Iterator = typename Container::iterator;
+            if (begin < end-1) {
+                Iterator middle = begin + (end - begin) / 2;
+                Sort(begin , middle, cmp);
+                Sort(middle, end, cmp);
+                Merge(begin, middle, end, cmp);
+            }
+        }
+
+        void Merge(typename Container::iterator begin, typename Container::iterator middle,
+                   typename Container::iterator end,
+                  std::function<bool (
+                  typename std::iterator_traits<typename Container::iterator>::value_type,
+                  typename std::iterator_traits<typename Container::iterator>::value_type)> cmp) {
+            using Iterator = typename Container::iterator;
+            using ValueType = typename std::iterator_traits<typename Container::iterator>::value_type;
+            Iterator begin2 = middle;
+            while (begin < middle && begin2 < end) {
+                if(this->visualizer) this->visualizer->Visualize(Operation::COMPARISON, begin2, begin);
+                if (cmp(*begin2, *begin)) {
+                    if(this->visualizer) this->visualizer->Visualize(Operation::ACCESS, begin2);
+                    ValueType value = *begin2;
+                    Iterator cur = begin2;
+                    while (cur != begin) {
+                        if(this->visualizer) this->visualizer->Visualize(Operation::ACCESS, cur-1);
+                        *cur = *(cur - 1);
+                        if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, cur);
+                        cur--;
+                    }
+                    *begin = value;
+                    if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, begin);
+                    middle++;
+                    begin2++;
+                }
+                begin++;
             }
         }
     };

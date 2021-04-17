@@ -146,7 +146,7 @@ TEST_CASE("testing sortings"){
     Sortings::QuickSort<std::vector<long>>quick;
     TestSorting<long>(quick, 10000);
     TestSorting<long>(quick, 10000, [](long x, long y){return x > y;});*/
-    Sortings::MergeSort<std::vector<long>>merge;
+    /*Sortings::MergeSort<std::vector<long>>merge;
     TestSorting<long>(merge, 10000);
     TestSorting<long>(merge, 10000, [](long x, long y){return x > y;});
 
@@ -164,7 +164,11 @@ TEST_CASE("testing sortings"){
 
     Sortings::ShellSort<std::vector<long>>shell;
     TestSorting<long>(shell, 10000);
-    TestSorting<long>(shell, 10000, [](long x, long y){return x > y;});
+    TestSorting<long>(shell, 10000, [](long x, long y){return x > y;});*/
+
+    Sortings::MergeSortInPlace<std::vector<long>>inplace;
+    TestSorting<long>(inplace, 100);
+    TestSorting<long>(inplace, 100, [](long x, long y){return x > y;});
 }
 
 int main(int argc, char *argv[])
