@@ -35,7 +35,8 @@ namespace Sortings{
         QUICKSORT,
         MERGESORT,
         HEAPSORT,
-        TIMSORT
+        TIMSORT,
+        INTROSORT
     };
 
     template <typename T>
@@ -544,6 +545,7 @@ namespace Sortings{
         }
     };
 
+    //Combine
     template<
         typename Container,
         typename Visualizer = DefaultVisualizer<Container>,
@@ -577,5 +579,56 @@ namespace Sortings{
                 }
             }
         }
+    };
+
+    //Combine
+    template<
+        typename Container,
+        typename Visualizer = DefaultVisualizer<Container>,
+        typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
+    class IntroSort : public Sorting<Container, Visualizer>{
+    public:
+        IntroSort(Visualizer* visualizer = nullptr):
+            Sorting<Container, Visualizer>(visualizer),
+            m_HeapSort(visualizer) {}
+
+        void Sort(typename Container::iterator begin, typename Container::iterator end,
+                  std::function<bool (
+                  typename std::iterator_traits<typename Container::iterator>::value_type,
+                  typename std::iterator_traits<typename Container::iterator>::value_type)> cmp =
+                [](typename std::iterator_traits<typename Container::iterator>::value_type x,
+                   typename std::iterator_traits<typename Container::iterator>::value_type y) ->
+                bool { return x < y; }) override {
+            using Iterator = typename Container::iterator;
+            if(end - begin > 32){
+                Iterator left  = begin;
+                Iterator right = end;
+                if(this->visualizer) this->visualizer->Visualize(Operation::ACCESS, left);
+                Iterator pivot = left++;
+                while( left != right ) {
+                  if( (this->visualizer ? this->visualizer->Visualize(Operation::COMPARISON, left) : true) && cmp( *left, *pivot ) ) {
+                     ++left;
+                  } else {
+                     while( left != --right &&
+                            (this->visualizer ?
+                             this->visualizer->Visualize(Operation::COMPARISON, right)
+                             : true) && cmp( *pivot, *right ) );
+                     std::swap( *left, *right );
+                     if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, left, right);
+                  }
+                }
+                --left;
+                std::swap( *begin, *left );
+                if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, left, begin);
+                Sort( begin, left, cmp );
+                Sort( right, end, cmp );
+            }
+            else{
+                m_HeapSort.Sort(begin, end, cmp);
+            }
+        }
+
+    private:
+        HeapSort<Container, Visualizer> m_HeapSort;
     };
 }

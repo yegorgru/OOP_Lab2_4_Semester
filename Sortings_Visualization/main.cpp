@@ -157,6 +157,10 @@ TEST_CASE("testing sortings"){
     Sortings::TimSort<std::vector<long>>tim;
     TestSorting<long>(tim, 10000);
     TestSorting<long>(tim, 10000, [](long x, long y){return x > y;});
+
+    Sortings::IntroSort<std::vector<long>>intro;
+    TestSorting<long>(intro, 10000);
+    TestSorting<long>(intro, 10000, [](long x, long y){return x > y;});
 }
 
 int main(int argc, char *argv[])
