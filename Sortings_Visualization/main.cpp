@@ -167,8 +167,12 @@ TEST_CASE("testing sortings"){
     TestSorting<long>(shell, 10000, [](long x, long y){return x > y;});*/
 
     Sortings::MergeSortInPlace<std::vector<long>>inplace;
-    TestSorting<long>(inplace, 100);
-    TestSorting<long>(inplace, 100, [](long x, long y){return x > y;});
+    TestSorting<long>(inplace, 10000);
+    TestSorting<long>(inplace, 10000, [](long x, long y){return x > y;});
+
+    Sortings::PigeonholeSort<std::vector<long>>pigeonhole;
+    TestSorting<long>(pigeonhole, 1000);
+    TestSorting<long>(pigeonhole, 1000, [](long x, long y){return x > y;});
 }
 
 int main(int argc, char *argv[])

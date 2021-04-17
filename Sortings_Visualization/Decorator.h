@@ -77,8 +77,11 @@ namespace Sortings {
                     m_Sorting = new Sortings::ShellSort<std::vector<int>,Visualizer>(&m_Visualizer);
                     break;
                 }
-
-            }
+                case Sortings::SortingName::PIGEONHOLESORT:{
+                        m_Sorting = new Sortings::PigeonholeSort<std::vector<int>,Visualizer>(&m_Visualizer);
+                        break;
+                }
+                }
         }
 
         qint64 Run(std::vector<int>& m_Numbers) {

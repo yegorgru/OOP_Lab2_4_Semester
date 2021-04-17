@@ -70,6 +70,9 @@ void Visualizer::PlayItem(){
     }
     else if(item.operation == Sortings::Operation::ACCESS){
         m_Rects[item.first]->setBrush(QBrush(Qt::yellow));
+        if(item.second != INT_MAX){
+            m_Rects[item.second]->setBrush(QBrush(Qt::yellow));
+        }
     }
     else if(item.operation == Sortings::Operation::CHANGE){
         m_Rects[item.first]->setBrush(QBrush(Qt::green));
