@@ -32,7 +32,8 @@ namespace Sortings{
         COMBSORT,
         GNOMESORT,
         ODDEVENSORT,
-        QUICKSORT
+        QUICKSORT,
+        MERGESORT
     };
 
     template <typename T>
@@ -413,32 +414,82 @@ namespace Sortings{
                 Sort( right, end, cmp );
             }
         }
-    /*private:
-        size_t Partition(
-                typename Container::iterator begin, typename Container::iterator end,
-                std::function<bool (
-                typename std::iterator_traits<typename Container::iterator>::value_type,
-                typename std::iterator_traits<typename Container::iterator>::value_type)> cmp =
+    };
+
+    template<
+        typename Container,
+        typename Visualizer = DefaultVisualizer<Container>,
+        typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
+    class MergeSort : public Sorting<Container, Visualizer>{
+    public:
+        MergeSort(Visualizer* visualizer = nullptr):
+            Sorting<Container, Visualizer>(visualizer){}
+
+        void Sort(typename Container::iterator begin, typename Container::iterator end,
+                  std::function<bool (
+                  typename std::iterator_traits<typename Container::iterator>::value_type,
+                  typename std::iterator_traits<typename Container::iterator>::value_type)> cmp =
                 [](typename std::iterator_traits<typename Container::iterator>::value_type x,
-                typename std::iterator_traits<typename Container::iterator>::value_type y) ->
-                bool { return x < y; }) {
+                   typename std::iterator_traits<typename Container::iterator>::value_type y) ->
+                bool { return x < y; }) override {
             using Iterator = typename Container::iterator;
-            using ValueType = typename std::iterator_traits<typename Container::iterator>::value_type;
-            ValueType pivot = *begin;
-            Iterator i = begin;
-            Iterator j = end;
-            j--;
-            while(i < j){
-                while(i < end && *i < pivot) i++;
-                while(j >= begin && *j > pivot) j--;
-                if(i >= j){
-                    break;
-                }
-                else{
-                    std::swap(*(i++), *(j--));
-                }
+            if (begin < end-1) {
+                Iterator middle = begin + (end - begin) / 2;
+                Sort(begin , middle, cmp);
+                Sort(middle, end, cmp);
+                Merge(begin, middle, end, cmp);
             }
-            return j-begin;
-        }*/
+        }
+
+    private:
+        void Merge(typename Container::iterator begin, typename Container::iterator middle,
+                   typename Container::iterator end,
+                  std::function<bool (
+                  typename std::iterator_traits<typename Container::iterator>::value_type,
+                  typename std::iterator_traits<typename Container::iterator>::value_type)> cmp) {
+            using Iterator = typename Container::iterator;
+
+            Container left(middle - begin);
+            Container right(end - middle);
+
+            for(Iterator i = begin, k=left.begin(); i<middle; i++, k++){
+                if(this->visualizer) this->visualizer->Visualize(Operation::ACCESS, i);
+                *k = *i;
+            }
+
+            for(Iterator i = middle, k=right.begin(); i<end; i++, k++){
+                if(this->visualizer) this->visualizer->Visualize(Operation::ACCESS, i);
+                *k = *i;
+            }
+            //std::copy(begin, middle, left.begin());
+            //std::copy(middle, end, right.begin());
+
+            Iterator i = left.begin();
+            Iterator j = right.begin();
+            Iterator current = begin;
+
+            while (i < left.end() && j < right.end()) {
+                if (cmp(*i, *j)) {
+                    *current = *i;
+                    i++;
+                } else {
+                    *current = *j;
+                    j++;
+                }
+                if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, current);
+                current++;
+            }
+
+            for(; i<left.end(); i++, current++){
+                *current = *i;
+                if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, current);
+            }
+
+            for(; j<right.end(); j++, current++){
+                *current = *j;
+                if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, current);
+            }
+
+        }
     };
 }

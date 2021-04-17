@@ -53,6 +53,10 @@ namespace Sortings {
                     m_Sorting = new Sortings::QuickSort<std::vector<int>,Visualizer>(&m_Visualizer);
                     break;
                 }
+                case Sortings::SortingName::MERGESORT:{
+                    m_Sorting = new Sortings::MergeSort<std::vector<int>,Visualizer>(&m_Visualizer);
+                    break;
+                }
             }
         }
 

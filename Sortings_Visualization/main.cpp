@@ -118,7 +118,7 @@ void TestSorting(Sortings::Sorting<std::vector<T>>& sorting, T number,
 }
 
 TEST_CASE("testing sortings"){
-    Sortings::BubbleSort<std::vector<long>>bubble;
+    /*Sortings::BubbleSort<std::vector<long>>bubble;
     TestSorting<long>(bubble, 1000);
     TestSorting<long>(bubble, 1000, [](long x, long y){return x > y;});
     Sortings::InsertionSort<std::vector<long>>insertion;
@@ -145,8 +145,10 @@ TEST_CASE("testing sortings"){
     TestSorting<long>(oddEven, 1000, [](long x, long y){return x > y;});
     Sortings::QuickSort<std::vector<long>>quick;
     TestSorting<long>(quick, 10000);
-    TestSorting<long>(quick, 10000, [](long x, long y){return x > y;});
-
+    TestSorting<long>(quick, 10000, [](long x, long y){return x > y;});*/
+    Sortings::MergeSort<std::vector<long>>merge;
+    TestSorting<long>(merge, 10000);
+    TestSorting<long>(merge, 10000, [](long x, long y){return x > y;});
 }
 
 int main(int argc, char *argv[])
