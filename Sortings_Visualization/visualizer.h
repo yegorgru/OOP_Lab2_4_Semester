@@ -6,6 +6,7 @@
 #include <QTimer>
 
 #include <vector>
+#include <optional>
 
 #include "Sorting.h"
 
@@ -16,7 +17,7 @@ class Visualizer : public QObject
 public:
     Visualizer(std::vector<int>& data);
 
-    bool Visualize(Sortings::Operation operation, size_t first, size_t second = INT_MAX);
+    bool Visualize(Sortings::Operation operation, std::vector<int>::iterator first, std::optional<std::vector<int>::iterator> second = std::nullopt);
 
     void FormScene(const QSize& size);
     void UpdateScene(double widthCoef, double heightCoef);

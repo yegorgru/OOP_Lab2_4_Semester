@@ -119,33 +119,33 @@ void TestSorting(Sortings::Sorting<std::vector<T>>& sorting, T number,
 
 TEST_CASE("testing sortings"){
     Sortings::BubbleSort<std::vector<long>>bubble;
-    TestSorting<long>(bubble, 10000);
-    TestSorting<long>(bubble, 10000, [](long x, long y){return x > y;});
+    TestSorting<long>(bubble, 1000);
+    TestSorting<long>(bubble, 1000, [](long x, long y){return x > y;});
     Sortings::InsertionSort<std::vector<long>>insertion;
-    TestSorting<long>(insertion, 10000);
-    TestSorting<long>(insertion, 10000, [](long x, long y){return x > y;});
+    TestSorting<long>(insertion, 1000);
+    TestSorting<long>(insertion, 1000, [](long x, long y){return x > y;});
     Sortings::SelectionSort<std::vector<long>>selection;
-    TestSorting<long>(selection, 10000);
-    TestSorting<long>(selection, 10000, [](long x, long y){return x > y;});
+    TestSorting<long>(selection, 1000);
+    TestSorting<long>(selection, 1000, [](long x, long y){return x > y;});
     Sortings::CycleSort<std::vector<long>>cycle;
-    TestSorting<long>(cycle, 10000);
-    TestSorting<long>(cycle, 10000, [](long x, long y){return x > y;});
+    TestSorting<long>(cycle, 1000);
+    TestSorting<long>(cycle, 1000, [](long x, long y){return x > y;});
 
     Sortings::ShakerSort<std::vector<long>>shaker;
-    TestSorting<long>(shaker, 10000);
-    TestSorting<long>(shaker, 10000, [](long x, long y){return x > y;});
+    TestSorting<long>(shaker, 1000);
+    TestSorting<long>(shaker, 1000, [](long x, long y){return x > y;});
     Sortings::CombSort<std::vector<long>>comb;
-    TestSorting<long>(comb, 10000);
-    TestSorting<long>(comb, 10000, [](long x, long y){return x > y;});
+    TestSorting<long>(comb, 1000);
+    TestSorting<long>(comb, 1000, [](long x, long y){return x > y;});
     Sortings::GnomeSort<std::vector<long>>gnome;
-    TestSorting<long>(gnome, 10000);
-    TestSorting<long>(gnome, 10000, [](long x, long y){return x > y;});
+    TestSorting<long>(gnome, 1000);
+    TestSorting<long>(gnome, 1000, [](long x, long y){return x > y;});
     Sortings::OddEvenSort<std::vector<long>>oddEven;
-    TestSorting<long>(oddEven, 10000);
-    TestSorting<long>(oddEven, 10000, [](long x, long y){return x > y;});
+    TestSorting<long>(oddEven, 1000);
+    TestSorting<long>(oddEven, 1000, [](long x, long y){return x > y;});
     Sortings::QuickSort<std::vector<long>>quick;
-    TestSorting<long>(quick, 100000);
-    TestSorting<long>(quick, 100000, [](long x, long y){return x > y;});
+    TestSorting<long>(quick, 10000);
+    TestSorting<long>(quick, 10000, [](long x, long y){return x > y;});
 
 }
 

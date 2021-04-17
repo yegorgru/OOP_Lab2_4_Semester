@@ -4,6 +4,7 @@
 #include <iterator>
 #include <algorithm>
 #include <functional>
+#include <optional>
 
 template<typename Container>
 using IteratorCategoryOf =
@@ -34,14 +35,17 @@ namespace Sortings{
         QUICKSORT
     };
 
+    template <typename T>
     class DefaultVisualizer{
     public:
-        bool Visualize(Operation operation, size_t first, size_t second = INT_MAX);
+        bool Visualize(Operation operation, typename T::iterator first, std::optional<typename T::iterator> second = std::nullopt){
+            return true;
+        }
     };
 
     template<
         typename Container,
-        typename Visualizer = DefaultVisualizer,
+        typename Visualizer = DefaultVisualizer<Container>,
         typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
     class Sorting{
     public:
@@ -61,7 +65,7 @@ namespace Sortings{
 
     template<
         typename Container,
-        typename Visualizer = DefaultVisualizer,
+        typename Visualizer = DefaultVisualizer<Container>,
         typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
     class BubbleSort : public Sorting<Container, Visualizer>{
     public:
@@ -78,10 +82,10 @@ namespace Sortings{
             using Iterator = typename Container::iterator;
             for (Iterator i = begin; i < end-1; i++){
                 for (Iterator j = begin; j < end-i+begin-1; j++){
-                    if(this->visualizer) this->visualizer->Visualize(Operation::COMPARISON, j-begin, j+1-begin);
+                    if(this->visualizer) this->visualizer->Visualize(Operation::COMPARISON, j, j+1);
                     if (cmp(*(j + 1), *j)){
                         std::swap(*j, *(j + 1));
-                        if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, j-begin, j+1-begin);
+                        if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, j, j+1);
                     }
                 }
             }
@@ -90,7 +94,7 @@ namespace Sortings{
 
     template<
         typename Container,
-        typename Visualizer = DefaultVisualizer,
+        typename Visualizer = DefaultVisualizer<Container>,
         typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
     class InsertionSort : public Sorting<Container, Visualizer>{
     public:
@@ -108,27 +112,27 @@ namespace Sortings{
             using ValueType = typename std::iterator_traits<typename Container::iterator>::value_type;
             for ( Iterator i = begin+1; i < end; i++) {
                 Iterator j= i;
-                this->visualizer->Visualize(Operation::ACCESS, i-begin);
+                this->visualizer->Visualize(Operation::ACCESS, i);
                 ValueType key = *i;
                 while (j > begin && (this->visualizer != nullptr ?
-                       this->visualizer->Visualize(Operation::COMPARISON, j-1-begin) :true) &&
+                       this->visualizer->Visualize(Operation::COMPARISON, j-1) :true) &&
                        cmp(key,*(j-1))) {
                     *j = *(j-1);
                     if(this->visualizer) {
-                        this->visualizer->Visualize(Operation::CHANGE, j-begin);
-                        this->visualizer->Visualize(Operation::ACCESS, j-1-begin);
+                        this->visualizer->Visualize(Operation::CHANGE, j);
+                        this->visualizer->Visualize(Operation::ACCESS, j-1);
                     }
                     j--;
                 }
                 *j = key;
-                if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, j-begin);
+                if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, j);
             }
         }
     };
 
     template<
         typename Container,
-        typename Visualizer = DefaultVisualizer,
+        typename Visualizer = DefaultVisualizer<Container>,
         typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
     class SelectionSort : public Sorting<Container, Visualizer>{
     public:
@@ -147,21 +151,21 @@ namespace Sortings{
                 Iterator min = i;
                 for (Iterator j = i + 1; j < end; j++)
                 {
-                    if(this->visualizer) this->visualizer->Visualize(Operation::COMPARISON, j-begin, min-begin);
+                    if(this->visualizer) this->visualizer->Visualize(Operation::COMPARISON, j, min);
                     if (cmp(*j, *min))
                     {
                         min = j;
                         if(this->visualizer){
-                            this->visualizer->Visualize(Operation::ACCESS, j-begin);
-                            this->visualizer->Visualize(Operation::CHANGE, min-begin);
+                            this->visualizer->Visualize(Operation::ACCESS, j);
+                            this->visualizer->Visualize(Operation::CHANGE, min);
                         }
                     }
                 }
-                if(this->visualizer) this->visualizer->Visualize(Operation::COMPARISON, i-begin, min-begin);
+                if(this->visualizer) this->visualizer->Visualize(Operation::COMPARISON, i, min);
                 if (min != i)
                 {
                     std::swap(*i, *min);
-                    if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, i-begin, min-begin);
+                    if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, i, min);
                 }
             }
         }
@@ -169,7 +173,7 @@ namespace Sortings{
 
     template<
         typename Container,
-        typename Visualizer = DefaultVisualizer,
+        typename Visualizer = DefaultVisualizer<Container>,
         typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
     class CycleSort : public Sorting<Container, Visualizer>{
     public:
@@ -187,11 +191,11 @@ namespace Sortings{
             using ValueType = typename std::iterator_traits<typename Container::iterator>::value_type;
             for( Iterator i = begin; i < end - 1; i++ )
             {
-                if(this->visualizer) this->visualizer->Visualize(Operation::ACCESS, i-begin);
+                if(this->visualizer) this->visualizer->Visualize(Operation::ACCESS, i);
                 ValueType cur = *i;
                 size_t pos = i-begin;
                 for( Iterator j = i + 1; j < end; j++ ){
-                    if(this->visualizer) this->visualizer->Visualize(Operation::COMPARISON, j-begin);
+                    if(this->visualizer) this->visualizer->Visualize(Operation::COMPARISON, j);
                     if( cmp(*j,cur)){
                         pos++;
                     }
@@ -199,24 +203,24 @@ namespace Sortings{
                 if( i-begin == pos ){
                     continue;
                 }
-                while((this->visualizer ? this->visualizer->Visualize(Operation::COMPARISON, pos) : true) && *(begin+pos) == cur){
+                while((this->visualizer ? this->visualizer->Visualize(Operation::COMPARISON, begin+pos) : true) && *(begin+pos) == cur){
                     pos++;
                 }
                 std::swap( cur, *(begin+pos));
-                if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, pos);
+                if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, begin+pos);
                 while( i-begin != pos ){
                     pos = i-begin;
                     for( Iterator j = i + 1; j < end; j++ ){
-                        if(this->visualizer) this->visualizer->Visualize(Operation::COMPARISON, j-begin);
+                        if(this->visualizer) this->visualizer->Visualize(Operation::COMPARISON, j);
                         if( cmp(*j, cur)) {
                             pos++;
                         }
                     }
-                    while((this->visualizer ? this->visualizer->Visualize(Operation::COMPARISON, pos) : true) && *(begin+pos) == cur){
+                    while((this->visualizer ? this->visualizer->Visualize(Operation::COMPARISON, begin+pos) : true) && *(begin+pos) == cur){
                         pos++;
                     }
                     std::swap( cur, *(begin+pos) );
-                    if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, pos);
+                    if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, begin+pos);
                 }
             }
         }
@@ -224,7 +228,7 @@ namespace Sortings{
 
     template<
         typename Container,
-        typename Visualizer = DefaultVisualizer,
+        typename Visualizer = DefaultVisualizer<Container>,
         typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
     class ShakerSort : public Sorting<Container, Visualizer>{
     public:
@@ -244,19 +248,19 @@ namespace Sortings{
             Iterator right = end - 1;
             do {
                 for (Iterator i = left; i < right; i++) {
-                    if(this->visualizer) this->visualizer->Visualize(Operation::COMPARISON, i+1-begin, i-begin);
+                    if(this->visualizer) this->visualizer->Visualize(Operation::COMPARISON, i+1, i);
                     if (cmp(*(i+1), *i)) {
                         std::swap(*i, *(i+1));
-                        if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, i+1-begin, i-begin);
+                        if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, i+1, i);
                         border=i-begin;
                     }
                 }
                 right=begin+border;
                 for (Iterator i = right; i > left; i--) {
-                    if(this->visualizer) this->visualizer->Visualize(Operation::COMPARISON, i-1-begin, i-begin);
+                    if(this->visualizer) this->visualizer->Visualize(Operation::COMPARISON, i-1, i);
                     if (cmp(*i, *(i-1))) {
                         std::swap(*i, *(i-1));
-                        if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, i-1-begin, i-begin);
+                        if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, i-1, i);
                         border=i-begin;
                     }
                 }
@@ -267,7 +271,7 @@ namespace Sortings{
 
     template<
         typename Container,
-        typename Visualizer = DefaultVisualizer,
+        typename Visualizer = DefaultVisualizer<Container>,
         typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
     class CombSort : public Sorting<Container, Visualizer>{
     public:
@@ -291,10 +295,10 @@ namespace Sortings{
                 }
                 swapped = false;
                 for (Iterator i = begin; i + step < end; i++) {
-                    if(this->visualizer) this->visualizer->Visualize(Operation::COMPARISON, i+step-begin, i-begin);
+                    if(this->visualizer) this->visualizer->Visualize(Operation::COMPARISON, i+step, i);
                     if (cmp(*(i+step),*i)) {
                         std::swap(*i, *(i + step));
-                        if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, i-begin, i+step-begin);
+                        if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, i, i+step);
                         swapped = true;
                     }
                 }
@@ -304,7 +308,7 @@ namespace Sortings{
 
     template<
         typename Container,
-        typename Visualizer = DefaultVisualizer,
+        typename Visualizer = DefaultVisualizer<Container>,
         typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
     class GnomeSort : public Sorting<Container, Visualizer>{
     public:
@@ -322,14 +326,14 @@ namespace Sortings{
             Iterator i = begin+1;
             Iterator j = begin+2;
             while(i < end){
-                if(this->visualizer) this->visualizer->Visualize(Operation::COMPARISON, i-1-begin, i-begin);
+                if(this->visualizer) this->visualizer->Visualize(Operation::COMPARISON, i-1, i);
                 if(cmp(*(i-1), *i)){
                     i = j;
                     j = j < end ? j+1 : j;
                 }
                 else{
                     std::swap(*(i-1), *i);
-                    if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, i-1-begin, i-begin);
+                    if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, i-1, i);
                     i--;
                     if(i==begin){
                         i = j;
@@ -342,7 +346,7 @@ namespace Sortings{
 
     template<
         typename Container,
-        typename Visualizer = DefaultVisualizer,
+        typename Visualizer = DefaultVisualizer<Container>,
         typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
     class OddEvenSort : public Sorting<Container, Visualizer>{
     public:
@@ -358,10 +362,10 @@ namespace Sortings{
                 bool { return x < y; }) override {
             for (size_t i = 0; i < end-begin; i++) {
                 for (size_t j = (i % 2) ? 0 : 1; j + 1 < end-begin; j += 2) {
-                    if(this->visualizer) this->visualizer->Visualize(Operation::COMPARISON, j+1, j);
+                    if(this->visualizer) this->visualizer->Visualize(Operation::COMPARISON, begin+j+1, begin+j);
                     if (cmp(*(begin+j+1), *(begin+j))) {
                         std::swap(*(begin+j+1), *(begin+j));
-                        if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, j+1, j);
+                        if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, begin+j+1, begin+j);
                     }
                 }
             }
@@ -370,7 +374,7 @@ namespace Sortings{
 
     template<
         typename Container,
-        typename Visualizer = DefaultVisualizer,
+        typename Visualizer = DefaultVisualizer<Container>,
         typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
     class QuickSort : public Sorting<Container, Visualizer>{
     public:
@@ -388,23 +392,23 @@ namespace Sortings{
             if (begin != end){
                 Iterator left  = begin;
                 Iterator right = end;
-                if(this->visualizer) this->visualizer->Visualize(Operation::ACCESS, left-begin);
+                if(this->visualizer) this->visualizer->Visualize(Operation::ACCESS, left);
                 Iterator pivot = left++;
                 while( left != right ) {
-                  if( (this->visualizer ? this->visualizer->Visualize(Operation::COMPARISON, left-begin) : true) && cmp( *left, *pivot ) ) {
+                  if( (this->visualizer ? this->visualizer->Visualize(Operation::COMPARISON, left) : true) && cmp( *left, *pivot ) ) {
                      ++left;
                   } else {
                      while( left != --right &&
                             (this->visualizer ?
-                             this->visualizer->Visualize(Operation::COMPARISON, right-begin)
+                             this->visualizer->Visualize(Operation::COMPARISON, right)
                              : true) && cmp( *pivot, *right ) );
                      std::swap( *left, *right );
-                     if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, left-begin, right-begin);
+                     if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, left, right);
                   }
                 }
                 --left;
                 std::swap( *begin, *left );
-                if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, left-begin, 0);
+                if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, left, begin);
                 Sort( begin, left, cmp );
                 Sort( right, end, cmp );
             }

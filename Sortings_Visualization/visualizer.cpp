@@ -1,6 +1,7 @@
 #include "visualizer.h"
 
 #include <iostream>
+#include <optional>
 
 Visualizer::Visualizer(std::vector<int>& data):
     m_Scene(new QGraphicsScene),
@@ -10,12 +11,15 @@ Visualizer::Visualizer(std::vector<int>& data):
     connect (m_Timer,&QTimer::timeout,this,&Visualizer::PlayItem);
 }
 
-bool Visualizer::Visualize(Sortings::Operation operation, size_t first, size_t second){
-    double secondHeight = second == INT_MAX ? 0 : double(m_Data[second])/m_MaxValue;
-    m_VisualizeQueue.push_back({operation, first, second,
-                                double(m_Data[first])/m_MaxValue,
-                                secondHeight});
-
+bool Visualizer::Visualize(Sortings::Operation operation, std::vector<int>::iterator first,
+                           std::optional<std::vector<int>::iterator> second){
+    double secondHeightCoef = second == std::nullopt ? 0 : double(**second)/m_MaxValue;
+    size_t firstPos = first - m_Data.begin();
+    size_t secondPos = second == std::nullopt ? INT_MAX : *second-m_Data.begin();
+    m_VisualizeQueue.push_back({operation, firstPos,
+                                secondPos,
+                                double(*first)/m_MaxValue,
+                                secondHeightCoef});
     return true;
     /*if(operation == Sortings::Operation::COMPARISON){
         m_Rects[position]->setBrush(QBrush(Qt::blue));

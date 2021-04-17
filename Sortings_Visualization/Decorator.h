@@ -8,11 +8,10 @@
 namespace Sortings {
 
     class SortingAndTiming  {
-        public:
-        Sortings::Sorting<std::vector<int>,Visualizer>* m_Sorting;
+    public:
+        SortingAndTiming(Sortings::Sorting<std::vector<int>,Visualizer>* sorting)
+            : m_Sorting(sorting) {}
 
-        SortingAndTiming(Sortings::Sorting<std::vector<int>,Visualizer>* sorting) : m_Sorting(sorting) {
-        }
         void SetSorting (Sortings::SortingName name, Visualizer& m_Visualizer) {
             if(m_Sorting){
                 delete m_Sorting;
@@ -56,13 +55,16 @@ namespace Sortings {
                 }
             }
         }
-        qint64 Run(std::vector<int>m_Numbers) {
+
+        qint64 Run(std::vector<int>& m_Numbers) {
             time.start();
             m_Sorting->Sort(m_Numbers.begin(), m_Numbers.end(), [](int x, int y) { return x < y; });
             return time.nsecsElapsed();
         }
-        private:
+
+    private:
         QElapsedTimer time;
+        Sortings::Sorting<std::vector<int>,Visualizer>* m_Sorting;
     };
 }
 #endif // DECORATOR_H
