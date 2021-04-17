@@ -34,7 +34,8 @@ namespace Sortings{
         ODDEVENSORT,
         QUICKSORT,
         MERGESORT,
-        HEAPSORT
+        HEAPSORT,
+        TIMSORT
     };
 
     template <typename T>
@@ -442,31 +443,25 @@ namespace Sortings{
             }
         }
 
-    private:
         void Merge(typename Container::iterator begin, typename Container::iterator middle,
                    typename Container::iterator end,
                   std::function<bool (
                   typename std::iterator_traits<typename Container::iterator>::value_type,
                   typename std::iterator_traits<typename Container::iterator>::value_type)> cmp) {
             using Iterator = typename Container::iterator;
-
             Container left(middle - begin);
             Container right(end - middle);
-
             for(Iterator i = begin, k=left.begin(); i<middle; i++, k++){
                 if(this->visualizer) this->visualizer->Visualize(Operation::ACCESS, i);
                 *k = *i;
             }
-
             for(Iterator i = middle, k=right.begin(); i<end; i++, k++){
                 if(this->visualizer) this->visualizer->Visualize(Operation::ACCESS, i);
                 *k = *i;
             }
-
             Iterator i = left.begin();
             Iterator j = right.begin();
             Iterator current = begin;
-
             while (i < left.end() && j < right.end()) {
                 if (cmp(*i, *j)) {
                     *current = *i;
@@ -478,17 +473,14 @@ namespace Sortings{
                 if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, current);
                 current++;
             }
-
             for(; i<left.end(); i++, current++){
                 *current = *i;
                 if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, current);
             }
-
             for(; j<right.end(); j++, current++){
                 *current = *j;
                 if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, current);
             }
-
         }
     };
 
@@ -548,6 +540,41 @@ namespace Sortings{
                 std::swap(*cur, *largest);
                 if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, cur, largest);
                 Heapify(begin, end, largest, cmp);
+            }
+        }
+    };
+
+    template<
+        typename Container,
+        typename Visualizer = DefaultVisualizer<Container>,
+        typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
+    class TimSort : public Sorting<Container, Visualizer>{
+    public:
+        TimSort(Visualizer* visualizer = nullptr):
+            Sorting<Container, Visualizer>(visualizer){}
+
+        void Sort(typename Container::iterator begin, typename Container::iterator end,
+                  std::function<bool (
+                  typename std::iterator_traits<typename Container::iterator>::value_type,
+                  typename std::iterator_traits<typename Container::iterator>::value_type)> cmp =
+                [](typename std::iterator_traits<typename Container::iterator>::value_type x,
+                   typename std::iterator_traits<typename Container::iterator>::value_type y) ->
+                bool { return x < y; }) override {
+            using Iterator = typename Container::iterator;
+            const int RUN = 32;
+            InsertionSort<Container, Visualizer> insertionSort(this->visualizer);
+            MergeSort<Container, Visualizer> mergeSort(this->visualizer);
+            for (Iterator i = begin; i < end; i+=RUN){
+                insertionSort.Sort(i, std::min(i+RUN, end), cmp);
+            }
+            for (int size = RUN; size < end-begin; size *= 2) {
+                for (Iterator left = begin; left < end; left += 2*size) {
+                    Iterator middle = left + size;
+                    Iterator right = std::min(left + 2*size, end);
+                    if(middle < right){
+                        mergeSort.Merge(left, middle, right, cmp);
+                    }
+                }
             }
         }
     };

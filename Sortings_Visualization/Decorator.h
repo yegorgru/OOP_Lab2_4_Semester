@@ -61,6 +61,10 @@ namespace Sortings {
                     m_Sorting = new Sortings::HeapSort<std::vector<int>,Visualizer>(&m_Visualizer);
                     break;
                 }
+                case Sortings::SortingName::TIMSORT:{
+                    m_Sorting = new Sortings::TimSort<std::vector<int>,Visualizer>(&m_Visualizer);
+                    break;
+                }
             }
         }
 

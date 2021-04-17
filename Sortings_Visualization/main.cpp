@@ -153,6 +153,10 @@ TEST_CASE("testing sortings"){
     Sortings::HeapSort<std::vector<long>>heap;
     TestSorting<long>(heap, 10000);
     TestSorting<long>(heap, 10000, [](long x, long y){return x > y;});
+
+    Sortings::TimSort<std::vector<long>>tim;
+    TestSorting<long>(tim, 10000);
+    TestSorting<long>(tim, 10000, [](long x, long y){return x > y;});
 }
 
 int main(int argc, char *argv[])
