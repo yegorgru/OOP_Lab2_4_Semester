@@ -69,6 +69,11 @@ namespace Sortings {
                     m_Sorting = new Sortings::IntroSort<std::vector<int>,Visualizer>(&m_Visualizer);
                     break;
                 }
+                case Sortings::SortingName::SHELLSORT:{
+                    m_Sorting = new Sortings::ShellSort<std::vector<int>,Visualizer>(&m_Visualizer);
+                    break;
+                }
+
             }
         }
 

@@ -36,7 +36,8 @@ namespace Sortings{
         MERGESORT,
         HEAPSORT,
         TIMSORT,
-        INTROSORT
+        INTROSORT,
+        SHELLSORT
     };
 
     template <typename T>
@@ -630,5 +631,45 @@ namespace Sortings{
 
     private:
         HeapSort<Container, Visualizer> m_HeapSort;
+    };
+
+    template<
+        typename Container,
+        typename Visualizer = DefaultVisualizer<Container>,
+        typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
+    class ShellSort : public Sorting<Container, Visualizer>{
+    public:
+        ShellSort(Visualizer* visualizer = nullptr):
+            Sorting<Container, Visualizer>(visualizer){}
+
+        void Sort(typename Container::iterator begin, typename Container::iterator end,
+                  std::function<bool (
+                  typename std::iterator_traits<typename Container::iterator>::value_type,
+                  typename std::iterator_traits<typename Container::iterator>::value_type)> cmp =
+                [](typename std::iterator_traits<typename Container::iterator>::value_type x,
+                   typename std::iterator_traits<typename Container::iterator>::value_type y) ->
+                bool { return x < y; }) override {
+            using ValueType = typename std::iterator_traits<typename Container::iterator>::value_type;
+            for (size_t gap = (end-begin)/2; gap > 0; gap /= 2){
+                {
+                    for (size_t i = gap; i < end-begin; i++)
+                    {
+                        if(this->visualizer) this->visualizer->Visualize(Operation::ACCESS, begin+i);
+                        ValueType temp = *(begin+i);
+                        size_t j;
+                        for (j = i; j >= gap &&
+                             (this->visualizer != nullptr ?
+                                                    this->visualizer->Visualize(Operation::COMPARISON, begin + j - gap) :true)
+                             && !cmp(*(begin + j - gap), temp); j -= gap){
+                            if(this->visualizer) this->visualizer->Visualize(Operation::ACCESS, begin + j - gap);
+                            *(begin + j) = *(begin + j - gap);
+                            if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, begin+j);
+                        }
+                        *(begin + j) = temp;
+                        if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, begin+j);
+                    }
+                }
+            }
+        }
     };
 }
