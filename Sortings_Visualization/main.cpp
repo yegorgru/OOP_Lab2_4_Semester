@@ -149,6 +149,10 @@ TEST_CASE("testing sortings"){
     Sortings::MergeSort<std::vector<long>>merge;
     TestSorting<long>(merge, 10000);
     TestSorting<long>(merge, 10000, [](long x, long y){return x > y;});
+
+    Sortings::HeapSort<std::vector<long>>heap;
+    TestSorting<long>(heap, 10000);
+    TestSorting<long>(heap, 10000, [](long x, long y){return x > y;});
 }
 
 int main(int argc, char *argv[])

@@ -33,7 +33,8 @@ namespace Sortings{
         GNOMESORT,
         ODDEVENSORT,
         QUICKSORT,
-        MERGESORT
+        MERGESORT,
+        HEAPSORT
     };
 
     template <typename T>
@@ -461,8 +462,6 @@ namespace Sortings{
                 if(this->visualizer) this->visualizer->Visualize(Operation::ACCESS, i);
                 *k = *i;
             }
-            //std::copy(begin, middle, left.begin());
-            //std::copy(middle, end, right.begin());
 
             Iterator i = left.begin();
             Iterator j = right.begin();
@@ -490,6 +489,66 @@ namespace Sortings{
                 if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, current);
             }
 
+        }
+    };
+
+    template<
+        typename Container,
+        typename Visualizer = DefaultVisualizer<Container>,
+        typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
+    class HeapSort : public Sorting<Container, Visualizer>{
+    public:
+        HeapSort(Visualizer* visualizer = nullptr):
+            Sorting<Container, Visualizer>(visualizer){}
+
+        void Sort(typename Container::iterator begin, typename Container::iterator end,
+                  std::function<bool (
+                  typename std::iterator_traits<typename Container::iterator>::value_type,
+                  typename std::iterator_traits<typename Container::iterator>::value_type)> cmp =
+                [](typename std::iterator_traits<typename Container::iterator>::value_type x,
+                   typename std::iterator_traits<typename Container::iterator>::value_type y) ->
+                bool { return x < y; }) override {
+            using Iterator = typename Container::iterator;
+            for (Iterator i = begin + (end-begin) / 2 - 1; i >= begin; i--){
+                Heapify(begin, end, i, cmp);
+            }
+            for (Iterator i=end-1; i>=begin; i--)
+            {
+                std::swap(*begin, *i);
+                if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, i, begin);
+                Heapify(begin, i, begin, cmp);
+            }
+        }
+
+    private:
+        void Heapify(typename Container::iterator begin, typename Container::iterator end,
+                     typename Container::iterator cur,
+                     std::function<bool (
+                     typename std::iterator_traits<typename Container::iterator>::value_type,
+                     typename std::iterator_traits<typename Container::iterator>::value_type)> cmp)
+        {
+            using Iterator = typename Container::iterator;
+            Iterator largest = cur;
+            Iterator left = begin+2*(cur-begin) + 1;
+            Iterator right = begin+2*(cur-begin) + 2;
+            if (left < end &&
+                (this->visualizer ?
+                 this->visualizer->Visualize(Operation::COMPARISON, left, largest) : true)
+                    && !cmp(*left, *largest)){
+                largest = left;
+            }
+            if (right < end &&
+               (this->visualizer ?
+                this->visualizer->Visualize(Operation::COMPARISON, right, largest) : true)
+                && !cmp(*right, *largest)){
+                largest = right;
+            }
+            if (largest != cur)
+            {
+                std::swap(*cur, *largest);
+                if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, cur, largest);
+                Heapify(begin, end, largest, cmp);
+            }
         }
     };
 }

@@ -257,6 +257,11 @@ background: linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(149,45,253,0.38728
            <string>MergeSort</string>
           </property>
          </item>
+         <item>
+          <property name="text">
+           <string>HeapSort</string>
+          </property>
+         </item>
         </widget>
        </item>
        <item>
