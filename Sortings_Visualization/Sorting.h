@@ -46,7 +46,8 @@ namespace Sortings{
         PIGEONHOLESORT,
         BUCKETSORT,
         COUNTINGSORT,
-        RADIXSORT
+        RADIXSORT,
+        FLASHSORT
     };
 
     template <typename T>
@@ -968,10 +969,11 @@ namespace Sortings{
         typename Container,
         typename Visualizer = DefaultVisualizer<Container>,
         typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
-    class SpreadSort : public Sorting<Container, Visualizer>{
+    class FlashSort : public Sorting<Container, Visualizer>{
     public:
-        SpreadSort(Visualizer* visualizer = nullptr):
-            Sorting<Container, Visualizer>(visualizer){}
+        FlashSort(Visualizer* visualizer = nullptr):
+            Sorting<Container, Visualizer>(visualizer),
+            m_InsertionSort(visualizer) {}
 
         void Sort(typename Container::iterator begin, typename Container::iterator end,
                   std::function<bool (
@@ -980,47 +982,94 @@ namespace Sortings{
                 [](typename std::iterator_traits<typename Container::iterator>::value_type x,
                    typename std::iterator_traits<typename Container::iterator>::value_type y) ->
                 bool { return x < y; }) override {
+
+            using Iterator = typename Container::iterator;
+            using ValueType = typename std::iterator_traits<typename Container::iterator>::value_type;
+
             if(begin > end-2){
                 return;
             }
-            using Iterator = typename Container::iterator;
-            using ValueType = typename std::iterator_traits<typename Container::iterator>::value_type;
-            int m, p = 1;
-            ValueType max = *begin;
+
             if(this->visualizer) this->visualizer->Visualize(Operation::ACCESS, begin);
-            for(Iterator i = begin+1; i < end; i++){
-                if(this->visualizer) this->visualizer->Visualize(Operation::ACCESS, i);
-                if(max < *i){
+            ValueType min = *begin;
+            ValueType max = *begin;
+            Iterator maxIt = begin;
+
+            for(Iterator i = begin+1; i < end; i++) {
+                if(*i > max) {
+                    if(this->visualizer) this->visualizer->Visualize(Operation::ACCESS, i);
                     max = *i;
+                    maxIt = i;
+                }
+                if(*i < min){
+                    if(this->visualizer) this->visualizer->Visualize(Operation::ACCESS, i);
+                    min = *i;
                 }
             }
 
-            int maxDigit = 0;
-            while(max > 0){
-                max/=10;
-                maxDigit++;
+            if(max == min) return;
+
+            size_t m = (end-begin)/5 + 2;
+
+            std::vector<int> L(m+1,0);
+
+            double c = (m-1.0)/(max-min);
+            size_t K;
+            for(Iterator h=begin; h < end; h++) {
+                if(this->visualizer) this->visualizer->Visualize(Operation::ACCESS, h);
+                K = ((int)(((*h)-min)*c))+1;
+                L[K]++;
             }
 
-            std::list<ValueType> pocket[10];
-            for(size_t i = 0; i < maxDigit; i++) {
-               m = std::pow(10, i+1);
-               p = pow(10, i);
-               for(Iterator j = begin; j<end; j++) {
-                   if(this->visualizer) this->visualizer->Visualize(Operation::ACCESS, j);
-                   ValueType temp = *j%m;
-                   size_t index = temp/p;
-                   pocket[index].push_back(*j);
-               }
-               Iterator current = begin;
-               for(size_t j = 0; j<10; j++) {
-                  while(!pocket[j].empty()) {
-                      *current = *(pocket[j].begin());
-                      if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, current);
-                      pocket[j].erase(pocket[j].begin());
-                      current++;
-                  }
-               }
+            for(K = 2; K < m+1; K++) {
+                L[K] = L[K] + L[K-1];
+            }
+
+            std::swap(*maxIt, *begin);
+            if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, maxIt, begin);
+
+            int j = 0;
+            K = m;
+            size_t movesCounter = 0;
+
+            while(movesCounter < end-begin) {
+                while(j >= L[K]) {
+                    j++;
+                    if(this->visualizer) this->visualizer->Visualize(Operation::ACCESS, begin+j);
+                    K = ((int)((*(begin+j) - min) * c)) + 1;
+                }
+
+                Iterator evicted = begin+j;
+
+                while(j < L[K])	{
+                    if(this->visualizer) this->visualizer->Visualize(Operation::ACCESS, evicted);
+                    K = size_t((*evicted-min)*c)+1;
+
+                    int location = L[K] - 1;
+
+                    std::swap(*(begin+location), *evicted);
+                    if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, evicted, begin+location);
+
+                    L[K]--;
+
+                    movesCounter++;
+                }
+            }
+
+            size_t threshold = (int)(1.25*(((end-begin)/m)+1));
+
+            for(K = m - 1; K >= 1; K--) {
+                int classSize = L[K+1] - L[K];
+
+                if(classSize > threshold && classSize > 32) {
+                    Sort(begin+L[K],begin+L[K]+classSize);
+                } else if(classSize > 1){
+                    m_InsertionSort.Sort(begin+L[K],begin+L[K]+classSize);
+                }
             }
         }
+
+    private:
+        InsertionSort<Container, Visualizer> m_InsertionSort;
     };
 }

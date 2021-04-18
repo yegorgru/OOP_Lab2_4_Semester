@@ -87,6 +87,10 @@ void SortingAndTiming::SetSorting(Sortings::SortingName name){
             m_Sorting = new Sortings::RadixSort<std::vector<int>,Visualizer>(m_Visualizer);
             break;
         }
+        case Sortings::SortingName::FLASHSORT:{
+            m_Sorting = new Sortings::FlashSort<std::vector<int>,Visualizer>(m_Visualizer);
+            break;
+        }
         }
         m_CurrentSortingName = name;
     }
