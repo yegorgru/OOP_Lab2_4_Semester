@@ -95,6 +95,10 @@ void SortingAndTiming::SetSorting(Sortings::SortingName name){
             m_Sorting = new Sortings::PancakeSort<std::vector<int>,Visualizer>(m_Visualizer);
             break;
         }
+        case Sortings::SortingName::BOGOSORT:{
+            m_Sorting = new Sortings::BogoSort<std::vector<int>,Visualizer>(m_Visualizer);
+            break;
+        }
         }
         m_CurrentSortingName = name;
     }

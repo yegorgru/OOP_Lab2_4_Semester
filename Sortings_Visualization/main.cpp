@@ -188,6 +188,10 @@ TEST_CASE("testing sortings"){
     Sortings::PancakeSort<std::vector<long>>pancake;
     TestSorting<long>(pancake, 1000);
     TestSorting<long>(pancake, 1000, [](long x, long y){return x > y;});
+
+    Sortings::BogoSort<std::vector<long>>bogo;
+    TestSorting<long>(bogo, 10);
+    TestSorting<long>(bogo, 10, [](long x, long y){return x > y;});
 }
 
 int main(int argc, char *argv[])

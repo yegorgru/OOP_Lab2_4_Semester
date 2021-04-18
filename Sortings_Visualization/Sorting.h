@@ -48,7 +48,8 @@ namespace Sortings{
         COUNTINGSORT,
         RADIXSORT,
         FLASHSORT,
-        PANCAKESORT
+        PANCAKESORT,
+        BOGOSORT
     };
 
     template <typename T>
@@ -1074,7 +1075,6 @@ namespace Sortings{
         InsertionSort<Container, Visualizer> m_InsertionSort;
     };
 
-    //cmp only for inheritance
     template<
         typename Container,
         typename Visualizer = DefaultVisualizer<Container>,
@@ -1119,6 +1119,92 @@ namespace Sortings{
                 start++;
                 i--;
             }
+        }
+    };
+
+    template<
+        typename Container,
+        typename Visualizer = DefaultVisualizer<Container>,
+        typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
+    class BogoSort : public Sorting<Container, Visualizer>{
+    public:
+        BogoSort(Visualizer* visualizer = nullptr):
+            Sorting<Container, Visualizer>(visualizer){}
+
+        void Sort(typename Container::iterator begin, typename Container::iterator end,
+                  std::function<bool (
+                  typename std::iterator_traits<typename Container::iterator>::value_type,
+                  typename std::iterator_traits<typename Container::iterator>::value_type)> cmp =
+                [](typename std::iterator_traits<typename Container::iterator>::value_type x,
+                   typename std::iterator_traits<typename Container::iterator>::value_type y) ->
+                bool { return x < y; }) override {
+            using Iterator = typename Container::iterator;
+            if(IsSorted(begin, end, cmp)){
+                return;
+            }
+            while (NextPermutation(begin, end)) {
+                if(IsSorted(begin, end, cmp)){
+                    return;
+                }
+            }
+        }
+
+    private:
+        bool NextPermutation(typename Container::iterator begin, typename Container::iterator end) {
+            using Iterator = typename Container::iterator;
+            if (begin == end) return false;
+            Iterator i = end;
+            if (begin == --i) return false;
+
+            while (true) {
+                Iterator i1, i2;
+
+                i1 = i;
+                if(this->visualizer) this->visualizer->Visualize(Operation::COMPARISON, i, i1);
+                if (*--i < *i1) {
+                    i2 = end;
+                    while (!(*i < *--i2)){
+                        if(this->visualizer) this->visualizer->Visualize(Operation::COMPARISON, i, i2);
+                    }
+                    if(this->visualizer) this->visualizer->Visualize(Operation::COMPARISON, i, i2);
+                    std::swap(*i, *i2);
+                    if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, i, i2);
+                    Reverse(i1, end);
+                    return true;
+                }
+                if (i == begin) {
+                    Reverse(begin, end);
+                    return false;
+                }
+            }
+        }
+
+        void Reverse(typename Container::iterator begin, typename Container::iterator end)
+        {
+            while ((begin != end) && (begin != --end)) {
+                std::swap(*begin, *end);
+                if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, begin, end);
+                begin++;
+            }
+        }
+
+        bool IsSorted(typename Container::iterator begin, typename Container::iterator end,
+                      std::function<bool (
+                      typename std::iterator_traits<typename Container::iterator>::value_type,
+                      typename std::iterator_traits<typename Container::iterator>::value_type)> cmp){
+            using Iterator = typename Container::iterator;
+            if (begin < end) {
+                Iterator next = begin;
+                while (++next != end) {
+                    if ((this->visualizer != nullptr ?
+                         this->visualizer->Visualize(Operation::COMPARISON, next, begin) : true)
+                            && cmp(*next, *begin)){
+                        return false;
+                    }
+                    begin = next;
+                }
+            }
+            return true;
         }
     };
 }
