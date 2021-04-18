@@ -3,7 +3,6 @@
 
 //#include <QDesktopWidget>
 #include <QElapsedTimer>
-#include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -44,7 +43,7 @@ void MainWindow::on_SortButton_clicked() {
 
     m_Visualizer.ClearQueue();
 
-    qDebug() << Qt::endl << "Time of sorting: " <<  m_SortingAndTiming.Run(m_Numbers) << "milliseconds" << Qt::endl;
+    ui->SortingTime->setText("Time of sorting: " +  QString::number(m_SortingAndTiming.Run(m_Numbers)) + " milliseconds");
 
     ui->groupBox->setEnabled(false);
     m_Visualizer.Play(ui->Slider->value());
