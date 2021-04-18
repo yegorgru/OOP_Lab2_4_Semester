@@ -6,6 +6,7 @@
 #include <functional>
 #include <optional>
 #include <vector>
+#include <array>
 
 template<typename Container>
 using IteratorCategoryOf =
@@ -40,7 +41,8 @@ namespace Sortings{
         TIMSORT,
         INTROSORT,
         SHELLSORT,
-        PIGEONHOLESORT
+        PIGEONHOLESORT,
+        BUCKETSORT
     };
 
     template <typename T>
@@ -760,7 +762,7 @@ namespace Sortings{
                 if (cmp(*max, *i)) max = i;
             }
             size_t range = (*max > *min ? *max - *min : *min - *max) + 1;
-            std::vector<ValueType> holes[range];
+            std::vector<ValueType>holes[range];
             for (Iterator i = begin; i < end; i++){
                 if(this->visualizer) this->visualizer->Visualize(Operation::ACCESS, i, min);
                 if(*max > *min){
@@ -779,5 +781,76 @@ namespace Sortings{
                 }
             }
         }
+    };
+
+    template<
+        typename Container,
+        typename Visualizer = DefaultVisualizer<Container>,
+        typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
+    class BucketSort : public Sorting<Container, Visualizer>{
+    public:
+        BucketSort(Visualizer* visualizer = nullptr):
+            Sorting<Container, Visualizer>(visualizer),
+            m_InsertionSort(visualizer) {}
+
+        void Sort(typename Container::iterator begin, typename Container::iterator end,
+                  std::function<bool (
+                  typename std::iterator_traits<typename Container::iterator>::value_type,
+                  typename std::iterator_traits<typename Container::iterator>::value_type)> cmp =
+                [](typename std::iterator_traits<typename Container::iterator>::value_type x,
+                   typename std::iterator_traits<typename Container::iterator>::value_type y) ->
+                bool { return x < y; }) override {
+            using Iterator = typename Container::iterator;
+            using ValueType = typename std::iterator_traits<typename Container::iterator>::value_type;
+
+            if(end - begin < 11){
+                m_InsertionSort.Sort(begin, end, cmp);
+                return;
+            }
+
+            Iterator min = begin;
+            Iterator max = begin;
+            for (Iterator i = begin+1; i < end; i++) {
+                if(this->visualizer) this->visualizer->Visualize(Operation::COMPARISON, i, min);
+                if (cmp(*i, *min)) min = i;
+                if(this->visualizer) this->visualizer->Visualize(Operation::COMPARISON, i, max);
+                if (cmp(*max, *i)) max = i;
+            }
+
+            std::vector<ValueType>buckets[end - begin + 1];
+
+            for (Iterator i = begin; i < end; i++) {
+                size_t bi;
+                if(*min < *max){
+                    if(this->visualizer) this->visualizer->Visualize(Operation::ACCESS, i, max);
+                    bi = double(*i) / *max * (end-begin);
+                    buckets[bi].push_back(*i);
+                }
+                else{
+                    if(this->visualizer) this->visualizer->Visualize(Operation::ACCESS, i, min);
+                    bi = double(*i) / *min * (end-begin);
+                    buckets[end - begin-bi].push_back(*i);
+                }
+            }
+
+            Iterator cur = begin;
+            for (std::vector<ValueType>& bucket: buckets){
+                for (ValueType& item: bucket){
+                    *cur = item;
+                    if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, cur);
+                    cur++;
+                }
+            }
+
+            cur = begin;
+
+            for (const auto& bucket:buckets){
+                Sort(cur, cur+bucket.size(), cmp);
+                cur+=bucket.size();
+            }
+        }
+
+    private:
+        InsertionSort<Container, Visualizer>m_InsertionSort;
     };
 }

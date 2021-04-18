@@ -81,6 +81,10 @@ namespace Sortings {
                         m_Sorting = new Sortings::PigeonholeSort<std::vector<int>,Visualizer>(&m_Visualizer);
                         break;
                 }
+                case Sortings::SortingName::BUCKETSORT:{
+                        m_Sorting = new Sortings::BucketSort<std::vector<int>,Visualizer>(&m_Visualizer);
+                        break;
+                }
                 }
         }
 
