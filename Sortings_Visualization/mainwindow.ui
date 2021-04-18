@@ -386,6 +386,13 @@ background: linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(149,45,253,0.38728
       </property>
      </widget>
     </item>
+    <item row="4" column="1">
+     <widget class="QLabel" name="SortingTime">
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
