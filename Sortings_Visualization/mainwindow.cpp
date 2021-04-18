@@ -57,8 +57,10 @@ void MainWindow::on_SortButton_clicked() {
 
     ui->SortingTime->setText("Time of sorting: " +  QString::number(m_SortingAndTiming.Run(m_Numbers)) + " milliseconds");
 
-    ui->groupBox->setEnabled(false);
-    m_Visualizer.Play(ui->Slider->value());
+    if (ui->ShowVisualizationCheckBox->isChecked()) {
+        ui->groupBox->setEnabled(false);
+        m_Visualizer.Play(ui->Slider->value());
+    }
     connect(&m_Visualizer, &Visualizer::Sorted, this, [this] { this->ui->groupBox->setEnabled(true); });
 }
 

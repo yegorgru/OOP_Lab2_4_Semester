@@ -124,6 +124,16 @@ background: linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(149,45,253,0.38728
         </widget>
        </item>
        <item>
+        <widget class="QCheckBox" name="ShowVisualizationCheckBox">
+         <property name="text">
+          <string>Show visualization </string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QSlider" name="verticalSlider">
          <property name="layoutDirection">
           <enum>Qt::LeftToRight</enum>

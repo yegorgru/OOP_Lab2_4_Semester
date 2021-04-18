@@ -11,7 +11,7 @@ public:
 
     void SetSorting(Sortings::SortingName name);
 
-    qint64 Run(std::vector<int>& m_Numbers);
+    float Run(std::vector<int>& m_Numbers);
 
 private:
     QElapsedTimer time;

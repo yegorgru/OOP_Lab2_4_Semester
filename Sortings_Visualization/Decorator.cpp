@@ -112,8 +112,8 @@ void SortingAndTiming::SetSorting(Sortings::SortingName name){
     }
 }
 
-qint64 SortingAndTiming::Run(std::vector<int>& m_Numbers){
+float SortingAndTiming::Run(std::vector<int>& m_Numbers){
     time.start();
     m_Sorting->Sort(m_Numbers.begin(), m_Numbers.end(), [](int x, int y) { return x < y; });
-    return time.elapsed();
+    return (float)time.nsecsElapsed()/1000000;
 }
