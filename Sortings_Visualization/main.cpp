@@ -178,6 +178,9 @@ TEST_CASE("testing sortings"){
 
     Sortings::CountingSort<std::vector<long>>counting;
     TestSorting<long>(counting, 1000);
+
+    Sortings::RadixSort<std::vector<long>>radix;
+    TestSorting<long>(radix, 10000);
 }
 
 int main(int argc, char *argv[])

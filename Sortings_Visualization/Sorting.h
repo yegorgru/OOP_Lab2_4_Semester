@@ -7,6 +7,8 @@
 #include <optional>
 #include <vector>
 #include <map>
+#include <list>
+#include <cmath>
 
 template<typename Container>
 using IteratorCategoryOf =
@@ -43,7 +45,8 @@ namespace Sortings{
         SHELLSORT,
         PIGEONHOLESORT,
         BUCKETSORT,
-        COUNTINGSORT
+        COUNTINGSORT,
+        RADIXSORT
     };
 
     template <typename T>
@@ -893,5 +896,66 @@ namespace Sortings{
         }
 
         static inline int RANGE = 1000;
+    };
+
+    //cmp only for inheritance
+    template<
+        typename Container,
+        typename Visualizer = DefaultVisualizer<Container>,
+        typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
+    class RadixSort : public Sorting<Container, Visualizer>{
+    public:
+        RadixSort(Visualizer* visualizer = nullptr):
+            Sorting<Container, Visualizer>(visualizer){}
+
+        void Sort(typename Container::iterator begin, typename Container::iterator end,
+                  std::function<bool (
+                  typename std::iterator_traits<typename Container::iterator>::value_type,
+                  typename std::iterator_traits<typename Container::iterator>::value_type)> cmp =
+                [](typename std::iterator_traits<typename Container::iterator>::value_type x,
+                   typename std::iterator_traits<typename Container::iterator>::value_type y) ->
+                bool { return x < y; }) override {
+            if(begin > end-2){
+                return;
+            }
+            using Iterator = typename Container::iterator;
+            using ValueType = typename std::iterator_traits<typename Container::iterator>::value_type;
+            int m, p = 1;
+            ValueType max = *begin;
+            if(this->visualizer) this->visualizer->Visualize(Operation::ACCESS, begin);
+            for(Iterator i = begin+1; i < end; i++){
+                if(this->visualizer) this->visualizer->Visualize(Operation::ACCESS, i);
+                if(max < *i){
+                    max = *i;
+                }
+            }
+
+            int maxDigit = 0;
+            while(max > 0){
+                max/=10;
+                maxDigit++;
+            }
+
+            std::list<ValueType> pocket[10];
+            for(size_t i = 0; i < maxDigit; i++) {
+               m = std::pow(10, i+1);
+               p = pow(10, i);
+               for(Iterator j = begin; j<end; j++) {
+                   if(this->visualizer) this->visualizer->Visualize(Operation::ACCESS, j);
+                   ValueType temp = *j%m;
+                   size_t index = temp/p;
+                   pocket[index].push_back(*j);
+               }
+               Iterator current = begin;
+               for(size_t j = 0; j<10; j++) {
+                  while(!pocket[j].empty()) {
+                      *current = *(pocket[j].begin());
+                      if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, current);
+                      pocket[j].erase(pocket[j].begin());
+                      current++;
+                  }
+               }
+            }
+        }
     };
 }

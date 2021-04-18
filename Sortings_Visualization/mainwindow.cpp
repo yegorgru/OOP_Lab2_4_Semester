@@ -122,6 +122,10 @@ void MainWindow::on_SortButton_clicked() {
             m_Sorting = new Sortings::CountingSort<std::vector<int>,Visualizer>(&m_Visualizer);
             break;
         }
+        case Sortings::SortingName::RADIXSORT:{
+            m_Sorting = new Sortings::RadixSort<std::vector<int>,Visualizer>(&m_Visualizer);
+            break;
+        }
         }
         m_CurrentSortingName = name;
     }
