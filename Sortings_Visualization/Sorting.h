@@ -1226,7 +1226,6 @@ namespace Sortings{
                 [](typename std::iterator_traits<typename Container::iterator>::value_type x,
                    typename std::iterator_traits<typename Container::iterator>::value_type y) ->
                 bool { return x < y; }) override {
-            using Iterator = typename Container::iterator;
             size_t temp;
             if(end-begin > 2) {
                 temp = (end-begin)/3;
