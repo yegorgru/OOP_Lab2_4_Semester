@@ -6,7 +6,7 @@
 #include <functional>
 #include <optional>
 #include <vector>
-#include <array>
+#include <map>
 
 template<typename Container>
 using IteratorCategoryOf =
@@ -42,7 +42,8 @@ namespace Sortings{
         INTROSORT,
         SHELLSORT,
         PIGEONHOLESORT,
-        BUCKETSORT
+        BUCKETSORT,
+        COUNTINGSORT
     };
 
     template <typename T>
@@ -733,7 +734,7 @@ namespace Sortings{
         }
     };
 
-    //works only with cmp equal to < or >
+    //cmp only for inheritance
     template<
         typename Container,
         typename Visualizer = DefaultVisualizer<Container>,
@@ -783,6 +784,7 @@ namespace Sortings{
         }
     };
 
+    //cmp only for inheritance
     template<
         typename Container,
         typename Visualizer = DefaultVisualizer<Container>,
@@ -812,25 +814,17 @@ namespace Sortings{
             Iterator max = begin;
             for (Iterator i = begin+1; i < end; i++) {
                 if(this->visualizer) this->visualizer->Visualize(Operation::COMPARISON, i, min);
-                if (cmp(*i, *min)) min = i;
+                if (*i < *min) min = i;
                 if(this->visualizer) this->visualizer->Visualize(Operation::COMPARISON, i, max);
-                if (cmp(*max, *i)) max = i;
+                if (*max < *i) max = i;
             }
 
             std::vector<ValueType>buckets[end - begin + 1];
 
             for (Iterator i = begin; i < end; i++) {
-                size_t bi;
-                if(*min < *max){
-                    if(this->visualizer) this->visualizer->Visualize(Operation::ACCESS, i, max);
-                    bi = double(*i) / *max * (end-begin);
-                    buckets[bi].push_back(*i);
-                }
-                else{
-                    if(this->visualizer) this->visualizer->Visualize(Operation::ACCESS, i, min);
-                    bi = double(*i) / *min * (end-begin);
-                    buckets[end - begin-bi].push_back(*i);
-                }
+                if(this->visualizer) this->visualizer->Visualize(Operation::ACCESS, i, max);
+                size_t bi = double(*i) / *max * (end-begin);
+                buckets[bi].push_back(*i);
             }
 
             Iterator cur = begin;
@@ -845,12 +839,59 @@ namespace Sortings{
             cur = begin;
 
             for (const auto& bucket:buckets){
-                Sort(cur, cur+bucket.size(), cmp);
+                Sort(cur, cur+bucket.size());
                 cur+=bucket.size();
             }
         }
 
     private:
         InsertionSort<Container, Visualizer>m_InsertionSort;
+    };
+
+    //cmp only for inheritance
+    template<
+        typename Container,
+        typename Visualizer = DefaultVisualizer<Container>,
+        typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
+    class CountingSort : public Sorting<Container, Visualizer>{
+    public:
+        CountingSort(Visualizer* visualizer = nullptr):
+            Sorting<Container, Visualizer>(visualizer){}
+
+        void Sort(typename Container::iterator begin, typename Container::iterator end,
+                  std::function<bool (
+                  typename std::iterator_traits<typename Container::iterator>::value_type,
+                  typename std::iterator_traits<typename Container::iterator>::value_type)> cmp =
+                [](typename std::iterator_traits<typename Container::iterator>::value_type x,
+                   typename std::iterator_traits<typename Container::iterator>::value_type y) ->
+                bool { return x < y; }) override {
+            using Iterator = typename Container::iterator;
+
+            std::vector<int>count(RANGE + 1, 0);
+
+            for (Iterator i = begin; i < end; i++){
+                if(this->visualizer) this->visualizer->Visualize(Operation::ACCESS, i);
+                count[*i]++;
+            }
+
+            for (size_t i = 1; i <= RANGE; i++){
+                count[i] += count[i - 1];
+            }
+
+            Container answer(end-begin);
+
+            for (Iterator i = begin; i < end; i++) {
+                if(this->visualizer) this->visualizer->Visualize(Operation::ACCESS, i);
+                answer[count[*i] - 1] = *i;
+                count[*i]--;
+            }
+
+            for(Iterator cur = begin, a = answer.begin(); cur < end; cur++, a++){
+                *cur = *a;
+                if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, cur);
+            }
+        }
+
+        static inline int RANGE = 1000;
     };
 }

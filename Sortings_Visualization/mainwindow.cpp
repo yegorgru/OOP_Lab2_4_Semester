@@ -9,7 +9,7 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow),
       m_Visualizer(m_Numbers),
-      m_SortingAndTiming(new Sortings::BubbleSort<std::vector<int>,Visualizer>(&m_Visualizer)),
+      m_Sorting(new Sortings::BubbleSort<std::vector<int>,Visualizer>(&m_Visualizer)),
       mersenne(rd())
 {
 
@@ -22,6 +22,8 @@ MainWindow::MainWindow(QWidget *parent)
     keyCtrl_D = new QShortcut(this);
     keyCtrl_D->setKey(Qt::CTRL + Qt::Key_D);
     connect(keyCtrl_D, SIGNAL(activated()), this, SLOT(on_SortButton_clicked()));
+
+    m_SortingAndTiming.SetSorting(m_Sorting);
 
     m_IsInitiated = false;
 }
@@ -43,12 +45,90 @@ void MainWindow::on_SortButton_clicked() {
     Sortings::SortingName name =
             static_cast<Sortings::SortingName>(ui->SortingNameComboBox->currentIndex());
     if(m_CurrentSortingName != name){
-        m_SortingAndTiming.SetSorting(name, m_Visualizer);
+        if(m_Sorting){
+            delete m_Sorting;
+        }
+        switch(name){
+        case Sortings::SortingName::BUBBLESORT:{
+            m_Sorting = new Sortings::BubbleSort<std::vector<int>,Visualizer>(&m_Visualizer);
+            break;
+        }
+        case Sortings::SortingName::INSERTIONSORT:{
+            m_Sorting = new Sortings::InsertionSort<std::vector<int>,Visualizer>(&m_Visualizer);
+            break;
+        }
+        case Sortings::SortingName::SELECTIONSORT:{
+            m_Sorting = new Sortings::SelectionSort<std::vector<int>,Visualizer>(&m_Visualizer);
+            break;
+        }
+        case Sortings::SortingName::CYCLESORT:{
+            m_Sorting = new Sortings::CycleSort<std::vector<int>,Visualizer>(&m_Visualizer);
+            break;
+        }
+        case Sortings::SortingName::SHAKERSORT:{
+            m_Sorting = new Sortings::ShakerSort<std::vector<int>,Visualizer>(&m_Visualizer);
+            break;
+        }
+        case Sortings::SortingName::COMBSORT:{
+            m_Sorting = new Sortings::CombSort<std::vector<int>,Visualizer>(&m_Visualizer);
+            break;
+        }
+        case Sortings::SortingName::GNOMESORT:{
+            m_Sorting = new Sortings::GnomeSort<std::vector<int>,Visualizer>(&m_Visualizer);
+            break;
+        }
+        case Sortings::SortingName::ODDEVENSORT:{
+            m_Sorting = new Sortings::OddEvenSort<std::vector<int>,Visualizer>(&m_Visualizer);
+            break;
+        }
+        case Sortings::SortingName::QUICKSORT:{
+            m_Sorting = new Sortings::QuickSort<std::vector<int>,Visualizer>(&m_Visualizer);
+            break;
+        }
+        case Sortings::SortingName::MERGESORT:{
+            m_Sorting = new Sortings::MergeSort<std::vector<int>,Visualizer>(&m_Visualizer);
+            break;
+        }
+        case Sortings::SortingName::MERGESORTINPLACE:{
+            m_Sorting = new Sortings::MergeSortInPlace<std::vector<int>,Visualizer>(&m_Visualizer);
+            break;
+        }
+        case Sortings::SortingName::HEAPSORT:{
+            m_Sorting = new Sortings::HeapSort<std::vector<int>,Visualizer>(&m_Visualizer);
+            break;
+        }
+        case Sortings::SortingName::TIMSORT:{
+            m_Sorting = new Sortings::TimSort<std::vector<int>,Visualizer>(&m_Visualizer);
+            break;
+        }
+        case Sortings::SortingName::INTROSORT:{
+            m_Sorting = new Sortings::IntroSort<std::vector<int>,Visualizer>(&m_Visualizer);
+            break;
+        }
+        case Sortings::SortingName::SHELLSORT:{
+            m_Sorting = new Sortings::ShellSort<std::vector<int>,Visualizer>(&m_Visualizer);
+            break;
+        }
+        case Sortings::SortingName::PIGEONHOLESORT:{
+            m_Sorting = new Sortings::PigeonholeSort<std::vector<int>,Visualizer>(&m_Visualizer);
+            break;
+        }
+        case Sortings::SortingName::BUCKETSORT:{
+            m_Sorting = new Sortings::BucketSort<std::vector<int>,Visualizer>(&m_Visualizer);
+            break;
+        }
+        case Sortings::SortingName::COUNTINGSORT:{
+            Sortings::CountingSort<std::vector<int>,Visualizer>::RANGE = ui->verticalSlider->value();
+            m_Sorting = new Sortings::CountingSort<std::vector<int>,Visualizer>(&m_Visualizer);
+            break;
+        }
+        }
         m_CurrentSortingName = name;
     }
 
     m_Visualizer.ClearQueue();
 
+    m_SortingAndTiming.SetSorting(m_Sorting);
     qDebug() << Qt::endl << "Time of sorting: " <<  m_SortingAndTiming.Run(m_Numbers) << "milliseconds" << Qt::endl;
 
     ui->groupBox->setEnabled(false);
@@ -59,13 +139,12 @@ void MainWindow::on_SortButton_clicked() {
 void MainWindow::RandomizeNumbers(int size){
     m_Numbers.clear();
     for(int i=0;i<size;i++){
-        m_Numbers.push_back(mersenne()%m_MaxValue);
+        m_Numbers.push_back(mersenne()%ui->verticalSlider->value());
     }
 }
 
 void MainWindow::on_InitiateButton_clicked()
 {
-    m_MaxValue = ui->verticalSlider->value();
     m_Visualizer.SetMaxValue( ui->verticalSlider->value());
 
     RandomizeNumbers(ui->spinBox->value());

@@ -172,11 +172,12 @@ TEST_CASE("testing sortings"){
 
     Sortings::PigeonholeSort<std::vector<long>>pigeonhole;
     TestSorting<long>(pigeonhole, 1000);
-    TestSorting<long>(pigeonhole, 1000, [](long x, long y){return x > y;});
 
     Sortings::BucketSort<std::vector<long>>bucket;
     TestSorting<long>(bucket, 1000);
-    TestSorting<long>(bucket, 1000, [](long x, long y){return x > y;});
+
+    Sortings::CountingSort<std::vector<long>>counting;
+    TestSorting<long>(counting, 1000);
 }
 
 int main(int argc, char *argv[])

@@ -42,11 +42,11 @@ private:
 
     Visualizer m_Visualizer;
 
-    Sortings::SortingAndTiming m_SortingAndTiming;
+    Sortings::Sorting<std::vector<int>, Visualizer>* m_Sorting;
+
+    SortingAndTiming m_SortingAndTiming;
 
     Sortings::SortingName m_CurrentSortingName;
-
-    int m_MaxValue;
 
     bool m_IsInitiated;
 
