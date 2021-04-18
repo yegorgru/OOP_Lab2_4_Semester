@@ -49,7 +49,9 @@ namespace Sortings{
         RADIXSORT,
         FLASHSORT,
         PANCAKESORT,
-        BOGOSORT
+        BOGOSORT,
+        STOOGESORT,
+        SLOWSORT
     };
 
     template <typename T>
@@ -1205,6 +1207,73 @@ namespace Sortings{
                 }
             }
             return true;
+        }
+    };
+
+    template<
+        typename Container,
+        typename Visualizer = DefaultVisualizer<Container>,
+        typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
+    class StoogeSort : public Sorting<Container, Visualizer>{
+    public:
+        StoogeSort(Visualizer* visualizer = nullptr):
+            Sorting<Container, Visualizer>(visualizer){}
+
+        void Sort(typename Container::iterator begin, typename Container::iterator end,
+                  std::function<bool (
+                  typename std::iterator_traits<typename Container::iterator>::value_type,
+                  typename std::iterator_traits<typename Container::iterator>::value_type)> cmp =
+                [](typename std::iterator_traits<typename Container::iterator>::value_type x,
+                   typename std::iterator_traits<typename Container::iterator>::value_type y) ->
+                bool { return x < y; }) override {
+            using Iterator = typename Container::iterator;
+            size_t temp;
+            if(end-begin > 2) {
+                temp = (end-begin)/3;
+                Sort(begin, end-temp, cmp);
+                Sort(begin+temp, end, cmp);
+                Sort(begin, end-temp, cmp);
+            }
+            if(cmp(*(--end), *begin)) {
+                if(this->visualizer) this->visualizer->Visualize(Operation::COMPARISON, end, begin);
+                std::swap(*end, *begin);
+                if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, end, begin);
+            }
+            if(this->visualizer) this->visualizer->Visualize(Operation::COMPARISON, end, begin);
+        }
+    };
+
+    template<
+        typename Container,
+        typename Visualizer = DefaultVisualizer<Container>,
+        typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
+    class SlowSort : public Sorting<Container, Visualizer>{
+    public:
+        SlowSort(Visualizer* visualizer = nullptr):
+            Sorting<Container, Visualizer>(visualizer){}
+
+        void Sort(typename Container::iterator begin, typename Container::iterator end,
+                  std::function<bool (
+                  typename std::iterator_traits<typename Container::iterator>::value_type,
+                  typename std::iterator_traits<typename Container::iterator>::value_type)> cmp =
+                [](typename std::iterator_traits<typename Container::iterator>::value_type x,
+                   typename std::iterator_traits<typename Container::iterator>::value_type y) ->
+                bool { return x < y; }) override {
+            if (end - begin < 2){
+                return;
+            }
+            else{
+                size_t middle = (end-begin)/2;
+                Sort(begin, begin + middle, cmp);
+                Sort(begin + middle, end, cmp);
+                end--;
+                if(this->visualizer) this->visualizer->Visualize(Operation::COMPARISON, end, begin+middle-1);
+                if(cmp(*end, *(begin+middle-1))){
+                    std::swap(*end, *(begin+middle-1));
+                    if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, end, begin+middle-1);
+                }
+                Sort(begin, end, cmp);
+            }
         }
     };
 }

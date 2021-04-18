@@ -99,6 +99,14 @@ void SortingAndTiming::SetSorting(Sortings::SortingName name){
             m_Sorting = new Sortings::BogoSort<std::vector<int>,Visualizer>(m_Visualizer);
             break;
         }
+        case Sortings::SortingName::STOOGESORT:{
+            m_Sorting = new Sortings::StoogeSort<std::vector<int>,Visualizer>(m_Visualizer);
+            break;
+        }
+        case Sortings::SortingName::SLOWSORT:{
+            m_Sorting = new Sortings::SlowSort<std::vector<int>,Visualizer>(m_Visualizer);
+            break;
+        }
         }
         m_CurrentSortingName = name;
     }

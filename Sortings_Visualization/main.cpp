@@ -192,6 +192,14 @@ TEST_CASE("testing sortings"){
     Sortings::BogoSort<std::vector<long>>bogo;
     TestSorting<long>(bogo, 10);
     TestSorting<long>(bogo, 10, [](long x, long y){return x > y;});
+
+    Sortings::StoogeSort<std::vector<long>>stooge;
+    TestSorting<long>(stooge, 100);
+    TestSorting<long>(stooge, 100, [](long x, long y){return x > y;});
+
+    Sortings::SlowSort<std::vector<long>>slow;
+    TestSorting<long>(slow, 100);
+    TestSorting<long>(slow, 100, [](long x, long y){return x > y;});
 }
 
 int main(int argc, char *argv[])
