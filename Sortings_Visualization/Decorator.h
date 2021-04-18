@@ -2,17 +2,20 @@
 
 #include <Sorting.h>
 #include <visualizer.h>
+
 #include <QElapsedTimer>
 
 class SortingAndTiming  {
 public:
-    SortingAndTiming() = default;
+    SortingAndTiming(Visualizer* visualizer);
 
-    void SetSorting(Sortings::Sorting<std::vector<int>,Visualizer>* sorting);
+    void SetSorting(Sortings::SortingName name);
 
     qint64 Run(std::vector<int>& m_Numbers);
 
 private:
     QElapsedTimer time;
+    Visualizer* m_Visualizer;
     Sortings::Sorting<std::vector<int>,Visualizer>* m_Sorting;
+    Sortings::SortingName m_CurrentSortingName;
 };
