@@ -47,7 +47,8 @@ namespace Sortings{
         BUCKETSORT,
         COUNTINGSORT,
         RADIXSORT,
-        FLASHSORT
+        FLASHSORT,
+        PANCAKESORT
     };
 
     template <typename T>
@@ -1071,5 +1072,53 @@ namespace Sortings{
 
     private:
         InsertionSort<Container, Visualizer> m_InsertionSort;
+    };
+
+    //cmp only for inheritance
+    template<
+        typename Container,
+        typename Visualizer = DefaultVisualizer<Container>,
+        typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
+    class PancakeSort : public Sorting<Container, Visualizer>{
+    public:
+        PancakeSort(Visualizer* visualizer = nullptr):
+            Sorting<Container, Visualizer>(visualizer){}
+
+        void Sort(typename Container::iterator begin, typename Container::iterator end,
+                  std::function<bool (
+                  typename std::iterator_traits<typename Container::iterator>::value_type,
+                  typename std::iterator_traits<typename Container::iterator>::value_type)> cmp =
+                [](typename std::iterator_traits<typename Container::iterator>::value_type x,
+                   typename std::iterator_traits<typename Container::iterator>::value_type y) ->
+                bool { return x < y; }) override {
+            using Iterator = typename Container::iterator;
+            for (size_t curSize = end-begin; curSize > 1; curSize--) {
+                size_t maxId = 0;
+
+                for(Iterator it = begin; it < begin + curSize;it++){
+                    if(this->visualizer) this->visualizer->Visualize(Operation::COMPARISON, begin + maxId, it);
+                    if(cmp(*(begin + maxId), *it)){
+                        maxId = it-begin;
+                    }
+                }
+
+                if (maxId != curSize-1){
+                    Flip(begin, begin+maxId+1);
+                    Flip(begin, begin+curSize);
+                }
+            }
+        }
+
+    private:
+        void Flip(typename Container::iterator begin, typename Container::iterator end) {
+            size_t start = 0;
+            size_t i = end-begin-1;
+            while (start < i) {
+                std::swap(*(begin+start),*(begin+i));
+                if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, begin + start, begin+i);
+                start++;
+                i--;
+            }
+        }
     };
 }

@@ -91,6 +91,10 @@ void SortingAndTiming::SetSorting(Sortings::SortingName name){
             m_Sorting = new Sortings::FlashSort<std::vector<int>,Visualizer>(m_Visualizer);
             break;
         }
+        case Sortings::SortingName::PANCAKESORT:{
+            m_Sorting = new Sortings::PancakeSort<std::vector<int>,Visualizer>(m_Visualizer);
+            break;
+        }
         }
         m_CurrentSortingName = name;
     }

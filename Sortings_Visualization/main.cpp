@@ -184,6 +184,10 @@ TEST_CASE("testing sortings"){
 
     Sortings::FlashSort<std::vector<long>>flash;
     TestSorting<long>(flash, 10000);
+
+    Sortings::PancakeSort<std::vector<long>>pancake;
+    TestSorting<long>(pancake, 1000);
+    TestSorting<long>(pancake, 1000, [](long x, long y){return x > y;});
 }
 
 int main(int argc, char *argv[])
