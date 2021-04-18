@@ -24,6 +24,14 @@ MainWindow::MainWindow(QWidget *parent)
     connect(keyCtrl_D, SIGNAL(activated()), this, SLOT(on_SortButton_clicked()));
 
     m_IsInitiated = false;
+
+    ui->changes->setReadOnly(true);
+    ui->accesses->setReadOnly(true);
+    ui->comparisons->setReadOnly(true);
+
+    m_Visualizer.SetChangesItem(ui->changes);
+    m_Visualizer.SetAccessesItem(ui->accesses);
+    m_Visualizer.SetComparisonsItem(ui->comparisons);
 }
 
 MainWindow::~MainWindow()
@@ -40,6 +48,10 @@ void MainWindow::resizeEvent(QResizeEvent *event)
 }
 
 void MainWindow::on_SortButton_clicked() {
+    ui->comparisons->setText("0");
+    ui->changes->setText("0");
+    ui->accesses->setText("0");
+
     m_SortingAndTiming.SetSorting(static_cast<Sortings::SortingName>(ui->SortingNameComboBox->currentIndex()));
 
     m_Visualizer.ClearQueue();

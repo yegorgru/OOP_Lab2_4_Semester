@@ -9,6 +9,7 @@ Visualizer::Visualizer(std::vector<int>& data):
     m_CurPos(0),
     m_Timer(new QTimer(this)){
     connect (m_Timer,&QTimer::timeout,this,&Visualizer::PlayItem);
+    m_Changes = m_Accesses = m_Comparisons = nullptr;
 }
 
 bool Visualizer::Visualize(Sortings::Operation operation, std::vector<int>::iterator first,
@@ -16,38 +17,22 @@ bool Visualizer::Visualize(Sortings::Operation operation, std::vector<int>::iter
     double secondHeightCoef = second == std::nullopt ? 0 : double(**second)/m_MaxValue;
     size_t firstPos = first - m_Data.begin();
     size_t secondPos = second == std::nullopt ? INT_MAX : *second-m_Data.begin();
-    m_VisualizeQueue.push_back({operation, firstPos,
+    m_VisualizeQueue.push_back({ operation, firstPos,
                                 secondPos,
                                 double(*first)/m_MaxValue,
                                 secondHeightCoef});
     return true;
-    /*if(operation == Sortings::Operation::COMPARISON){
-        m_Rects[position]->setBrush(QBrush(Qt::blue));
-    }
-    else if(operation == Sortings::Operation::ACCESS){
-        m_Rects[position]->setBrush(QBrush(Qt::yellow));
-    }
-    else if(operation == Sortings::Operation::CHANGE){
-        m_Rects[position]->setBrush(QBrush(Qt::green));
-        double height = double(m_Data[position])/m_MaxValue*m_Scene->height()*0.9;
-        auto rect = m_Rects[position]->boundingRect();
-        m_Rects[position]->setRect(rect.x(), 10, rect.width(), height);
-    }
-    m_Scene->update();*/
 }
 
 void Visualizer::Play(int speedOfVisualization){
     m_VisualizeQueue.push_back({Sortings::Operation::END, 0, 0, 0, 0});
     std::cout << "Visualization started, " << m_VisualizeQueue.size() << std::endl;
     m_CurPos = 0;
-    //m_TimeLine = new QTimeLine(m_VisualizeQueue.size()*speedOfVisualization);
-    //connect(timeLine, SIGNAL(frameChanged(int)), this, SLOT(&Visualizer::PlayItem));
     m_Timer->start(speedOfVisualization);
 }
 
 void Visualizer::PlayItem(){
     if(m_CurPos > 0){
-        std::cout << "back" << m_CurPos -1 << std::endl;
         auto& lastItem = m_VisualizeQueue[m_CurPos-1];
         m_Rects[lastItem.first]->setBrush(QBrush(Qt::red));
         if(lastItem.second != INT_MAX){
@@ -60,32 +45,42 @@ void Visualizer::PlayItem(){
             return;
         }
     }
-    std::cout << "change" << m_CurPos << std::endl;
     auto& item = m_VisualizeQueue[m_CurPos++];
     if(item.operation == Sortings::Operation::COMPARISON){
         m_Rects[item.first]->setBrush(QBrush(Qt::blue));
+        long comp = m_Comparisons->text().toLong();
+        m_Comparisons->setText(QString::number(++comp));
         if(item.second != INT_MAX){
             m_Rects[item.second]->setBrush(QBrush(Qt::blue));
         }
     }
     else if(item.operation == Sortings::Operation::ACCESS){
         m_Rects[item.first]->setBrush(QBrush(Qt::yellow));
+        long acc = m_Accesses->text().toLong();
+        acc++;
         if(item.second != INT_MAX){
             m_Rects[item.second]->setBrush(QBrush(Qt::yellow));
+            acc++;
         }
+        m_Accesses->setText(QString::number(acc));
     }
     else if(item.operation == Sortings::Operation::CHANGE){
         m_Rects[item.first]->setBrush(QBrush(Qt::green));
+        long ch = m_Changes->text().toLong();
+        ch++;
+
         m_Rects[item.first]->setRect(item.first*m_Width, 10,
                                      m_Width, item.firstHeightCoef*m_Scene->height()*0.9);
 
         if(item.second != INT_MAX){
             m_Rects[item.second]->setBrush(QBrush(Qt::green));
+            ch++;
+
             m_Rects[item.second]->setRect(item.second*m_Width, 10,
                                          m_Width, item.secondHeightCoef*m_Scene->height()*0.9);
         }
+        m_Changes->setText(QString::number(ch));
     }
-    std::cout << "Update" << m_CurPos-1 << std::endl;
     m_Scene->update();
 }
 
@@ -137,4 +132,14 @@ void Visualizer::UpdateScene(double widthCoef, double heightCoef){
 
 void Visualizer::SetMaxValue(int value){
     m_MaxValue = value;
+}
+
+void Visualizer::SetComparisonsItem(QLineEdit* item){
+    m_Comparisons = item;
+}
+void Visualizer::SetChangesItem(QLineEdit* item){
+    m_Changes = item;
+}
+void Visualizer::SetAccessesItem(QLineEdit* item){
+    m_Accesses = item;
 }

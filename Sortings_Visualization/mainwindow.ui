@@ -24,17 +24,44 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="4" column="2">
-     <spacer name="horizontalSpacer_3">
+     <widget class="QLabel" name="label_2">
+      <property name="text">
+       <string>Comparisons</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <spacer name="verticalSpacer">
       <property name="orientation">
-       <enum>Qt::Horizontal</enum>
+       <enum>Qt::Vertical</enum>
       </property>
       <property name="sizeHint" stdset="0">
        <size>
-        <width>40</width>
-        <height>20</height>
+        <width>20</width>
+        <height>40</height>
        </size>
       </property>
      </spacer>
+    </item>
+    <item row="4" column="3">
+     <widget class="QLineEdit" name="comparisons"/>
+    </item>
+    <item row="4" column="5">
+     <widget class="QLineEdit" name="changes"/>
+    </item>
+    <item row="4" column="7">
+     <widget class="QLineEdit" name="accesses">
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="2" rowspan="4" colspan="7">
+     <widget class="QGraphicsView" name="graphicsView">
+      <property name="styleSheet">
+       <string notr="true">background: rgb(255, 255, 255)</string>
+      </property>
+     </widget>
     </item>
     <item row="3" column="1">
      <widget class="QGroupBox" name="groupBox">
@@ -345,49 +372,17 @@ background: linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(149,45,253,0.38728
       </layout>
      </widget>
     </item>
-    <item row="4" column="3">
-     <spacer name="horizontalSpacer_2">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
+    <item row="4" column="6">
+     <widget class="QLabel" name="label_5">
+      <property name="text">
+       <string>Accesses</string>
       </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>40</width>
-        <height>20</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item row="1" column="1">
-     <spacer name="verticalSpacer">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>40</height>
-       </size>
-      </property>
-     </spacer>
+     </widget>
     </item>
     <item row="4" column="4">
-     <spacer name="horizontalSpacer">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>40</width>
-        <height>20</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item row="0" column="2" rowspan="4" colspan="4">
-     <widget class="QGraphicsView" name="graphicsView">
-      <property name="styleSheet">
-       <string notr="true">background: rgb(255, 255, 255)</string>
+     <widget class="QLabel" name="label_4">
+      <property name="text">
+       <string>Changes</string>
       </property>
      </widget>
     </item>

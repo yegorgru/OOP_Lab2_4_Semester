@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QGraphicsRectItem>
 #include <QTimer>
+#include <QLineEdit>
 
 #include <vector>
 #include <optional>
@@ -23,6 +24,9 @@ public:
     void UpdateScene(double widthCoef, double heightCoef);
 
     void SetMaxValue(int value);
+    void SetComparisonsItem(QLineEdit* item);
+    void SetChangesItem(QLineEdit* item);
+    void SetAccessesItem(QLineEdit* item);
 
     void Play(int speedOfVisualization);
     void PlayItem();
@@ -52,4 +56,8 @@ private:
 
     std::vector<VisualizeItem>m_VisualizeQueue;
     QTimer *m_Timer;
+
+    QLineEdit* m_Comparisons;
+    QLineEdit* m_Changes;
+    QLineEdit* m_Accesses;
 };

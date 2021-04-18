@@ -766,9 +766,9 @@ namespace Sortings{
             Iterator max = begin;
             for (Iterator i = begin+1; i < end; i++) {
                 if(this->visualizer) this->visualizer->Visualize(Operation::COMPARISON, i, min);
-                if (cmp(*i, *min)) min = i;
+                if (*i < *min) min = i;
                 if(this->visualizer) this->visualizer->Visualize(Operation::COMPARISON, i, max);
-                if (cmp(*max, *i)) max = i;
+                if (*max < *i) max = i;
             }
             size_t range = (*max > *min ? *max - *min : *min - *max) + 1;
             std::vector<ValueType>holes[range];
@@ -933,6 +933,7 @@ namespace Sortings{
             ValueType max = *begin;
             if(this->visualizer) this->visualizer->Visualize(Operation::ACCESS, begin);
             for(Iterator i = begin+1; i < end; i++){
+                if(this->visualizer) this->visualizer->Visualize(Operation::COMPARISON, i);
                 if(this->visualizer) this->visualizer->Visualize(Operation::ACCESS, i);
                 if(max < *i){
                     max = *i;
@@ -1000,6 +1001,7 @@ namespace Sortings{
             Iterator maxIt = begin;
 
             for(Iterator i = begin+1; i < end; i++) {
+                if(this->visualizer) this->visualizer->Visualize(Operation::COMPARISON, i);
                 if(*i > max) {
                     if(this->visualizer) this->visualizer->Visualize(Operation::ACCESS, i);
                     max = *i;
