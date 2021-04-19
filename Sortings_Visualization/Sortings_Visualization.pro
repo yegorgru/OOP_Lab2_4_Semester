@@ -19,6 +19,8 @@ SOURCES += \
     Decorator.cpp \
     main.cpp \
     mainwindow.cpp \
+    parser.cpp \
+    parsingwindow.cpp \
     visualizer.cpp
 
 HEADERS += \
@@ -26,10 +28,13 @@ HEADERS += \
     Sorting.h \
     doctest.h \
     mainwindow.h \
+    parser.h \
+    parsingwindow.h \
     visualizer.h
 
 FORMS += \
-    mainwindow.ui
+    mainwindow.ui \
+    parsingwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 //#include <iostream>
 //#include <QDesktopWidget>
+#include "parsingwindow.h"
 #include <QElapsedTimer>
 
 MainWindow::MainWindow(QWidget *parent)
@@ -85,4 +86,12 @@ void MainWindow::on_InitiateButton_clicked()
     ui->SortButton->setEnabled(true);
 
     m_IsInitiated = true;
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+    //hide();
+    window = new ParsingWindow(this);
+    window->show();
+
 }

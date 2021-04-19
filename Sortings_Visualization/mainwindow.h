@@ -11,7 +11,7 @@
 #include "Sorting.h"
 #include "visualizer.h"
 #include "Decorator.h"
-
+#include "parsingwindow.h"
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -32,10 +32,13 @@ private slots:
 
     void on_InitiateButton_clicked();
 
+    void on_pushButton_clicked();
+
 private:
     void RandomizeNumbers(int numberOfRectangles);
 
     Ui::MainWindow *ui;
+    ParsingWindow * window;
     QShortcut  *keyCtrl_D;
 
     std::vector<int>m_Numbers;
