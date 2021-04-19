@@ -10,7 +10,7 @@ public:
     SortingAndTiming(Visualizer* visualizer);
 
     void SetSorting(Sortings::SortingName name);
-
+    QString ComplexityCheck(Sortings::SortingName name);
     float Run(std::vector<int>& m_Numbers);
 
 private:

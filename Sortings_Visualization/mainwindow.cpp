@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-
+//#include <iostream>
 //#include <QDesktopWidget>
 #include <QElapsedTimer>
 
@@ -31,6 +31,7 @@ MainWindow::MainWindow(QWidget *parent)
     m_Visualizer.SetChangesItem(ui->changes);
     m_Visualizer.SetAccessesItem(ui->accesses);
     m_Visualizer.SetComparisonsItem(ui->comparisons);
+
 }
 
 MainWindow::~MainWindow()
@@ -56,6 +57,7 @@ void MainWindow::on_SortButton_clicked() {
     m_Visualizer.ClearQueue();
 
     ui->SortingTime->setText("Time of sorting: " +  QString::number(m_SortingAndTiming.Run(m_Numbers)) + " milliseconds");
+    ui->TheorComplexity->setText("Average computational complexity: " + m_SortingAndTiming.ComplexityCheck(static_cast<Sortings::SortingName>(ui->SortingNameComboBox->currentIndex())));
 
     if (ui->ShowVisualizationCheckBox->isChecked()) {
         ui->groupBox->setEnabled(false);
