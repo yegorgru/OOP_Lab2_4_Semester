@@ -224,7 +224,7 @@ double calc(queue<char> in)
                else
                {
                    cout << "Please enter the variable \'" << var_buf << "\': ";//просим пользователя её ввести
-                   cin >> res.top();//вводим значение переменной с клавиатуры
+                    res.top() = 4;//вводим значение переменной с клавиатуры
                    mem[var_buf] = res.top();//запоминаем переменную и её значение
                }
            }
