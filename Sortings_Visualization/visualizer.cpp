@@ -3,7 +3,7 @@
 #include <iostream>
 #include <optional>
 
-Visualizer::Visualizer(std::vector<int>& data):
+Visualizer::Visualizer(std::vector<uint32_t>& data):
     m_Scene(new QGraphicsScene),
     m_Data(data),
     m_CurPos(0),
@@ -13,11 +13,11 @@ Visualizer::Visualizer(std::vector<int>& data):
     m_CanRun = false;
 }
 
-bool Visualizer::Visualize(Sortings::Operation operation, std::vector<int>::iterator first,
-                           std::optional<std::vector<int>::iterator> second){
+bool Visualizer::Visualize(Sortings::Operation operation, std::vector<uint32_t>::iterator first,
+                           std::optional<std::vector<uint32_t>::iterator> second){
     double secondHeightCoef = second == std::nullopt ? 0 : double(**second)/m_MaxValue;
     size_t firstPos = first - m_Data.begin();
-    size_t secondPos = second == std::nullopt ? INT_MAX : *second-m_Data.begin();
+    size_t secondPos = second == std::nullopt ? UINT32_MAX : *second-m_Data.begin();
     m_VisualizeQueue.push_back({ operation, firstPos,
                                 secondPos,
                                 double(*first)/m_MaxValue,
@@ -37,7 +37,7 @@ void Visualizer::PlayItem(){
     if(m_CurPos > 0){
         auto& lastItem = m_VisualizeQueue[m_CurPos-1];
         m_Rects[lastItem.first]->setBrush(QBrush(Qt::red));
-        if(lastItem.second != INT_MAX){
+        if(lastItem.second != UINT32_MAX){
             m_Rects[lastItem.second]->setBrush(QBrush(Qt::red));
         }
         if(m_CurPos == m_VisualizeQueue.size()){
@@ -53,7 +53,7 @@ void Visualizer::PlayItem(){
         m_Rects[item.first]->setBrush(QBrush(Qt::blue));
         long comp = m_Comparisons->text().toLong();
         m_Comparisons->setText(QString::number(++comp));
-        if(item.second != INT_MAX){
+        if(item.second != UINT32_MAX){
             m_Rects[item.second]->setBrush(QBrush(Qt::blue));
         }
     }
@@ -61,7 +61,7 @@ void Visualizer::PlayItem(){
         m_Rects[item.first]->setBrush(QBrush(Qt::yellow));
         long acc = m_Accesses->text().toLong();
         acc++;
-        if(item.second != INT_MAX){
+        if(item.second != UINT32_MAX){
             m_Rects[item.second]->setBrush(QBrush(Qt::yellow));
             acc++;
         }
@@ -75,7 +75,7 @@ void Visualizer::PlayItem(){
         m_Rects[item.first]->setRect(item.first*m_Width, 10,
                                      m_Width, item.firstHeightCoef*m_Scene->height()*0.9);
 
-        if(item.second != INT_MAX){
+        if(item.second != UINT32_MAX){
             m_Rects[item.second]->setBrush(QBrush(Qt::green));
             ch++;
 
@@ -105,7 +105,6 @@ void Visualizer::Clear(){
         delete i;
     }
     m_Rects.clear();
-    m_Data.clear();
     m_Scene->update();
 }
 
@@ -155,7 +154,7 @@ void Visualizer::UpdateScene(double widthCoef, double heightCoef){
     m_Scene->update();
 }
 
-void Visualizer::SetMaxValue(int value){
+void Visualizer::SetMaxValue(uint32_t value){
     m_MaxValue = value;
 }
 

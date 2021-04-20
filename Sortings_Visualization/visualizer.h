@@ -11,19 +11,19 @@
 
 #include "Sorting.h"
 
-class Visualizer : public QObject, public Sortings::DefaultVisualizer<std::vector<int>>
+class Visualizer : public QObject, public Sortings::DefaultVisualizer<std::vector<uint32_t>>
 {
     Q_OBJECT
 
 public:
-    Visualizer(std::vector<int>& data);
+    Visualizer(std::vector<uint32_t>& data);
 
-    bool Visualize(Sortings::Operation operation, std::vector<int>::iterator first, std::optional<std::vector<int>::iterator> second = std::nullopt) override;
+    bool Visualize(Sortings::Operation operation, std::vector<uint32_t>::iterator first, std::optional<std::vector<uint32_t>::iterator> second = std::nullopt) override;
 
     void FormScene(const QSize& size);
     void UpdateScene(double widthCoef, double heightCoef);
 
-    void SetMaxValue(int value);
+    void SetMaxValue(uint32_t value);
     void SetComparisonsItem(QLineEdit* item);
     void SetChangesItem(QLineEdit* item);
     void SetAccessesItem(QLineEdit* item);
@@ -52,8 +52,8 @@ private:
 
     QGraphicsScene* m_Scene;
     std::vector<QGraphicsRectItem*>m_Rects;
-    std::vector<int>&m_Data;
-    int m_MaxValue;
+    std::vector<uint32_t>&m_Data;
+    uint32_t m_MaxValue;
     double m_Width;
     size_t m_CurPos;
 

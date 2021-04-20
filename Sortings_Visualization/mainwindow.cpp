@@ -54,19 +54,19 @@ void MainWindow::on_SortButton_clicked() {
     ui->changes->setText("0");
     ui->accesses->setText("0");
 
-    m_SortingAndTiming.SetSorting(static_cast<Sortings::SortingName>(ui->SortingNameComboBox->currentIndex()),ui->numberOfItems->value() <= 500);
+    m_SortingAndTiming.SetSorting(static_cast<Sortings::SortingName>(ui->SortingNameComboBox->currentIndex()),m_Numbers.size() <= 500);
 
     m_Visualizer.ClearQueue();
 
     if(ui->SortingOrder->currentText() == "Direct Order"){
-        ui->SortingTime->setText("Time of sorting: " +  QString::number(m_SortingAndTiming.Run(m_Numbers, [](int x, int y) { return x < y; })) + " milliseconds");
+        ui->SortingTime->setText("Time of sorting: " +  QString::number(m_SortingAndTiming.Run(m_Numbers, [](uint32_t x, uint32_t y) { return x < y; })) + " milliseconds");
     }
     else if(ui->SortingOrder->currentText() == "Reverse Order"){
-        ui->SortingTime->setText("Time of sorting: " +  QString::number(m_SortingAndTiming.Run(m_Numbers, [](int x, int y) { return x > y; })) + " milliseconds");
+        ui->SortingTime->setText("Time of sorting: " +  QString::number(m_SortingAndTiming.Run(m_Numbers, [](uint32_t x, uint32_t y) { return x > y; })) + " milliseconds");
     }
     ui->TheorComplexity->setText("Average computational complexity: " + m_SortingAndTiming.ComplexityCheck(static_cast<Sortings::SortingName>(ui->SortingNameComboBox->currentIndex())));
 
-    if (ui->numberOfItems->value() <= 500) {
+    if (m_Numbers.size() <= 500) {
         ui->groupBox->setEnabled(false);
         m_Visualizer.Play(ui->delay->value());
         ui->VisualizationControl->setVisible(true);
@@ -77,7 +77,7 @@ void MainWindow::on_SortButton_clicked() {
 
 void MainWindow::FormNumbers(){
     m_Numbers.clear();
-    for(int i=0;i<ui->numberOfItems->value();i++){
+    for(uint32_t i=0;i<ui->numberOfItems->value();i++){
         m_Numbers.push_back(mersenne()%ui->numberOfItems->value());
     }
     if(ui->InitiateOrder->currentText() == "Almost Sorted"){
@@ -96,12 +96,16 @@ void MainWindow::FormNumbers(){
 
 void MainWindow::on_InitiateButton_clicked()
 {
-    m_Visualizer.SetMaxValue(ui->numberOfItems->value());
-
     FormNumbers();
 
-    auto size = ui->graphicsView->size();
-    m_Visualizer.FormScene(size);
+    if(m_Numbers.size() <= 500){
+        m_Visualizer.SetMaxValue(ui->numberOfItems->value());
+        auto size = ui->graphicsView->size();
+        m_Visualizer.FormScene(size);
+    }
+    else{
+        m_Visualizer.Clear();
+    }
 
     ui->SortButton->setEnabled(true);
 
@@ -131,6 +135,7 @@ void MainWindow::on_StopButton_clicked()
 void MainWindow::on_ClearButton_clicked()
 {
     m_Visualizer.Clear();
+    m_Numbers.clear();
     ui->VisualizationControl->setVisible(false);
     this->ui->groupBox->setEnabled(true);
     ui->SortButton->setEnabled(false);

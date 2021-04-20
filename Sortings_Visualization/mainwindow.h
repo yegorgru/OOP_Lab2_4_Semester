@@ -47,7 +47,7 @@ private:
     ParsingWindow * window;
     QShortcut  *keyCtrl_D;
 
-    std::vector<int>m_Numbers;
+    std::vector<uint32_t>m_Numbers;
 
     Visualizer m_Visualizer;
 

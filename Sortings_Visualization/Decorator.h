@@ -12,12 +12,12 @@ public:
     void SetSorting(Sortings::SortingName name, bool isVisualization);
 
     QString ComplexityCheck(Sortings::SortingName name);
-    float Run(std::vector<int>& m_Numbers, std::function<bool (int,int)> cmp);
+    float Run(std::vector<uint32_t>& m_Numbers, std::function<bool (uint32_t,uint32_t)> cmp);
 
 private:
     QElapsedTimer time;
     Visualizer* m_Visualizer;
-    Sortings::DefaultVisualizer<std::vector<int>>m_DefaultVisualizer;
-    Sortings::Sorting<std::vector<int>>*m_Sorting;
+    Sortings::DefaultVisualizer<std::vector<uint32_t>>m_DefaultVisualizer;
+    Sortings::Sorting<std::vector<uint32_t>>*m_Sorting;
     Sortings::SortingName m_CurrentSortingName;
 };

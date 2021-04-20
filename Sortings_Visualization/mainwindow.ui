@@ -429,7 +429,7 @@ background: linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(149,45,253,0.38728
        <number>2</number>
       </property>
       <property name="maximum">
-       <number>500</number>
+       <number>10000000</number>
       </property>
       <property name="value">
        <number>100</number>
