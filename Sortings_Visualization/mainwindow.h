@@ -34,7 +34,9 @@ private slots:
 
     void on_pushButton_clicked();
 
-private:    
+    void on_delay_sliderMoved(int position);
+
+private:
     void FormNumbers();
 
     Ui::MainWindow *ui;

@@ -24,51 +24,161 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="6" column="1">
-     <widget class="QLabel" name="TheorComplexity">
-      <property name="text">
-       <string/>
+     <widget class="QSlider" name="delay">
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="minimum">
+       <number>1</number>
+      </property>
+      <property name="maximum">
+       <number>1000</number>
+      </property>
+      <property name="singleStep">
+       <number>10</number>
+      </property>
+      <property name="pageStep">
+       <number>10</number>
+      </property>
+      <property name="value">
+       <number>500</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="tickPosition">
+       <enum>QSlider::TicksBelow</enum>
+      </property>
+      <property name="tickInterval">
+       <number>100</number>
       </property>
      </widget>
     </item>
-    <item row="5" column="2">
-     <widget class="QLabel" name="label_2">
+    <item row="16" column="3">
+     <widget class="QLineEdit" name="comparisons"/>
+    </item>
+    <item row="16" column="6">
+     <widget class="QLabel" name="label_5">
       <property name="text">
-       <string>Comparisons</string>
+       <string>Accesses</string>
       </property>
      </widget>
     </item>
-    <item row="5" column="7">
+    <item row="0" column="2" rowspan="16" colspan="7">
+     <widget class="QGraphicsView" name="graphicsView">
+      <property name="styleSheet">
+       <string notr="true">background: rgb(255, 255, 255)</string>
+      </property>
+     </widget>
+    </item>
+    <item row="9" column="1">
+     <widget class="QLabel" name="label_6">
+      <property name="text">
+       <string>Sorting order</string>
+      </property>
+     </widget>
+    </item>
+    <item row="11" column="1">
+     <widget class="QLabel" name="label_7">
+      <property name="text">
+       <string>Initiate order</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="1">
+     <widget class="QLabel" name="label_3">
+      <property name="maximumSize">
+       <size>
+        <width>130</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 255, 255);</string>
+      </property>
+      <property name="text">
+       <string>Amount of items</string>
+      </property>
+     </widget>
+    </item>
+    <item row="16" column="7">
      <widget class="QLineEdit" name="accesses">
       <property name="text">
        <string/>
       </property>
      </widget>
     </item>
-    <item row="5" column="1">
-     <widget class="QLabel" name="SortingTime">
+    <item row="17" column="1">
+     <widget class="QLabel" name="TheorComplexity">
       <property name="text">
        <string/>
       </property>
      </widget>
     </item>
-    <item row="2" column="1">
-     <widget class="QPushButton" name="pushButton">
+    <item row="16" column="2">
+     <widget class="QLabel" name="label_2">
       <property name="text">
-       <string>Computational complexity</string>
+       <string>Comparisons</string>
       </property>
      </widget>
     </item>
-    <item row="5" column="3">
-     <widget class="QLineEdit" name="comparisons"/>
+    <item row="16" column="5">
+     <widget class="QLineEdit" name="changes"/>
     </item>
-    <item row="5" column="4">
+    <item row="10" column="1">
+     <widget class="QComboBox" name="SortingOrder">
+      <item>
+       <property name="text">
+        <string>Direct Order</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Reverse Order</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <spacer name="verticalSpacer">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="13" column="1">
+     <widget class="QLabel" name="label_8">
+      <property name="text">
+       <string>Sorting type</string>
+      </property>
+     </widget>
+    </item>
+    <item row="16" column="4">
      <widget class="QLabel" name="label_4">
       <property name="text">
        <string>Changes</string>
       </property>
      </widget>
     </item>
-    <item row="4" column="1">
+    <item row="15" column="1">
      <widget class="QGroupBox" name="groupBox">
       <property name="minimumSize">
        <size>
@@ -90,293 +200,6 @@ background: linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(149,45,253,0.38728
        <string/>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
-       <item>
-        <widget class="QLabel" name="label_3">
-         <property name="maximumSize">
-          <size>
-           <width>130</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">background-color: rgb(255, 255, 255);</string>
-         </property>
-         <property name="text">
-          <string>Amount of items</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QSpinBox" name="numberOfItems">
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">background: rgb(255, 255, 255)</string>
-         </property>
-         <property name="minimum">
-          <number>2</number>
-         </property>
-         <property name="maximum">
-          <number>500</number>
-         </property>
-         <property name="value">
-          <number>100</number>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QSlider" name="Slider">
-         <property name="minimumSize">
-          <size>
-           <width>30</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="styleSheet">
-          <string notr="true"/>
-         </property>
-         <property name="minimum">
-          <number>1</number>
-         </property>
-         <property name="maximum">
-          <number>1000</number>
-         </property>
-         <property name="singleStep">
-          <number>10</number>
-         </property>
-         <property name="pageStep">
-          <number>10</number>
-         </property>
-         <property name="value">
-          <number>500</number>
-         </property>
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="tickPosition">
-          <enum>QSlider::TicksBelow</enum>
-         </property>
-         <property name="tickInterval">
-          <number>100</number>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="label">
-         <property name="maximumSize">
-          <size>
-           <width>110</width>
-           <height>30</height>
-          </size>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">background-color: rgb(255, 255, 255);</string>
-         </property>
-         <property name="text">
-          <string>Visualization Delay</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_6">
-         <property name="text">
-          <string>Sorting order</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QComboBox" name="SortingOrder">
-         <item>
-          <property name="text">
-           <string>Direct Order</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Reverse Order</string>
-          </property>
-         </item>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_7">
-         <property name="text">
-          <string>Initiate order</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QComboBox" name="InitiateOrder">
-         <item>
-          <property name="text">
-           <string>Random</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Almost Sorted</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Almost Sorted in Reverse Order</string>
-          </property>
-         </item>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_8">
-         <property name="text">
-          <string>Sorting type</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QComboBox" name="SortingNameComboBox">
-         <property name="minimumSize">
-          <size>
-           <width>300</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <item>
-          <property name="text">
-           <string>BubbleSort</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>InsertionSort</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>SelectionSort</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>CycleSort</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>ShakerSort</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>CombSort</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>GnomeSort</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>OddEvenSort</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>QuickSort</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>MergeSort</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>MergeSortInPlace</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>HeapSort</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>TimSort</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>IntroSort</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>ShellSort</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>PigeonholeSort</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>BucketSort</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>CountingSort</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>RadixSort</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>FlashSort</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>PancakeSort</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>BogoSort</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>StoogeSort</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>SlowSort</string>
-          </property>
-         </item>
-        </widget>
-       </item>
        <item>
         <widget class="QPushButton" name="InitiateButton">
          <property name="maximumSize">
@@ -406,35 +229,212 @@ background: linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(149,45,253,0.38728
       </layout>
      </widget>
     </item>
-    <item row="5" column="5">
-     <widget class="QLineEdit" name="changes"/>
+    <item row="2" column="1">
+     <widget class="QPushButton" name="pushButton">
+      <property name="text">
+       <string>Computational complexity</string>
+      </property>
+     </widget>
     </item>
-    <item row="0" column="2" rowspan="5" colspan="7">
-     <widget class="QGraphicsView" name="graphicsView">
+    <item row="12" column="1">
+     <widget class="QComboBox" name="InitiateOrder">
+      <item>
+       <property name="text">
+        <string>Random</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Almost Sorted</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Almost Sorted in Reverse Order</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item row="7" column="1">
+     <widget class="QLabel" name="label">
+      <property name="maximumSize">
+       <size>
+        <width>110</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 255, 255);</string>
+      </property>
+      <property name="text">
+       <string>Visualization Delay</string>
+      </property>
+     </widget>
+    </item>
+    <item row="16" column="1">
+     <widget class="QLabel" name="SortingTime">
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="1">
+     <widget class="QSpinBox" name="numberOfItems">
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>16777215</height>
+       </size>
+      </property>
       <property name="styleSheet">
        <string notr="true">background: rgb(255, 255, 255)</string>
       </property>
-     </widget>
-    </item>
-    <item row="5" column="6">
-     <widget class="QLabel" name="label_5">
-      <property name="text">
-       <string>Accesses</string>
+      <property name="minimum">
+       <number>2</number>
+      </property>
+      <property name="maximum">
+       <number>500</number>
+      </property>
+      <property name="value">
+       <number>100</number>
       </property>
      </widget>
     </item>
-    <item row="1" column="1">
-     <spacer name="verticalSpacer">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
+    <item row="14" column="1">
+     <widget class="QComboBox" name="SortingNameComboBox">
+      <property name="minimumSize">
        <size>
-        <width>20</width>
-        <height>40</height>
+        <width>300</width>
+        <height>0</height>
        </size>
       </property>
-     </spacer>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <item>
+       <property name="text">
+        <string>BubbleSort</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>InsertionSort</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>SelectionSort</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>CycleSort</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>ShakerSort</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>CombSort</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>GnomeSort</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>OddEvenSort</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>QuickSort</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>MergeSort</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>MergeSortInPlace</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>HeapSort</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>TimSort</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>IntroSort</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>ShellSort</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>PigeonholeSort</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>BucketSort</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>CountingSort</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>RadixSort</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>FlashSort</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>PancakeSort</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>BogoSort</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>StoogeSort</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>SlowSort</string>
+       </property>
+      </item>
+     </widget>
     </item>
    </layout>
   </widget>
@@ -453,7 +453,7 @@ background: linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(149,45,253,0.38728
  <resources/>
  <connections>
   <connection>
-   <sender>Slider</sender>
+   <sender>delay</sender>
    <signal>valueChanged(int)</signal>
    <receiver>label</receiver>
    <slot>setNum(int)</slot>

@@ -67,7 +67,7 @@ void MainWindow::on_SortButton_clicked() {
 
     if (ui->numberOfItems->value() <= 500) {
         ui->groupBox->setEnabled(false);
-        m_Visualizer.Play(ui->Slider->value());
+        m_Visualizer.Play(ui->delay->value());
     }
     connect(&m_Visualizer, &Visualizer::Sorted, this, [this] { this->ui->groupBox->setEnabled(true); });
 }
@@ -111,4 +111,11 @@ void MainWindow::on_pushButton_clicked()
     window = new ParsingWindow(this);
     window->show();
 
+}
+
+void MainWindow::on_delay_sliderMoved(int position)
+{
+    if(m_Visualizer.GetTimer()){
+        m_Visualizer.GetTimer()->setInterval(position);
+    }
 }
