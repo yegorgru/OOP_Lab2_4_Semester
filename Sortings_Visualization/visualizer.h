@@ -11,14 +11,14 @@
 
 #include "Sorting.h"
 
-class Visualizer : public QObject
+class Visualizer : public QObject, public Sortings::DefaultVisualizer<std::vector<int>>
 {
     Q_OBJECT
 
 public:
     Visualizer(std::vector<int>& data);
 
-    bool Visualize(Sortings::Operation operation, std::vector<int>::iterator first, std::optional<std::vector<int>::iterator> second = std::nullopt);
+    bool Visualize(Sortings::Operation operation, std::vector<int>::iterator first, std::optional<std::vector<int>::iterator> second = std::nullopt) override;
 
     void FormScene(const QSize& size);
     void UpdateScene(double widthCoef, double heightCoef);

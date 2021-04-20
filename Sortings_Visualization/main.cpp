@@ -15,6 +15,8 @@ template <typename T>
 void TestSortingBasic(Sortings::Sorting<std::vector<T>>& sorting,
                       std::function<bool (T,T)> cmp =
                     [](T x, T y) -> bool { return x < y; }){
+    Sortings::DefaultVisualizer<std::vector<T>>vis;
+    sorting.SetVisualizer(&vis);
     std::vector<T> v = {5,2,1,4,3};
     std::vector<T> copy_v = v;
     sorting.Sort(v.begin(), v.end(), cmp);
@@ -32,6 +34,8 @@ template <typename T>
 void TestSortingRandom(Sortings::Sorting<std::vector<T>>& sorting, T number,
                        std::function<bool (T,T)> cmp =
                      [](T x, T y) -> bool { return x < y; }){
+    Sortings::DefaultVisualizer<std::vector<T>>vis;
+    sorting.SetVisualizer(&vis);
     std::random_device rd;
     std::mt19937 mersenne(rd());
     std::vector<T>random_v;
@@ -42,29 +46,14 @@ void TestSortingRandom(Sortings::Sorting<std::vector<T>>& sorting, T number,
     std::sort(copy_random_v.begin(), copy_random_v.end(), cmp);
     sorting.Sort(random_v.begin(), random_v.end(), cmp);
     CHECK(random_v == copy_random_v);
-
-    /*std::vector<int>random_vv;
-    for(uint32_t i=0;i<number; i++){
-        random_vv.push_back(mersenne() % number);
-    }
-    auto copy_random_vv = random_vv;
-    std::sort(copy_random_vv.begin(), copy_random_vv.end(), [](int x, int y){ return x > y;});
-    sorting.Sort(random_vv.begin(), random_vv.end(), [](int x, int y){ return x > y;});
-    CHECK(random_vv == copy_random_vv);*/
-
-    /*for(auto i:v){
-        std::cout << i << std::endl;
-    }
-    std::cout << std::endl;
-    for(auto i:vv){
-        std::cout << i << std::endl;
-    }*/
 }
 
 template <typename T>
 void TestSortingAlmostSorted(Sortings::Sorting<std::vector<T>>& sorting, T number,
                              std::function<bool (T,T)> cmp =
                            [](T x, T y) -> bool { return x < y; }){
+    Sortings::DefaultVisualizer<std::vector<T>>vis;
+    sorting.SetVisualizer(&vis);
     std::random_device rd;
     std::mt19937 mersenne(rd());
     std::vector<T>random_v;
@@ -88,6 +77,8 @@ template <typename T>
 void TestSortingAlmostReverseSorted(Sortings::Sorting<std::vector<T>>& sorting, T number,
                              std::function<bool (T,T)> cmp =
                            [](T x, T y) -> bool { return x < y; }){
+    Sortings::DefaultVisualizer<std::vector<T>>vis;
+    sorting.SetVisualizer(&vis);
     std::random_device rd;
     std::mt19937 mersenne(rd());
     std::vector<T>random_v;

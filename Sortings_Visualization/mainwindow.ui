@@ -23,10 +23,10 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="5" column="6">
-     <widget class="QLabel" name="label_5">
+    <item row="6" column="1">
+     <widget class="QLabel" name="TheorComplexity">
       <property name="text">
-       <string>Accesses</string>
+       <string/>
       </property>
      </widget>
     </item>
@@ -34,6 +34,37 @@
      <widget class="QLabel" name="label_2">
       <property name="text">
        <string>Comparisons</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="7">
+     <widget class="QLineEdit" name="accesses">
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="1">
+     <widget class="QLabel" name="SortingTime">
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QPushButton" name="pushButton">
+      <property name="text">
+       <string>Computational complexity</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="3">
+     <widget class="QLineEdit" name="comparisons"/>
+    </item>
+    <item row="5" column="4">
+     <widget class="QLabel" name="label_4">
+      <property name="text">
+       <string>Changes</string>
       </property>
      </widget>
     </item>
@@ -76,7 +107,7 @@ background: linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(149,45,253,0.38728
         </widget>
        </item>
        <item>
-        <widget class="QSpinBox" name="spinBox">
+        <widget class="QSpinBox" name="numberOfItems">
          <property name="maximumSize">
           <size>
            <width>16777215</width>
@@ -94,41 +125,6 @@ background: linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(149,45,253,0.38728
          </property>
          <property name="value">
           <number>100</number>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="ShowVisualizationCheckBox">
-         <property name="text">
-          <string>Show visualization </string>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QSlider" name="verticalSlider">
-         <property name="layoutDirection">
-          <enum>Qt::LeftToRight</enum>
-         </property>
-         <property name="minimum">
-          <number>10</number>
-         </property>
-         <property name="maximum">
-          <number>10000</number>
-         </property>
-         <property name="singleStep">
-          <number>10</number>
-         </property>
-         <property name="value">
-          <number>1000</number>
-         </property>
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="tickInterval">
-          <number>10</number>
          </property>
         </widget>
        </item>
@@ -192,15 +188,56 @@ background: linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(149,45,253,0.38728
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="InitiateButton">
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>16777215</height>
-          </size>
-         </property>
+        <widget class="QLabel" name="label_6">
          <property name="text">
-          <string>Initiate</string>
+          <string>Sorting order</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="SortingOrder">
+         <item>
+          <property name="text">
+           <string>Direct Order</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Reverse Order</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_7">
+         <property name="text">
+          <string>Initiate order</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="InitiateOrder">
+         <item>
+          <property name="text">
+           <string>Random</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Almost Sorted</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Almost Sorted in Reverse Order</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_8">
+         <property name="text">
+          <string>Sorting type</string>
          </property>
         </widget>
        </item>
@@ -341,6 +378,19 @@ background: linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(149,45,253,0.38728
         </widget>
        </item>
        <item>
+        <widget class="QPushButton" name="InitiateButton">
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Initiate</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QPushButton" name="SortButton">
          <property name="maximumSize">
           <size>
@@ -356,15 +406,8 @@ background: linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(149,45,253,0.38728
       </layout>
      </widget>
     </item>
-    <item row="5" column="7">
-     <widget class="QLineEdit" name="accesses">
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-    </item>
-    <item row="5" column="3">
-     <widget class="QLineEdit" name="comparisons"/>
+    <item row="5" column="5">
+     <widget class="QLineEdit" name="changes"/>
     </item>
     <item row="0" column="2" rowspan="5" colspan="7">
      <widget class="QGraphicsView" name="graphicsView">
@@ -373,29 +416,12 @@ background: linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(149,45,253,0.38728
       </property>
      </widget>
     </item>
-    <item row="5" column="4">
-     <widget class="QLabel" name="label_4">
+    <item row="5" column="6">
+     <widget class="QLabel" name="label_5">
       <property name="text">
-       <string>Changes</string>
+       <string>Accesses</string>
       </property>
      </widget>
-    </item>
-    <item row="5" column="1">
-     <widget class="QLabel" name="SortingTime">
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-    </item>
-    <item row="6" column="1">
-     <widget class="QLabel" name="TheorComplexity">
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-    </item>
-    <item row="5" column="5">
-     <widget class="QLineEdit" name="changes"/>
     </item>
     <item row="1" column="1">
      <spacer name="verticalSpacer">
@@ -409,13 +435,6 @@ background: linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(149,45,253,0.38728
        </size>
       </property>
      </spacer>
-    </item>
-    <item row="2" column="1">
-     <widget class="QPushButton" name="pushButton">
-      <property name="text">
-       <string>Computational complexity</string>
-      </property>
-     </widget>
     </item>
    </layout>
   </widget>

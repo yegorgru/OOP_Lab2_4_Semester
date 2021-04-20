@@ -53,32 +53,49 @@ void MainWindow::on_SortButton_clicked() {
     ui->changes->setText("0");
     ui->accesses->setText("0");
 
-    m_SortingAndTiming.SetSorting(static_cast<Sortings::SortingName>(ui->SortingNameComboBox->currentIndex()));
+    m_SortingAndTiming.SetSorting(static_cast<Sortings::SortingName>(ui->SortingNameComboBox->currentIndex()),ui->numberOfItems->value() <= 500);
 
     m_Visualizer.ClearQueue();
 
-    ui->SortingTime->setText("Time of sorting: " +  QString::number(m_SortingAndTiming.Run(m_Numbers)) + " milliseconds");
+    if(ui->SortingOrder->currentText() == "Direct Order"){
+        ui->SortingTime->setText("Time of sorting: " +  QString::number(m_SortingAndTiming.Run(m_Numbers, [](int x, int y) { return x < y; })) + " milliseconds");
+    }
+    else if(ui->SortingOrder->currentText() == "Reverse Order"){
+        ui->SortingTime->setText("Time of sorting: " +  QString::number(m_SortingAndTiming.Run(m_Numbers, [](int x, int y) { return x > y; })) + " milliseconds");
+    }
     ui->TheorComplexity->setText("Average computational complexity: " + m_SortingAndTiming.ComplexityCheck(static_cast<Sortings::SortingName>(ui->SortingNameComboBox->currentIndex())));
 
-    if (ui->ShowVisualizationCheckBox->isChecked()) {
+    if (ui->numberOfItems->value() <= 500) {
         ui->groupBox->setEnabled(false);
         m_Visualizer.Play(ui->Slider->value());
     }
     connect(&m_Visualizer, &Visualizer::Sorted, this, [this] { this->ui->groupBox->setEnabled(true); });
 }
 
-void MainWindow::RandomizeNumbers(int size){
+void MainWindow::FormNumbers(){
     m_Numbers.clear();
-    for(int i=0;i<size;i++){
-        m_Numbers.push_back(mersenne()%ui->verticalSlider->value());
+    for(int i=0;i<ui->numberOfItems->value();i++){
+        m_Numbers.push_back(mersenne()%ui->numberOfItems->value());
+    }
+    if(ui->InitiateOrder->currentText() == "Almost Sorted"){
+        std::sort(m_Numbers.begin(), m_Numbers.end());
+        for(size_t i=0;i<m_Numbers.size()/50;i++){
+            std::swap(m_Numbers[mersenne()%m_Numbers.size()], m_Numbers[mersenne()%m_Numbers.size()]);
+        }
+    }
+    else if(ui->InitiateOrder->currentText() == "Almost Sorted in Reverse Order"){
+        std::sort(m_Numbers.rbegin(), m_Numbers.rend());
+        for(size_t i=0;i<m_Numbers.size()/50;i++){
+            std::swap(m_Numbers[mersenne()%m_Numbers.size()], m_Numbers[mersenne()%m_Numbers.size()]);
+        }
     }
 }
 
 void MainWindow::on_InitiateButton_clicked()
 {
-    m_Visualizer.SetMaxValue( ui->verticalSlider->value());
+    m_Visualizer.SetMaxValue(ui->numberOfItems->value());
 
-    RandomizeNumbers(ui->spinBox->value());
+    FormNumbers();
 
     auto size = ui->graphicsView->size();
     m_Visualizer.FormScene(size);

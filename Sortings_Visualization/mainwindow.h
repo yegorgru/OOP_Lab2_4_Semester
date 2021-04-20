@@ -34,8 +34,8 @@ private slots:
 
     void on_pushButton_clicked();
 
-private:
-    void RandomizeNumbers(int numberOfRectangles);
+private:    
+    void FormNumbers();
 
     Ui::MainWindow *ui;
     ParsingWindow * window;

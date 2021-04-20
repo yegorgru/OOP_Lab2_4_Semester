@@ -57,19 +57,22 @@ namespace Sortings{
     template <typename T>
     class DefaultVisualizer{
     public:
-        bool Visualize(Operation operation, typename T::iterator first, std::optional<typename T::iterator> second = std::nullopt){
+        virtual bool Visualize(Operation operation, typename T::iterator first, std::optional<typename T::iterator> second = std::nullopt){
             return true;
         }
     };
 
     template<
         typename Container,
-        typename Visualizer = DefaultVisualizer<Container>,
         typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
     class Sorting{
     public:
-        Sorting(Visualizer* visualizer = nullptr):
-            visualizer(visualizer){}
+        Sorting(DefaultVisualizer<Container>* visualizer = nullptr):
+            visualizer(visualizer) {}
+
+        void SetVisualizer(DefaultVisualizer<Container>* curVisualizer){
+            visualizer = curVisualizer;
+        }
 
         virtual void Sort(typename Container::iterator begin, typename Container::iterator end,
                      std::function<bool (
@@ -79,17 +82,17 @@ namespace Sortings{
                    typename std::iterator_traits<typename Container::iterator>::value_type y) ->
                 bool { return x < y; }) = 0;
     protected:
-        Visualizer* visualizer;
+        DefaultVisualizer<Container>* visualizer;
     };
 
     template<
         typename Container,
         typename Visualizer = DefaultVisualizer<Container>,
         typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
-    class BubbleSort : public Sorting<Container, Visualizer>{
+    class BubbleSort : public Sorting<Container>{
     public:
-        BubbleSort(Visualizer* visualizer = nullptr):
-            Sorting<Container, Visualizer>(visualizer){}
+        BubbleSort(DefaultVisualizer<Container>* visualizer = nullptr):
+            Sorting<Container>(visualizer){}
 
         void Sort(typename Container::iterator begin, typename Container::iterator end,
                   std::function<bool (
@@ -115,10 +118,10 @@ namespace Sortings{
         typename Container,
         typename Visualizer = DefaultVisualizer<Container>,
         typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
-    class InsertionSort : public Sorting<Container, Visualizer>{
+    class InsertionSort : public Sorting<Container>{
     public:
-        InsertionSort(Visualizer* visualizer = nullptr):
-            Sorting<Container, Visualizer>(visualizer){}
+        InsertionSort(DefaultVisualizer<Container>* visualizer = nullptr):
+            Sorting<Container>(visualizer){}
 
         void Sort(typename Container::iterator begin, typename Container::iterator end,
                   std::function<bool (
@@ -153,10 +156,10 @@ namespace Sortings{
         typename Container,
         typename Visualizer = DefaultVisualizer<Container>,
         typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
-    class SelectionSort : public Sorting<Container, Visualizer>{
+    class SelectionSort : public Sorting<Container>{
     public:
         SelectionSort(Visualizer* visualizer = nullptr):
-            Sorting<Container, Visualizer>(visualizer){}
+            Sorting<Container>(visualizer){}
 
         void Sort(typename Container::iterator begin, typename Container::iterator end,
                   std::function<bool (
@@ -194,10 +197,10 @@ namespace Sortings{
         typename Container,
         typename Visualizer = DefaultVisualizer<Container>,
         typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
-    class CycleSort : public Sorting<Container, Visualizer>{
+    class CycleSort : public Sorting<Container>{
     public:
         CycleSort(Visualizer* visualizer = nullptr):
-            Sorting<Container, Visualizer>(visualizer){}
+            Sorting<Container>(visualizer){}
 
         void Sort(typename Container::iterator begin, typename Container::iterator end,
                   std::function<bool (
@@ -249,10 +252,10 @@ namespace Sortings{
         typename Container,
         typename Visualizer = DefaultVisualizer<Container>,
         typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
-    class ShakerSort : public Sorting<Container, Visualizer>{
+    class ShakerSort : public Sorting<Container>{
     public:
         ShakerSort(Visualizer* visualizer = nullptr):
-            Sorting<Container, Visualizer>(visualizer){}
+            Sorting<Container>(visualizer){}
 
         void Sort(typename Container::iterator begin, typename Container::iterator end,
                   std::function<bool (
@@ -292,10 +295,10 @@ namespace Sortings{
         typename Container,
         typename Visualizer = DefaultVisualizer<Container>,
         typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
-    class CombSort : public Sorting<Container, Visualizer>{
+    class CombSort : public Sorting<Container>{
     public:
         CombSort(Visualizer* visualizer = nullptr):
-            Sorting<Container, Visualizer>(visualizer){}
+            Sorting<Container>(visualizer){}
 
         void Sort(typename Container::iterator begin, typename Container::iterator end,
                   std::function<bool (
@@ -329,10 +332,10 @@ namespace Sortings{
         typename Container,
         typename Visualizer = DefaultVisualizer<Container>,
         typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
-    class GnomeSort : public Sorting<Container, Visualizer>{
+    class GnomeSort : public Sorting<Container>{
     public:
         GnomeSort(Visualizer* visualizer = nullptr):
-            Sorting<Container, Visualizer>(visualizer){}
+            Sorting<Container>(visualizer){}
 
         void Sort(typename Container::iterator begin, typename Container::iterator end,
                   std::function<bool (
@@ -367,10 +370,10 @@ namespace Sortings{
         typename Container,
         typename Visualizer = DefaultVisualizer<Container>,
         typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
-    class OddEvenSort : public Sorting<Container, Visualizer>{
+    class OddEvenSort : public Sorting<Container>{
     public:
         OddEvenSort(Visualizer* visualizer = nullptr):
-            Sorting<Container, Visualizer>(visualizer){}
+            Sorting<Container>(visualizer){}
 
         void Sort(typename Container::iterator begin, typename Container::iterator end,
                   std::function<bool (
@@ -395,10 +398,10 @@ namespace Sortings{
         typename Container,
         typename Visualizer = DefaultVisualizer<Container>,
         typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
-    class QuickSort : public Sorting<Container, Visualizer>{
+    class QuickSort : public Sorting<Container>{
     public:
         QuickSort(Visualizer* visualizer = nullptr):
-            Sorting<Container, Visualizer>(visualizer){}
+            Sorting<Container>(visualizer){}
 
         void Sort(typename Container::iterator begin, typename Container::iterator end,
                   std::function<bool (
@@ -438,10 +441,10 @@ namespace Sortings{
         typename Container,
         typename Visualizer = DefaultVisualizer<Container>,
         typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
-    class MergeSort : public Sorting<Container, Visualizer>{
+    class MergeSort : public Sorting<Container>{
     public:
         MergeSort(Visualizer* visualizer = nullptr):
-            Sorting<Container, Visualizer>(visualizer){}
+            Sorting<Container>(visualizer){}
 
         void Sort(typename Container::iterator begin, typename Container::iterator end,
                   std::function<bool (
@@ -504,10 +507,10 @@ namespace Sortings{
         typename Container,
         typename Visualizer = DefaultVisualizer<Container>,
         typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
-    class MergeSortInPlace : public Sorting<Container, Visualizer>{
+    class MergeSortInPlace : public Sorting<Container>{
     public:
         MergeSortInPlace(Visualizer* visualizer = nullptr):
-            Sorting<Container, Visualizer>(visualizer){}
+            Sorting<Container>(visualizer){}
 
         void Sort(typename Container::iterator begin, typename Container::iterator end,
                   std::function<bool (
@@ -559,10 +562,10 @@ namespace Sortings{
         typename Container,
         typename Visualizer = DefaultVisualizer<Container>,
         typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
-    class HeapSort : public Sorting<Container, Visualizer>{
+    class HeapSort : public Sorting<Container>{
     public:
         HeapSort(Visualizer* visualizer = nullptr):
-            Sorting<Container, Visualizer>(visualizer){}
+            Sorting<Container>(visualizer){}
 
         void Sort(typename Container::iterator begin, typename Container::iterator end,
                   std::function<bool (
@@ -620,10 +623,10 @@ namespace Sortings{
         typename Container,
         typename Visualizer = DefaultVisualizer<Container>,
         typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
-    class TimSort : public Sorting<Container, Visualizer>{
+    class TimSort : public Sorting<Container>{
     public:
         TimSort(Visualizer* visualizer = nullptr):
-            Sorting<Container, Visualizer>(visualizer){}
+            Sorting<Container>(visualizer){}
 
         void Sort(typename Container::iterator begin, typename Container::iterator end,
                   std::function<bool (
@@ -634,8 +637,8 @@ namespace Sortings{
                 bool { return x < y; }) override {
             using Iterator = typename Container::iterator;
             const int RUN = 32;
-            InsertionSort<Container, Visualizer> insertionSort(this->visualizer);
-            MergeSort<Container, Visualizer> mergeSort(this->visualizer);
+            InsertionSort<Container> insertionSort(this->visualizer);
+            MergeSort<Container> mergeSort(this->visualizer);
             for (Iterator i = begin; i < end; i+=RUN){
                 insertionSort.Sort(i, std::min(i+RUN, end), cmp);
             }
@@ -656,10 +659,10 @@ namespace Sortings{
         typename Container,
         typename Visualizer = DefaultVisualizer<Container>,
         typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
-    class IntroSort : public Sorting<Container, Visualizer>{
+    class IntroSort : public Sorting<Container>{
     public:
         IntroSort(Visualizer* visualizer = nullptr):
-            Sorting<Container, Visualizer>(visualizer),
+            Sorting<Container>(visualizer),
             m_HeapSort(visualizer) {}
 
         void Sort(typename Container::iterator begin, typename Container::iterator end,
@@ -694,22 +697,23 @@ namespace Sortings{
                 Sort( right, end, cmp );
             }
             else{
+                m_HeapSort.SetVisualizer(this->visualizer);
                 m_HeapSort.Sort(begin, end, cmp);
             }
         }
 
     private:
-        HeapSort<Container, Visualizer> m_HeapSort;
+        HeapSort<Container> m_HeapSort;
     };
 
     template<
         typename Container,
         typename Visualizer = DefaultVisualizer<Container>,
         typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
-    class ShellSort : public Sorting<Container, Visualizer>{
+    class ShellSort : public Sorting<Container>{
     public:
         ShellSort(Visualizer* visualizer = nullptr):
-            Sorting<Container, Visualizer>(visualizer){}
+            Sorting<Container>(visualizer){}
 
         void Sort(typename Container::iterator begin, typename Container::iterator end,
                   std::function<bool (
@@ -747,10 +751,10 @@ namespace Sortings{
         typename Container,
         typename Visualizer = DefaultVisualizer<Container>,
         typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
-    class PigeonholeSort : public Sorting<Container, Visualizer>{
+    class PigeonholeSort : public Sorting<Container>{
     public:
         PigeonholeSort(Visualizer* visualizer = nullptr):
-            Sorting<Container, Visualizer>(visualizer){}
+            Sorting<Container>(visualizer){}
 
         void Sort(typename Container::iterator begin, typename Container::iterator end,
                   std::function<bool (
@@ -797,10 +801,10 @@ namespace Sortings{
         typename Container,
         typename Visualizer = DefaultVisualizer<Container>,
         typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
-    class BucketSort : public Sorting<Container, Visualizer>{
+    class BucketSort : public Sorting<Container>{
     public:
         BucketSort(Visualizer* visualizer = nullptr):
-            Sorting<Container, Visualizer>(visualizer),
+            Sorting<Container>(visualizer),
             m_InsertionSort(visualizer) {}
 
         void Sort(typename Container::iterator begin, typename Container::iterator end,
@@ -814,6 +818,7 @@ namespace Sortings{
             using ValueType = typename std::iterator_traits<typename Container::iterator>::value_type;
 
             if(end - begin < 11){
+                m_InsertionSort.SetVisualizer(this->visualizer);
                 m_InsertionSort.Sort(begin, end, cmp);
                 return;
             }
@@ -853,7 +858,7 @@ namespace Sortings{
         }
 
     private:
-        InsertionSort<Container, Visualizer>m_InsertionSort;
+        InsertionSort<Container>m_InsertionSort;
     };
 
     //cmp only for inheritance
@@ -861,10 +866,10 @@ namespace Sortings{
         typename Container,
         typename Visualizer = DefaultVisualizer<Container>,
         typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
-    class CountingSort : public Sorting<Container, Visualizer>{
+    class CountingSort : public Sorting<Container>{
     public:
         CountingSort(Visualizer* visualizer = nullptr):
-            Sorting<Container, Visualizer>(visualizer){}
+            Sorting<Container>(visualizer){}
 
         void Sort(typename Container::iterator begin, typename Container::iterator end,
                   std::function<bool (
@@ -912,10 +917,10 @@ namespace Sortings{
         typename Container,
         typename Visualizer = DefaultVisualizer<Container>,
         typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
-    class RadixSort : public Sorting<Container, Visualizer>{
+    class RadixSort : public Sorting<Container>{
     public:
         RadixSort(Visualizer* visualizer = nullptr):
-            Sorting<Container, Visualizer>(visualizer){}
+            Sorting<Container>(visualizer){}
 
         void Sort(typename Container::iterator begin, typename Container::iterator end,
                   std::function<bool (
@@ -974,10 +979,10 @@ namespace Sortings{
         typename Container,
         typename Visualizer = DefaultVisualizer<Container>,
         typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
-    class FlashSort : public Sorting<Container, Visualizer>{
+    class FlashSort : public Sorting<Container>{
     public:
         FlashSort(Visualizer* visualizer = nullptr):
-            Sorting<Container, Visualizer>(visualizer),
+            Sorting<Container>(visualizer),
             m_InsertionSort(visualizer) {}
 
         void Sort(typename Container::iterator begin, typename Container::iterator end,
@@ -1070,23 +1075,24 @@ namespace Sortings{
                 if(classSize > threshold && classSize > 32) {
                     Sort(begin+L[K],begin+L[K]+classSize);
                 } else if(classSize > 1){
+                    m_InsertionSort.SetVisualizer(this->visualizer);
                     m_InsertionSort.Sort(begin+L[K],begin+L[K]+classSize);
                 }
             }
         }
 
     private:
-        InsertionSort<Container, Visualizer> m_InsertionSort;
+        InsertionSort<Container> m_InsertionSort;
     };
 
     template<
         typename Container,
         typename Visualizer = DefaultVisualizer<Container>,
         typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
-    class PancakeSort : public Sorting<Container, Visualizer>{
+    class PancakeSort : public Sorting<Container>{
     public:
         PancakeSort(Visualizer* visualizer = nullptr):
-            Sorting<Container, Visualizer>(visualizer){}
+            Sorting<Container>(visualizer){}
 
         void Sort(typename Container::iterator begin, typename Container::iterator end,
                   std::function<bool (
@@ -1130,10 +1136,10 @@ namespace Sortings{
         typename Container,
         typename Visualizer = DefaultVisualizer<Container>,
         typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
-    class BogoSort : public Sorting<Container, Visualizer>{
+    class BogoSort : public Sorting<Container>{
     public:
         BogoSort(Visualizer* visualizer = nullptr):
-            Sorting<Container, Visualizer>(visualizer){}
+            Sorting<Container>(visualizer){}
 
         void Sort(typename Container::iterator begin, typename Container::iterator end,
                   std::function<bool (
@@ -1142,7 +1148,6 @@ namespace Sortings{
                 [](typename std::iterator_traits<typename Container::iterator>::value_type x,
                    typename std::iterator_traits<typename Container::iterator>::value_type y) ->
                 bool { return x < y; }) override {
-            using Iterator = typename Container::iterator;
             if(IsSorted(begin, end, cmp)){
                 return;
             }
@@ -1216,10 +1221,10 @@ namespace Sortings{
         typename Container,
         typename Visualizer = DefaultVisualizer<Container>,
         typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
-    class StoogeSort : public Sorting<Container, Visualizer>{
+    class StoogeSort : public Sorting<Container>{
     public:
         StoogeSort(Visualizer* visualizer = nullptr):
-            Sorting<Container, Visualizer>(visualizer){}
+            Sorting<Container>(visualizer){}
 
         void Sort(typename Container::iterator begin, typename Container::iterator end,
                   std::function<bool (
@@ -1248,10 +1253,10 @@ namespace Sortings{
         typename Container,
         typename Visualizer = DefaultVisualizer<Container>,
         typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
-    class SlowSort : public Sorting<Container, Visualizer>{
+    class SlowSort : public Sorting<Container>{
     public:
         SlowSort(Visualizer* visualizer = nullptr):
-            Sorting<Container, Visualizer>(visualizer){}
+            Sorting<Container>(visualizer){}
 
         void Sort(typename Container::iterator begin, typename Container::iterator end,
                   std::function<bool (
