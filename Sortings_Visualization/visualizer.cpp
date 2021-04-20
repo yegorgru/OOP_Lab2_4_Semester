@@ -10,6 +10,7 @@ Visualizer::Visualizer(std::vector<int>& data):
     m_Timer(new QTimer(this)){
     connect (m_Timer,&QTimer::timeout,this,&Visualizer::PlayItem);
     m_Changes = m_Accesses = m_Comparisons = nullptr;
+    m_CanRun = false;
 }
 
 bool Visualizer::Visualize(Sortings::Operation operation, std::vector<int>::iterator first,
@@ -29,6 +30,7 @@ void Visualizer::Play(int speedOfVisualization){
     std::cout << "Visualization started, " << m_VisualizeQueue.size() << std::endl;
     m_CurPos = 0;
     m_Timer->start(speedOfVisualization);
+    m_CanRun = true;
 }
 
 void Visualizer::PlayItem(){
@@ -41,6 +43,7 @@ void Visualizer::PlayItem(){
         if(m_CurPos == m_VisualizeQueue.size()){
             m_Timer->stop();
             m_Scene->update();
+            m_CanRun = false;
             emit Sorted();
             return;
         }
@@ -81,6 +84,28 @@ void Visualizer::PlayItem(){
         }
         m_Changes->setText(QString::number(ch));
     }
+    m_Scene->update();
+}
+
+void Visualizer::PauseOrContinue(){
+    if(m_CanRun && m_Timer->isActive()){
+        m_Timer->stop();
+    }
+    else if(m_CanRun && !m_Timer->isActive()){
+        m_Timer->start();
+    }
+}
+
+void Visualizer::Clear(){
+    m_Timer->stop();
+    m_CanRun = false;
+    m_VisualizeQueue.clear();
+
+    for(auto i:m_Rects){
+        delete i;
+    }
+    m_Rects.clear();
+    m_Data.clear();
     m_Scene->update();
 }
 

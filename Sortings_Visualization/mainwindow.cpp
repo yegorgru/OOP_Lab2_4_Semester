@@ -33,6 +33,7 @@ MainWindow::MainWindow(QWidget *parent)
     m_Visualizer.SetAccessesItem(ui->accesses);
     m_Visualizer.SetComparisonsItem(ui->comparisons);
 
+    ui->VisualizationControl->setVisible(false);
 }
 
 MainWindow::~MainWindow()
@@ -68,8 +69,10 @@ void MainWindow::on_SortButton_clicked() {
     if (ui->numberOfItems->value() <= 500) {
         ui->groupBox->setEnabled(false);
         m_Visualizer.Play(ui->delay->value());
+        ui->VisualizationControl->setVisible(true);
     }
-    connect(&m_Visualizer, &Visualizer::Sorted, this, [this] { this->ui->groupBox->setEnabled(true); });
+    connect(&m_Visualizer, &Visualizer::Sorted, this, [this] { this->ui->groupBox->setEnabled(true);
+                                                                this->ui->VisualizationControl->setVisible(false);});
 }
 
 void MainWindow::FormNumbers(){
@@ -118,4 +121,17 @@ void MainWindow::on_delay_sliderMoved(int position)
     if(m_Visualizer.GetTimer()){
         m_Visualizer.GetTimer()->setInterval(position);
     }
+}
+
+void MainWindow::on_StopButton_clicked()
+{
+    m_Visualizer.PauseOrContinue();
+}
+
+void MainWindow::on_ClearButton_clicked()
+{
+    m_Visualizer.Clear();
+    ui->VisualizationControl->setVisible(false);
+    this->ui->groupBox->setEnabled(true);
+    ui->SortButton->setEnabled(false);
 }

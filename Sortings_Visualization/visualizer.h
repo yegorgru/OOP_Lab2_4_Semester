@@ -33,6 +33,9 @@ public:
 
     void ClearQueue();
 
+    void PauseOrContinue();
+    void Clear();
+
     QGraphicsScene* GetScene();
     QTimer* GetTimer();
 
@@ -53,6 +56,8 @@ private:
     int m_MaxValue;
     double m_Width;
     size_t m_CurPos;
+
+    bool m_CanRun;
 
     std::vector<VisualizeItem>m_VisualizeQueue;
     QTimer *m_Timer;

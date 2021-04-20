@@ -36,6 +36,10 @@ private slots:
 
     void on_delay_sliderMoved(int position);
 
+    void on_StopButton_clicked();
+
+    void on_ClearButton_clicked();
+
 private:
     void FormNumbers();
 
