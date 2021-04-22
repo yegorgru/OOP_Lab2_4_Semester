@@ -399,9 +399,9 @@ namespace Sortings{
     };
 
     template<
-        typename Container,
-        typename Visualizer = DefaultVisualizer<Container>,
-        typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
+            typename Container,
+            typename Visualizer = DefaultVisualizer<Container>,
+            typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
     class QuickSort : public Sorting<Container>{
     public:
         QuickSort(Visualizer* visualizer = nullptr):
@@ -445,10 +445,10 @@ namespace Sortings{
         typename Container,
         typename Visualizer = DefaultVisualizer<Container>,
         typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
-    class MergeSort : public Sorting<Container>{
+    class AbstractMergeSort : public Sorting<Container>{
     public:
-        MergeSort(Visualizer* visualizer = nullptr):
-            Sorting<Container>(visualizer){}
+        AbstractMergeSort(Visualizer* visualizer = nullptr):
+            Sorting<Container>(visualizer) {}
 
         void Sort(typename Container::iterator begin, typename Container::iterator end,
                   std::function<bool (
@@ -466,11 +466,27 @@ namespace Sortings{
             }
         }
 
+        virtual void Merge(typename Container::iterator begin, typename Container::iterator middle,
+                   typename Container::iterator end,
+                  std::function<bool (
+                  typename std::iterator_traits<typename Container::iterator>::value_type,
+                  typename std::iterator_traits<typename Container::iterator>::value_type)> cmp) = 0;
+    };
+
+    template<
+        typename Container,
+        typename Visualizer = DefaultVisualizer<Container>,
+        typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
+    class MergeSort : public AbstractMergeSort<Container, Visualizer>{
+    public:
+        MergeSort(Visualizer* visualizer = nullptr):
+            AbstractMergeSort<Container, Visualizer>(visualizer) {}
+
         void Merge(typename Container::iterator begin, typename Container::iterator middle,
                    typename Container::iterator end,
                   std::function<bool (
                   typename std::iterator_traits<typename Container::iterator>::value_type,
-                  typename std::iterator_traits<typename Container::iterator>::value_type)> cmp) {
+                  typename std::iterator_traits<typename Container::iterator>::value_type)> cmp) override {
             using Iterator = typename Container::iterator;
             Container left(middle - begin);
             Container right(end - middle);
@@ -511,32 +527,16 @@ namespace Sortings{
         typename Container,
         typename Visualizer = DefaultVisualizer<Container>,
         typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
-    class MergeSortInPlace : public Sorting<Container>{
+    class MergeSortInPlace : public AbstractMergeSort<Container, Visualizer>{
     public:
         MergeSortInPlace(Visualizer* visualizer = nullptr):
-            Sorting<Container>(visualizer){}
-
-        void Sort(typename Container::iterator begin, typename Container::iterator end,
-                  std::function<bool (
-                  typename std::iterator_traits<typename Container::iterator>::value_type,
-                  typename std::iterator_traits<typename Container::iterator>::value_type)> cmp =
-                [](typename std::iterator_traits<typename Container::iterator>::value_type x,
-                   typename std::iterator_traits<typename Container::iterator>::value_type y) ->
-                bool { return x < y; }) override {
-            using Iterator = typename Container::iterator;
-            if (begin < end-1) {
-                Iterator middle = begin + (end - begin) / 2;
-                Sort(begin , middle, cmp);
-                Sort(middle, end, cmp);
-                Merge(begin, middle, end, cmp);
-            }
-        }
+            AbstractMergeSort<Container, Visualizer>(visualizer) {}
 
         void Merge(typename Container::iterator begin, typename Container::iterator middle,
                    typename Container::iterator end,
                   std::function<bool (
                   typename std::iterator_traits<typename Container::iterator>::value_type,
-                  typename std::iterator_traits<typename Container::iterator>::value_type)> cmp) {
+                  typename std::iterator_traits<typename Container::iterator>::value_type)> cmp) override {
             using Iterator = typename Container::iterator;
             using ValueType = typename std::iterator_traits<typename Container::iterator>::value_type;
             Iterator begin2 = middle;
