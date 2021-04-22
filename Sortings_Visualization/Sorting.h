@@ -70,8 +70,12 @@ namespace Sortings{
         Sorting(DefaultVisualizer<Container>* visualizer = nullptr):
             visualizer(visualizer) {}
 
-        void SetVisualizer(DefaultVisualizer<Container>* curVisualizer){
+        virtual void SetVisualizer(DefaultVisualizer<Container>* curVisualizer){
             visualizer = curVisualizer;
+        }
+
+        DefaultVisualizer<Container>* GetVisualizer(){
+            return visualizer;
         }
 
         virtual void Sort(typename Container::iterator begin, typename Container::iterator end,

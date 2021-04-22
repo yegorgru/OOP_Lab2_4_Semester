@@ -52,8 +52,10 @@ private:
     std::vector<uint32_t>m_Numbers;
 
     Visualizer m_Visualizer;
+    Sortings::DefaultVisualizer<std::vector<uint32_t>>m_DefaultVisualizer;
 
-    SortingAndTiming m_SortingAndTiming;
+    Sortings::SortingProxy<std::vector<uint32_t>> m_Sorting;
+    Sortings::SortingAndTiming<std::vector<uint32_t>> m_SortingAndTiming;
 
     bool m_IsInitiated;
 

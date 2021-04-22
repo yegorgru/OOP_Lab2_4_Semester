@@ -16,7 +16,6 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    Decorator.cpp \
     main.cpp \
     mainwindow.cpp \
     parser.cpp \
@@ -28,6 +27,7 @@ HEADERS += \
     Factory.h \
     Singleton.h \
     Sorting.h \
+    SortingProxy.h \
     doctest.h \
     mainwindow.h \
     parser.h \

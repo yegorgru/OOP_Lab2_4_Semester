@@ -7,7 +7,7 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow),
       m_Visualizer(m_Numbers),
-      m_SortingAndTiming(&m_Visualizer),
+      m_SortingAndTiming(&m_Sorting),
       mersenne(rd())
 {
     ui->setupUi(this);
@@ -51,17 +51,22 @@ void MainWindow::on_SortButton_clicked() {
     ui->writes->setText("0");
     ui->reads->setText("0");
 
-    m_SortingAndTiming.SetSorting(static_cast<Sortings::SortingName>(ui->SortingNameComboBox->currentIndex()),m_Numbers.size() <= 500);
+    if(m_Numbers.size() <= 500){
+        m_Sorting.SetVisualizer(&m_Visualizer);
+    }
+    else{
+        m_Sorting.SetVisualizer(&m_DefaultVisualizer);
+    }
 
     m_Visualizer.ClearQueue();
 
     if(ui->SortingOrder->currentText() == "Increasing"){
-        ui->SortingTime->setText("Time of sorting: " +  QString::number(m_SortingAndTiming.Run(m_Numbers, [](uint32_t x, uint32_t y) { return x < y; })) + " milliseconds");
+        ui->SortingTime->setText("Time of sorting: " +  QString::number(m_SortingAndTiming.Sort(static_cast<Sortings::SortingName>(ui->SortingNameComboBox->currentIndex()), m_Numbers.begin(), m_Numbers.end(), [](uint32_t x, uint32_t y) { return x < y; })) + " milliseconds");
     }
     else if(ui->SortingOrder->currentText() == "Decreasing"){
-        ui->SortingTime->setText("Time of sorting: " +  QString::number(m_SortingAndTiming.Run(m_Numbers, [](uint32_t x, uint32_t y) { return x > y; })) + " milliseconds");
+        ui->SortingTime->setText("Time of sorting: " +  QString::number(m_SortingAndTiming.Sort(static_cast<Sortings::SortingName>(ui->SortingNameComboBox->currentIndex()), m_Numbers.begin(), m_Numbers.end(), [](uint32_t x, uint32_t y) { return x > y; })) + " milliseconds");
     }
-    ui->TheorComplexity->setText("Average computational complexity: " + m_SortingAndTiming.ComplexityCheck(static_cast<Sortings::SortingName>(ui->SortingNameComboBox->currentIndex())));
+    ui->TheorComplexity->setText(QString::fromStdString("Average computational complexity: " + m_SortingAndTiming.ComplexityCheck(static_cast<Sortings::SortingName>(ui->SortingNameComboBox->currentIndex()))));
 
     if (m_Numbers.size() <= 500) {
         ui->groupBox->setEnabled(false);
