@@ -1,9 +1,11 @@
 #pragma once
 
 #include <Sorting.h>
-#include <visualizer.h>
+#include "visualizer.h"
 
 #include <QElapsedTimer>
+
+
 
 class SortingAndTiming  {
 public:

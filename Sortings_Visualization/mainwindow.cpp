@@ -1,7 +1,5 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-//#include <iostream>
-//#include <QDesktopWidget>
 #include "parsingwindow.h"
 #include <QElapsedTimer>
 
