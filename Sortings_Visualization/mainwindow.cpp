@@ -12,7 +12,6 @@ MainWindow::MainWindow(QWidget *parent)
       m_SortingAndTiming(&m_Visualizer),
       mersenne(rd())
 {
-
     ui->setupUi(this);
 
     ui->graphicsView->scale(1, -1);
@@ -25,12 +24,12 @@ MainWindow::MainWindow(QWidget *parent)
 
     m_IsInitiated = false;
 
-    ui->changes->setReadOnly(true);
-    ui->accesses->setReadOnly(true);
+    ui->writes->setReadOnly(true);
+    ui->reads->setReadOnly(true);
     ui->comparisons->setReadOnly(true);
 
-    m_Visualizer.SetChangesItem(ui->changes);
-    m_Visualizer.SetAccessesItem(ui->accesses);
+    m_Visualizer.SetChangesItem(ui->writes);
+    m_Visualizer.SetAccessesItem(ui->reads);
     m_Visualizer.SetComparisonsItem(ui->comparisons);
 
     ui->VisualizationControl->setVisible(false);
@@ -51,17 +50,17 @@ void MainWindow::resizeEvent(QResizeEvent *event)
 
 void MainWindow::on_SortButton_clicked() {
     ui->comparisons->setText("0");
-    ui->changes->setText("0");
-    ui->accesses->setText("0");
+    ui->writes->setText("0");
+    ui->reads->setText("0");
 
     m_SortingAndTiming.SetSorting(static_cast<Sortings::SortingName>(ui->SortingNameComboBox->currentIndex()),m_Numbers.size() <= 500);
 
     m_Visualizer.ClearQueue();
 
-    if(ui->SortingOrder->currentText() == "Direct Order"){
+    if(ui->SortingOrder->currentText() == "Increasing"){
         ui->SortingTime->setText("Time of sorting: " +  QString::number(m_SortingAndTiming.Run(m_Numbers, [](uint32_t x, uint32_t y) { return x < y; })) + " milliseconds");
     }
-    else if(ui->SortingOrder->currentText() == "Reverse Order"){
+    else if(ui->SortingOrder->currentText() == "Decreasing"){
         ui->SortingTime->setText("Time of sorting: " +  QString::number(m_SortingAndTiming.Run(m_Numbers, [](uint32_t x, uint32_t y) { return x > y; })) + " milliseconds");
     }
     ui->TheorComplexity->setText("Average computational complexity: " + m_SortingAndTiming.ComplexityCheck(static_cast<Sortings::SortingName>(ui->SortingNameComboBox->currentIndex())));
@@ -72,7 +71,7 @@ void MainWindow::on_SortButton_clicked() {
         ui->VisualizationControl->setVisible(true);
     }
     connect(&m_Visualizer, &Visualizer::Sorted, this, [this] { this->ui->groupBox->setEnabled(true);
-                                                                this->ui->VisualizationControl->setVisible(false);});
+                                                               this->ui->VisualizationControl->setVisible(false);});
 }
 
 void MainWindow::FormNumbers(){

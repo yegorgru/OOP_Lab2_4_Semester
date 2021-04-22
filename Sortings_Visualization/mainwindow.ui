@@ -72,7 +72,7 @@
     <item row="19" column="6">
      <widget class="QLabel" name="label_5">
       <property name="text">
-       <string>Accesses</string>
+       <string>Reads</string>
       </property>
      </widget>
     </item>
@@ -107,7 +107,7 @@
      </widget>
     </item>
     <item row="19" column="7">
-     <widget class="QLineEdit" name="accesses">
+     <widget class="QLineEdit" name="reads">
       <property name="text">
        <string/>
       </property>
@@ -264,18 +264,18 @@
      </widget>
     </item>
     <item row="19" column="5">
-     <widget class="QLineEdit" name="changes"/>
+     <widget class="QLineEdit" name="writes"/>
     </item>
     <item row="10" column="1">
      <widget class="QComboBox" name="SortingOrder">
       <item>
        <property name="text">
-        <string>Direct Order</string>
+        <string>Increasing</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Reverse Order</string>
+        <string>Decreasing</string>
        </property>
       </item>
      </widget>
@@ -303,7 +303,7 @@
     <item row="19" column="4">
      <widget class="QLabel" name="label_4">
       <property name="text">
-       <string>Changes</string>
+       <string>Writes</string>
       </property>
      </widget>
     </item>

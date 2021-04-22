@@ -59,30 +59,30 @@ void Visualizer::PlayItem(){
     }
     else if(item.operation == Sortings::Operation::ACCESS){
         m_Rects[item.first]->setBrush(QBrush(Qt::yellow));
-        long acc = m_Accesses->text().toLong();
-        acc++;
+        long reads = m_Accesses->text().toLong();
+        reads++;
         if(item.second != UINT32_MAX){
             m_Rects[item.second]->setBrush(QBrush(Qt::yellow));
-            acc++;
+            reads++;
         }
-        m_Accesses->setText(QString::number(acc));
+        m_Accesses->setText(QString::number(reads));
     }
     else if(item.operation == Sortings::Operation::CHANGE){
         m_Rects[item.first]->setBrush(QBrush(Qt::green));
-        long ch = m_Changes->text().toLong();
-        ch++;
+        long writes = m_Changes->text().toLong();
+        writes++;
 
         m_Rects[item.first]->setRect(item.first*m_Width, 10,
                                      m_Width, item.firstHeightCoef*m_Scene->height()*0.9);
 
         if(item.second != UINT32_MAX){
             m_Rects[item.second]->setBrush(QBrush(Qt::green));
-            ch++;
+            writes++;
 
             m_Rects[item.second]->setRect(item.second*m_Width, 10,
                                          m_Width, item.secondHeightCoef*m_Scene->height()*0.9);
         }
-        m_Changes->setText(QString::number(ch));
+        m_Changes->setText(QString::number(writes));
     }
     m_Scene->update();
 }
