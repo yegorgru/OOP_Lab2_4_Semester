@@ -26,6 +26,7 @@ SOURCES += \
 HEADERS += \
     Decorator.h \
     Factory.h \
+    Singleton.h \
     Sorting.h \
     doctest.h \
     mainwindow.h \

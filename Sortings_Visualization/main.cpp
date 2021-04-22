@@ -196,11 +196,11 @@ TEST_CASE("testing sortings"){
 int main(int argc, char *argv[])
 {
     doctest::Context context;
-    int res = context.run();
+    //int res = context.run();
 
     QApplication a(argc, argv);
-    MainWindow w;
-    w.setWindowState(Qt::WindowMaximized);
-    w.show();
+    MainWindow* w = MainWindow::Create();
+    w->setWindowState(Qt::WindowMaximized);
+    w->show();
     return a.exec();
 }

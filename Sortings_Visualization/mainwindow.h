@@ -12,11 +12,13 @@
 #include "visualizer.h"
 #include "Decorator.h"
 #include "parsingwindow.h"
+#include "Singleton.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
-class MainWindow : public QMainWindow
+class MainWindow : public QMainWindow, public Singleton<MainWindow>
 {
     Q_OBJECT
 
