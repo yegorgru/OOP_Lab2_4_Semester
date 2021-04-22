@@ -79,3 +79,5 @@ Thumbs.db
 *.dll
 *.exe
 
+build-Sortings_Visualization-Desktop_Qt_5_15_1_MinGW_32_bit-Debug/.qmake.stash
+build-Sortings_Visualization-Desktop_Qt_5_15_1_MinGW_32_bit-Debug/debug/moc_predefs.h
