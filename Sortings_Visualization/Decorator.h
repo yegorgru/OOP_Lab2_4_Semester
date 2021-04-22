@@ -55,7 +55,7 @@ namespace Sortings{
                 performance.push_back("Average performance: O(n²/2^p)");
                 performance.push_back("Worst-case performance: O(n²)");
             }
-            else if ((name == Sortings::SortingName::QUICKSORT) || (name == Sortings::SortingName::SHELLSORT)) {
+            else if ((name == Sortings::SortingName::QUICKSORTPIVOTFIRST) || (name == Sortings::SortingName::SHELLSORT)) {
                 performance.push_back("Best-case performance: O(n log(n))");
                 performance.push_back("Average performance: O(n log(n))");
                 performance.push_back("Worst-case performance: O(n²)");
