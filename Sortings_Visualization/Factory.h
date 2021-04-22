@@ -44,8 +44,8 @@ public:
         case Sortings::SortingName::ODDEVENSORT:{
             return SortingFactory<Container,Sortings::OddEvenSort<Container>>::CreateSorting(visualizer);
         }
-        case Sortings::SortingName::QUICKSORT:{
-            return SortingFactory<Container,Sortings::QuickSort<Container>>::CreateSorting(visualizer);
+        case Sortings::SortingName::QUICKSORTPIVOTFIRST:{
+            return SortingFactory<Container,Sortings::QuickSortPivotFirst<Container>>::CreateSorting(visualizer);
         }
         case Sortings::SortingName::MERGESORT:{
             return SortingFactory<Container,Sortings::MergeSort<Container>>::CreateSorting(visualizer);

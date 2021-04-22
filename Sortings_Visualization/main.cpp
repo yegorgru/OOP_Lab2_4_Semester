@@ -134,7 +134,7 @@ TEST_CASE("testing sortings"){
     Sortings::OddEvenSort<std::vector<long>>oddEven;
     TestSorting<long>(oddEven, 1000);
     TestSorting<long>(oddEven, 1000, [](long x, long y){return x > y;});
-    Sortings::QuickSort<std::vector<long>>quick;
+    Sortings::QuickSortPivotFirst<std::vector<long>>quick;
     TestSorting<long>(quick, 10000);
     TestSorting<long>(quick, 10000, [](long x, long y){return x > y;});
     Sortings::MergeSort<std::vector<long>>merge;

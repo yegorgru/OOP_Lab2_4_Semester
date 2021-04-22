@@ -35,7 +35,7 @@ namespace Sortings{
             {
                 return "O(n²)";
             }
-            else if ((name == Sortings::SortingName::COMBSORT) || (name == Sortings::SortingName::QUICKSORT) || (name == Sortings::SortingName::MERGESORT)
+            else if ((name == Sortings::SortingName::COMBSORT) || (name == Sortings::SortingName::QUICKSORTPIVOTFIRST) || (name == Sortings::SortingName::MERGESORT)
                        || (name == Sortings::SortingName::MERGESORTINPLACE) || (name == Sortings::SortingName::HEAPSORT) || (name == Sortings::SortingName::TIMSORT)
                        || (name == Sortings::SortingName::INTROSORT) || (name == Sortings::SortingName::SHELLSORT) || (name == Sortings::SortingName::BUCKETSORT))
             {
