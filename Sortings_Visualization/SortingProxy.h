@@ -20,10 +20,11 @@ namespace Sortings{
                 typename std::iterator_traits<typename Container::iterator>::value_type y) ->
                 bool { return x < y; }){
             if(m_CurrentSortingName != sorting){
+                DefaultVisualizer<Container>* vis = nullptr;
                 if(m_Sorting){
+                    vis = m_Sorting->GetVisualizer();
                     delete m_Sorting;
                 }
-                DefaultVisualizer<Container>* vis = m_Sorting->GetVisualizer();
                 m_Sorting = Factory<std::vector<uint32_t>>::CreateSorting(sorting);
                 m_Sorting->SetVisualizer(vis);
                 m_CurrentSortingName = sorting;

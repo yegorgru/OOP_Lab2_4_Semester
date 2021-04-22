@@ -36,7 +36,7 @@ namespace Sortings{
         COMBSORT,
         GNOMESORT,
         ODDEVENSORT,
-        QUICKSORT,
+        QUICKSORTPIVOTFIRST,
         MERGESORT,
         MERGESORTINPLACE,
         HEAPSORT,
@@ -402,10 +402,10 @@ namespace Sortings{
             typename Container,
             typename Visualizer = DefaultVisualizer<Container>,
             typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
-    class QuickSort : public Sorting<Container>{
+    class AbstractQuickSort : public Sorting<Container>{
     public:
-        QuickSort(Visualizer* visualizer = nullptr):
-            Sorting<Container>(visualizer){}
+        AbstractQuickSort(Visualizer* visualizer = nullptr):
+            Sorting<Container>(visualizer) {}
 
         void Sort(typename Container::iterator begin, typename Container::iterator end,
                   std::function<bool (
@@ -414,30 +414,55 @@ namespace Sortings{
                 [](typename std::iterator_traits<typename Container::iterator>::value_type x,
                    typename std::iterator_traits<typename Container::iterator>::value_type y) ->
                 bool { return x < y; }) override {
-            using Iterator = typename Container::iterator;
             if (begin != end){
-                Iterator left  = begin;
-                Iterator right = end;
-                if(this->visualizer) this->visualizer->Visualize(Operation::ACCESS, left);
-                Iterator pivot = left++;
-                while( left != right ) {
-                  if( (this->visualizer ? this->visualizer->Visualize(Operation::COMPARISON, left) : true) && cmp( *left, *pivot ) ) {
-                     ++left;
-                  } else {
-                     while( left != --right &&
-                            (this->visualizer ?
-                             this->visualizer->Visualize(Operation::COMPARISON, right)
-                             : true) && cmp( *pivot, *right ) );
-                     std::swap( *left, *right );
-                     if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, left, right);
-                  }
-                }
-                --left;
-                std::swap( *begin, *left );
-                if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, left, begin);
-                Sort( begin, left, cmp );
-                Sort( right, end, cmp );
+                auto pivot = ChoosePivot(begin, end);
+                PartitionAndSort(begin, end, pivot, cmp);
             }
+        }
+
+        virtual typename Container::iterator ChoosePivot(typename Container::iterator begin, typename Container::iterator end) = 0;
+
+        virtual void PartitionAndSort(typename Container::iterator begin, typename Container::iterator end,
+                          typename Container::iterator pivot,
+                          std::function<bool (
+                          typename std::iterator_traits<typename Container::iterator>::value_type,
+                          typename std::iterator_traits<typename Container::iterator>::value_type)> cmp){
+            using Iterator = typename Container::iterator;
+            Iterator left  = begin;
+            Iterator right = end;
+            left++;
+            while( left != right ) {
+              if( (this->visualizer ? this->visualizer->Visualize(Operation::COMPARISON, left) : true) && cmp( *left, *pivot ) ) {
+                 ++left;
+              } else {
+                 while( left != --right &&
+                        (this->visualizer ?
+                         this->visualizer->Visualize(Operation::COMPARISON, right)
+                         : true) && cmp( *pivot, *right ) );
+                 std::swap( *left, *right );
+                 if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, left, right);
+              }
+            }
+            --left;
+            std::swap( *begin, *left );
+            if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, left, begin);
+            Sort( begin, left, cmp );
+            Sort( right, end, cmp );
+        }
+    };
+
+    template<
+            typename Container,
+            typename Visualizer = DefaultVisualizer<Container>,
+            typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
+    class QuickSortPivotFirst : public AbstractQuickSort<Container, Visualizer>{
+    public:
+        QuickSortPivotFirst(Visualizer* visualizer = nullptr):
+            AbstractQuickSort<Container, Visualizer>(visualizer) {}
+
+        virtual typename Container::iterator ChoosePivot(typename Container::iterator begin, typename Container::iterator end) override {
+            if(this->visualizer) this->visualizer->Visualize(Operation::ACCESS, begin);
+            return begin;
         }
     };
 
