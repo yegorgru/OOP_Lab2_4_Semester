@@ -1,32 +1,78 @@
 #ifndef PARSER_H
 #define PARSER_H
-#include <stack>
-#include <map>
-#include <functional>
-#include <utility>
-#include <stdlib.h>
+#include <algorithm>
 #include <iostream>
-#include <queue>
-#include <QString>
+#include <list>
+#include <string>
 using namespace std;
-class parser
+class Component
 {
+protected:
+    Component *parent_;
 public:
-    parser();
-    parser(QString input);
-     void Parse(string input);
-     double calc(queue<char> in);
-     queue<char> to_revpol(const QString& input);
-     int prior(char& in);
-     bool is_digit(char& in);
-     bool is_var(char& in);
-     bool is_oper(char& in);
-     queue<char> gen;
-private:
+    virtual ~Component() {}
+    void SetParent(Component* parent){
+        this->parent_ = parent;
+    }
+    Component * GetParent() const {
+        return this->parent_;
+    }
 
+    virtual void Add(Component *component){}
+    virtual void Remove(Component *component){}
+    virtual bool IsComposite() const {
+        return false;
+      }
+    virtual string Operation() const  {}
 
 
 
 };
+class Leaf :public Component{
+public:
+ std::string Operation() const override {
+   return "Leaf";
+ }
+};
+class Composite :public Component {
+protected:
+       list<Component*> children_;
+public:
+       void Add(Component *component) override {
+           this->children_.push_back(component);
+           component->SetParent(this);
+         }
+       void Remove(Component *component) override {
+           children_.remove(component);
+           component->SetParent(nullptr);
+         }
+       bool IsComposite() const override {
+           return true;
+         }
+       string Operation() const override {
+           string result;
+           for (const Component *c : children_) {
+             if (c == children_.back()) {
+               result += c->Operation();
+             } else {
+               result += c->Operation() + "+";
+             }
+           }
+           return "Branch(" + result + ")";
+         }
 
+};
+void Simple_tree(Component *component) {
+
+  cout << "RESULT: " << component->Operation();
+
+}
+void Complex_tree(Component *component1, Component *component2) {
+
+  if (component1->IsComposite()) {
+    component1->Add(component2);
+  }
+  cout << "RESULT: " << component1->Operation();
+
+}
 #endif // PARSER_H
