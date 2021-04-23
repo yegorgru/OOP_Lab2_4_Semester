@@ -10,7 +10,7 @@
 
 #define DOCTEST_CONFIG_IMPLEMENT
 #include "doctest.h"
-
+/*
 template <typename T>
 void TestSortingBasic(Sortings::Sorting<std::vector<T>>& sorting,
                       std::function<bool (T,T)> cmp =
@@ -27,7 +27,7 @@ void TestSortingBasic(Sortings::Sorting<std::vector<T>>& sorting,
     std::vector<int> copy_vv = vv;
     sorting.Sort(vv.begin(), vv.end(), [](int x, int y){ return x > y;});
     std::sort(copy_vv.begin(), copy_vv.end(), [](int x, int y){ return x > y;});
-    CHECK(vv == copy_vv);*/
+    CHECK(vv == copy_vv);
 }
 
 template <typename T>
@@ -201,7 +201,7 @@ TEST_CASE("testing sortings"){
     TestSorting<long>(slow, 100);
     TestSorting<long>(slow, 100, [](long x, long y){return x > y;});
 }
-
+*/
 int main(int argc, char *argv[])
 {
     doctest::Context context;

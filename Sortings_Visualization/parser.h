@@ -1,82 +1,100 @@
 #ifndef PARSER_H
 #define PARSER_H
+
 #include <algorithm>
 #include <iostream>
 #include <list>
 #include <string>
 using namespace std;
-class Component
-{
-protected:
-    Component *parent_;
-public:
-   virtual ~Component() {}
+class Component {
 
-    void SetParent(Component* parent){
-        this->parent_ = parent;
+ protected:
+  Component *parent_;
+private:
+  int k = 0;
+ public:
+  Component() {
+      k++;
+  }
+  int GetValue(){
+      return k;
+  }
+  virtual ~Component() {}
+  void SetParent(Component *parent) {
+    this->parent_ = parent;
+  }
+  Component *GetParent() const {
+    return this->parent_;
+  }
+
+  virtual void Add(Component *component) {}
+  virtual void Remove(Component *component) {}
+
+  virtual bool IsComposite() const {
+    return false;
+  }
+
+  virtual std::string Operation() const = 0;
+};
+
+class Leaf : public Component {
 
 
+ public:
 
-    }
-    Component * GetParent() const {
-        return this->parent_;
-    }
 
-    virtual void Add(Component *component);
-    virtual void Remove(Component *component);
-    virtual bool IsComposite() const {
-        return false;
+  std::string Operation() const override {
+    return "Argument";
+  }
+};
+
+class Composite : public Component {
+
+ protected:
+  std::list<Component *> children_;
+
+ public:
+
+  void Add(Component *component) override {
+    this->children_.push_back(component);
+    component->SetParent(this);
+  }
+
+  void Remove(Component *component) override {
+    children_.remove(component);
+    component->SetParent(nullptr);
+  }
+  bool IsComposite() const override {
+    return true;
+  }
+
+  std::string Operation() const override {
+    std::string result;
+    for (const Component *c : children_) {
+      if (c == children_.back()) {
+        result += c->Operation();
+      } else {
+        result += c->Operation() + "+";
       }
-    virtual string Operation() const = 0;
-
-
-
+    }
+    return "Loop(" + result + ")";
+  }
 };
-class Leaf :public Component{
-public:
- string Operation() const override {
-   return "Argument";
- }
-};
-class Composite :public Component {
-protected:
-       list<Component*> children_;
-public:
-       void Add(Component *component) override {
-           this->children_.push_back(component);
-           component->SetParent(this);
-         }
-       void Remove(Component *component) override {
-           children_.remove(component);
-           component->SetParent(nullptr);
-         }
-       bool IsComposite() const override {
-           return true;
-         }
-       string Operation() const override {
-           string result;
-           for (const Component *c : children_) {
-             if (c == children_.back()) {
-               result += c->Operation();
-             } else {
-               result += c->Operation() + "+";
-             }
-           }
-           return "Loop(" + result + ")";
-         }
 
-};
 string Simple_tree(Component *component) {
-string result;
-  //cout << "RESULT: " << component->Operation();
-return result =component->Operation() ;
+    string result;
+ // std::cout << "RESULT: " << component->Operation();
+return  result = component->Operation();
 }
+
+
 string Complex_tree(Component *component1, Component *component2) {
 string result;
   if (component1->IsComposite()) {
     component1->Add(component2);
   }
-  //cout << "RESULT: " <<
-  return result = component1->Operation();
+  //std::cout << "RESULT: " << component1->Operation();
+    return result = component1->Operation();
 }
+
 #endif // PARSER_H

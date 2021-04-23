@@ -1,8 +1,6 @@
 //#include "parser.h"
 
-
-//parser::parser(){
+//Parser::Parser()
+//{
 
 //}
-
-
