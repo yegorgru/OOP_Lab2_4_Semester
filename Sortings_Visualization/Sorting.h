@@ -414,40 +414,39 @@ namespace Sortings{
                 [](typename std::iterator_traits<typename Container::iterator>::value_type x,
                    typename std::iterator_traits<typename Container::iterator>::value_type y) ->
                 bool { return x < y; }) override {
-            if (begin != end){
+            if (end - begin > 1){
                 auto pivot = ChoosePivot(begin, end);
-                PartitionAndSort(begin, end, pivot, cmp);
+                auto p = Partition(begin, end, pivot, cmp);
+                Sort(begin, p, cmp);
+                Sort(p+1, end, cmp);
             }
         }
 
-        virtual typename Container::iterator ChoosePivot(typename Container::iterator begin, typename Container::iterator end) = 0;
+        virtual typename  Container::iterator ChoosePivot(typename Container::iterator begin, typename Container::iterator end) = 0;
 
-        virtual void PartitionAndSort(typename Container::iterator begin, typename Container::iterator end,
+        virtual typename Container::iterator Partition(typename Container::iterator begin, typename Container::iterator end,
                           typename Container::iterator pivot,
                           std::function<bool (
                           typename std::iterator_traits<typename Container::iterator>::value_type,
                           typename std::iterator_traits<typename Container::iterator>::value_type)> cmp){
             using Iterator = typename Container::iterator;
-            Iterator left  = begin;
-            Iterator right = end;
-            left++;
-            while( left != right ) {
-              if( (this->visualizer ? this->visualizer->Visualize(Operation::COMPARISON, left) : true) && cmp( *left, *pivot ) ) {
-                 ++left;
-              } else {
-                 while( left != --right &&
-                        (this->visualizer ?
-                         this->visualizer->Visualize(Operation::COMPARISON, right)
-                         : true) && cmp( *pivot, *right ) );
-                 std::swap( *left, *right );
-                 if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, left, right);
-              }
+            Iterator left = begin, right = end;
+            while(true){
+                while(cmp(*(++left), *pivot)){
+                  if ( left == end-1) break;
+                  if(this->visualizer) this->visualizer->Visualize(Operation::COMPARISON, left, pivot);
+                }
+                while (cmp(*pivot, *(--right))){
+                  if ( right == begin ) break;
+                  if(this->visualizer) this->visualizer->Visualize(Operation::COMPARISON, right, pivot);
+                }
+                if (left >= right) break;
+                std::swap(*left,*right);
+                if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, left, right);
             }
-            --left;
-            std::swap( *begin, *left );
-            if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, left, begin);
-            Sort( begin, left, cmp );
-            Sort( right, end, cmp );
+            std::swap(*pivot,*right);
+            if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, pivot, right);
+            return right;
         }
     };
 
