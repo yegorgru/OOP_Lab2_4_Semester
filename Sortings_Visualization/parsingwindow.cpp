@@ -24,12 +24,13 @@ ParsingWindow::~ParsingWindow()
 
 void ParsingWindow::on_pushButton_clicked()
 {
+
  Component *simple = new Leaf;
    std::cout << "Client: I've got a simple component:\n";
-   Simple_tree(simple);
+   //Simple_tree(simple);
  //QString qstr = QString::fromStdString(Simple_tree(simple));
 
-     // ui->theorComplexity->setText(qstr);
+      //ui->theorComplexity->setText(qstr);
       std::cout << "\n\n";
       Component *tree = new Composite;
         Component *branch1 = new Composite;
@@ -44,7 +45,14 @@ void ParsingWindow::on_pushButton_clicked()
             tree->Add(branch2);
             std::cout << "Client: Now I've got a composite tree:\n";
             Simple_tree(tree);
+            QString qstr = QString::fromStdString(Simple_tree(tree));
+            ui->theorComplexity->setText(qstr);
             std::cout << "\n\n";
+            std::cout << "Client: I don't need to check the components classes even when managing the tree:\n";
+              Complex_tree(tree, simple);
+              QString qstr1 = QString::fromStdString(Complex_tree(tree,simple));
+              std::cout << "\n";
+
             delete simple;
               delete tree;
               delete branch1;

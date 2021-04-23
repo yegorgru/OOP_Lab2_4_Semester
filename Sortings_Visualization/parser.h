@@ -10,28 +10,32 @@ class Component
 protected:
     Component *parent_;
 public:
-    virtual ~Component() {}
+   virtual ~Component() {}
+
     void SetParent(Component* parent){
         this->parent_ = parent;
+
+
+
     }
     Component * GetParent() const {
         return this->parent_;
     }
 
-    virtual void Add(Component *component){}
-    virtual void Remove(Component *component){}
+    virtual void Add(Component *component);
+    virtual void Remove(Component *component);
     virtual bool IsComposite() const {
         return false;
       }
-    virtual string Operation() const  {}
+    virtual string Operation() const = 0;
 
 
 
 };
 class Leaf :public Component{
 public:
- std::string Operation() const override {
-   return "Leaf";
+ string Operation() const override {
+   return "Argument";
  }
 };
 class Composite :public Component {
@@ -58,21 +62,21 @@ public:
                result += c->Operation() + "+";
              }
            }
-           return "Branch(" + result + ")";
+           return "Loop(" + result + ")";
          }
 
 };
-void Simple_tree(Component *component) {
-
-  cout << "RESULT: " << component->Operation();
-
+string Simple_tree(Component *component) {
+string result;
+  //cout << "RESULT: " << component->Operation();
+return result =component->Operation() ;
 }
-void Complex_tree(Component *component1, Component *component2) {
-
+string Complex_tree(Component *component1, Component *component2) {
+string result;
   if (component1->IsComposite()) {
     component1->Add(component2);
   }
-  cout << "RESULT: " << component1->Operation();
-
+  //cout << "RESULT: " <<
+  return result = component1->Operation();
 }
 #endif // PARSER_H
