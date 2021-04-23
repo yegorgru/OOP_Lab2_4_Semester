@@ -47,6 +47,15 @@ public:
         case Sortings::SortingName::QUICKSORTPIVOTFIRST:{
             return SortingFactory<Container,Sortings::QuickSortPivotFirst<Container>>::CreateSorting(visualizer);
         }
+        case Sortings::SortingName::QUICKSORTPIVOTLAST:{
+            return SortingFactory<Container,Sortings::QuickSortPivotLast<Container>>::CreateSorting(visualizer);
+        }
+        case Sortings::SortingName::QUICKSORTPIVOTMIDDLE:{
+            return SortingFactory<Container,Sortings::QuickSortPivotMiddle<Container>>::CreateSorting(visualizer);
+        }
+        case Sortings::SortingName::QUICKSORTPIVOTRANDOM:{
+            return SortingFactory<Container,Sortings::QuickSortPivotRandom<Container>>::CreateSorting(visualizer);
+        }
         case Sortings::SortingName::MERGESORT:{
             return SortingFactory<Container,Sortings::MergeSort<Container>>::CreateSorting(visualizer);
         }

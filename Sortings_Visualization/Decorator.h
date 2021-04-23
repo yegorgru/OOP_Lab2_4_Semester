@@ -28,8 +28,8 @@ namespace Sortings{
             return (float)time.nsecsElapsed()/1000000;
         }
 
-        std::vector<QString> ComplexityCheck(Sortings::SortingName name){
-            std::vector<QString> performance;
+        std::vector<std::string> ComplexityCheck(Sortings::SortingName name){
+            std::vector<std::string> performance;
             if ((name == Sortings::SortingName::BUBBLESORT ) || (name == Sortings::SortingName::INSERTIONSORT) ||
                     (name == Sortings::SortingName::SELECTIONSORT) || (name == Sortings::SortingName::SHAKERSORT) ||
                     (name == Sortings::SortingName::GNOMESORT) || (name == Sortings::SortingName::ODDEVENSORT) ||
@@ -55,7 +55,7 @@ namespace Sortings{
                 performance.push_back("Average performance: O(n²/2^p)");
                 performance.push_back("Worst-case performance: O(n²)");
             }
-            else if ((name == Sortings::SortingName::QUICKSORTPIVOTFIRST) || (name == Sortings::SortingName::SHELLSORT)) {
+            else if ((name == Sortings::SortingName::QUICKSORTPIVOTRANDOM) ||(name == Sortings::SortingName::QUICKSORTPIVOTMIDDLE) ||(name == Sortings::SortingName::QUICKSORTPIVOTLAST) || (name == Sortings::SortingName::QUICKSORTPIVOTFIRST) || (name == Sortings::SortingName::SHELLSORT)) {
                 performance.push_back("Best-case performance: O(n log(n))");
                 performance.push_back("Average performance: O(n log(n))");
                 performance.push_back("Worst-case performance: O(n²)");

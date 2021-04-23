@@ -9,6 +9,7 @@
 #include <map>
 #include <list>
 #include <cmath>
+#include <random>
 
 template<typename Container>
 using IteratorCategoryOf =
@@ -37,6 +38,9 @@ namespace Sortings{
         GNOMESORT,
         ODDEVENSORT,
         QUICKSORTPIVOTFIRST,
+        QUICKSORTPIVOTLAST,
+        QUICKSORTPIVOTMIDDLE,
+        QUICKSORTPIVOTRANDOM,
         MERGESORT,
         MERGESORTINPLACE,
         HEAPSORT,
@@ -431,20 +435,22 @@ namespace Sortings{
                           typename std::iterator_traits<typename Container::iterator>::value_type)> cmp){
             using Iterator = typename Container::iterator;
             Iterator left = begin, right = end;
+            std::swap(*pivot, *begin);
+            if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, begin, pivot);
             while(true){
-                while(cmp(*(++left), *pivot)){
+                while(cmp(*(++left), *begin)){
                   if ( left == end-1) break;
-                  if(this->visualizer) this->visualizer->Visualize(Operation::COMPARISON, left, pivot);
+                  if(this->visualizer) this->visualizer->Visualize(Operation::COMPARISON, left, begin);
                 }
-                while (cmp(*pivot, *(--right))){
+                while (cmp(*begin, *(--right))){
                   if ( right == begin ) break;
-                  if(this->visualizer) this->visualizer->Visualize(Operation::COMPARISON, right, pivot);
+                  if(this->visualizer) this->visualizer->Visualize(Operation::COMPARISON, right, begin);
                 }
                 if (left >= right) break;
                 std::swap(*left,*right);
                 if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, left, right);
             }
-            std::swap(*pivot,*right);
+            std::swap(*begin,*right);
             if(this->visualizer) this->visualizer->Visualize(Operation::CHANGE, pivot, right);
             return right;
         }
@@ -462,6 +468,57 @@ namespace Sortings{
         virtual typename Container::iterator ChoosePivot(typename Container::iterator begin, typename Container::iterator end) override {
             if(this->visualizer) this->visualizer->Visualize(Operation::ACCESS, begin);
             return begin;
+        }
+    };
+
+    template<
+            typename Container,
+            typename Visualizer = DefaultVisualizer<Container>,
+            typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
+    class QuickSortPivotRandom : public AbstractQuickSort<Container, Visualizer>{
+    public:
+        QuickSortPivotRandom(Visualizer* visualizer = nullptr):
+            AbstractQuickSort<Container, Visualizer>(visualizer),
+            mersenne(rd()) {}
+
+        virtual typename Container::iterator ChoosePivot(typename Container::iterator begin, typename Container::iterator end) override {
+            size_t pivot = mersenne()%(end-begin);
+            if(this->visualizer) this->visualizer->Visualize(Operation::ACCESS, begin+pivot);
+            return begin + pivot;
+        }
+
+    private:
+        std::random_device rd;
+        std::mt19937 mersenne;
+    };
+
+    template<
+            typename Container,
+            typename Visualizer = DefaultVisualizer<Container>,
+            typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
+    class QuickSortPivotLast : public AbstractQuickSort<Container, Visualizer>{
+    public:
+        QuickSortPivotLast(Visualizer* visualizer = nullptr):
+            AbstractQuickSort<Container, Visualizer>(visualizer) {}
+
+        virtual typename Container::iterator ChoosePivot(typename Container::iterator begin, typename Container::iterator end) override {
+            if(this->visualizer) this->visualizer->Visualize(Operation::ACCESS, end-1);
+            return end-1;
+        }
+    };
+
+    template<
+            typename Container,
+            typename Visualizer = DefaultVisualizer<Container>,
+            typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
+    class QuickSortPivotMiddle : public AbstractQuickSort<Container, Visualizer>{
+    public:
+        QuickSortPivotMiddle(Visualizer* visualizer = nullptr):
+            AbstractQuickSort<Container, Visualizer>(visualizer) {}
+
+        virtual typename Container::iterator ChoosePivot(typename Container::iterator begin, typename Container::iterator end) override {
+            if(this->visualizer) this->visualizer->Visualize(Operation::ACCESS, begin + (end-begin)/2);
+            return begin + (end-begin)/2;
         }
     };
 

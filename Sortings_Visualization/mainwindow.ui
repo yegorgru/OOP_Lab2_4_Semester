@@ -265,6 +265,21 @@
       </item>
       <item>
        <property name="text">
+        <string>QuickSortPivotLast</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>QuickSortPivotMiddle</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>QuickSortPivotRandom</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
         <string>MergeSort</string>
        </property>
       </item>

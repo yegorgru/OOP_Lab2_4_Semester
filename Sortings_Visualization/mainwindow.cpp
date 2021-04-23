@@ -66,11 +66,11 @@ void MainWindow::on_SortButton_clicked() {
     else if(ui->SortingOrder->currentText() == "Decreasing"){
         ui->SortingTime->setText("Time of sorting: " +  QString::number(m_SortingAndTiming.Sort(static_cast<Sortings::SortingName>(ui->SortingNameComboBox->currentIndex()), m_Numbers.begin(), m_Numbers.end(), [](uint32_t x, uint32_t y) { return x > y; })) + " milliseconds");
     }
-    std::vector<QString> performance = m_SortingAndTiming.ComplexityCheck(static_cast<Sortings::SortingName>(ui->SortingNameComboBox->currentIndex()));
+    std::vector<std::string> performance = m_SortingAndTiming.ComplexityCheck(static_cast<Sortings::SortingName>(ui->SortingNameComboBox->currentIndex()));
 
-    ui->BestCase->setText(performance[0]);
-    ui->Average->setText(performance[1]);
-    ui->WorstCase->setText(performance[2]);
+    ui->BestCase->setText(QString::fromStdString(performance[0]));
+    ui->Average->setText(QString::fromStdString(performance[1]));
+    ui->WorstCase->setText(QString::fromStdString(performance[2]));
 
     if (m_Numbers.size() <= 500) {
         ui->groupBox->setEnabled(false);
