@@ -202,6 +202,9 @@ TEST_CASE("testing sortings"){
     TestSorting<long>(slow, 100, [](long x, long y){return x > y;});
 }
 */
+/// <summary>
+/// Sort Visualization
+/// </summary>
 int main(int argc, char *argv[])
 {
     doctest::Context context;
