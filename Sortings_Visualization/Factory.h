@@ -1,22 +1,47 @@
+/**
+\file
+\brief .h file with implementation of factory pattern for sortings
+*/
+
 #pragma once
 
 #include "Sorting.h"
 
+/**
+\brief template class that creates sortings
+*/
 template<
     typename Container, typename Sorting,
     typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
 class SortingFactory{
 public:
+
+    /**
+    \brief Creates new sorting
+
+    \param visualizer optional parameter - pointer on visalizer
+    \return new sorting
+    */
     static Sorting* CreateSorting(Sortings::DefaultVisualizer<Container>* visualizer = nullptr){
         return new Sorting(visualizer);
     }
 };
 
+/**
+\brief template class that invoke SortingFactory::Create factory
+*/
 template<
     typename Container,
     typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
 class Factory{
 public:
+    /**
+    \brief Creates new sorting
+
+    \param name determines type of sorting
+    \param visualizer optional parameter - pointer on visalizer
+    \return new sorting
+    */
     static Sortings::Sorting<Container>* CreateSorting(Sortings::SortingName name,
                     Sortings::DefaultVisualizer<Container>* visualizer = nullptr){
         switch(name){

@@ -1,3 +1,8 @@
+/**
+\file
+\brief .cpp file with implementation of Visualizer class
+*/
+
 #include "visualizer.h"
 
 #include <iostream>

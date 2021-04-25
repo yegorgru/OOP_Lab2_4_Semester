@@ -1,3 +1,8 @@
+/**
+\file
+\brief .h file with implementation of sorting algorithms
+*/
+
 #pragma once
 
 #include <type_traits>
@@ -11,16 +16,24 @@
 #include <cmath>
 #include <random>
 
+/**
+\brief helps to find out what categoty iterator has
+*/
 template<typename Container>
 using IteratorCategoryOf =
     typename std::iterator_traits<typename Container::iterator>::iterator_category;
 
+/**
+\brief helps to find out if iterator has random access iterator
+*/
 template<typename Container>
 using HaveRandomAccessIterator =
     std::is_base_of<std::random_access_iterator_tag, IteratorCategoryOf<Container>>;
 
 namespace Sortings{
-
+    /**
+    \brief enum for operation types in sortings
+    */
     enum class Operation{
         COMPARISON = 0,
         ACCESS,
@@ -28,6 +41,9 @@ namespace Sortings{
         END
     };
 
+    /**
+    \brief enum with name of every implemented sorting
+    */
     enum class SortingName{
         BUBBLESORT,
         INSERTIONSORT,
@@ -58,30 +74,68 @@ namespace Sortings{
         SLOWSORT
     };
 
+    /**
+    \brief basic class for visualizers that can be passed in sortings
+    */
     template <typename T>
     class DefaultVisualizer{
     public:
+        /**
+        \brief visualizes some operation in sorting
+
+        \param operation kind of Operation
+        \param first first iterator to visualize
+        \param seconf optional parameter - second iterator to visualize
+        \return always true in order to be able be passed in loop or if
+        */
         virtual bool Visualize(Operation operation, typename T::iterator first, std::optional<typename T::iterator> second = std::nullopt){
             return true;
         }
     };
 
+    /**
+    \brief basic class of sorting
+
+    pure virtual class
+    */
     template<
         typename Container,
         typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
     class Sorting{
     public:
+
+        /**
+        \brief constructs
+        */
         Sorting(DefaultVisualizer<Container>* visualizer = nullptr):
             visualizer(visualizer) {}
 
+        /**
+        \brief sets visualizer
+
+        \param curVisualizer pointer on new visualizer
+        \note virtual method
+        */
         virtual void SetVisualizer(DefaultVisualizer<Container>* curVisualizer){
             visualizer = curVisualizer;
         }
 
+        /**
+        \brief visualizer getter
+
+        \return pointer on current visualizer
+        */
         DefaultVisualizer<Container>* GetVisualizer(){
             return visualizer;
         }
 
+        /**
+        \brief sorts given range
+
+        \param begin first iterator in sorted range
+        \param end next after last iterator of sorted range
+        \param cmp - optional function - comparator of elements, operator < by default
+        */
         virtual void Sort(typename Container::iterator begin, typename Container::iterator end,
                      std::function<bool (
                      typename std::iterator_traits<typename Container::iterator>::value_type,
@@ -90,15 +144,18 @@ namespace Sortings{
                    typename std::iterator_traits<typename Container::iterator>::value_type y) ->
                 bool { return x < y; }) = 0;
     protected:
-        DefaultVisualizer<Container>* visualizer;
+        DefaultVisualizer<Container>* visualizer;   ///<pointer on current visualizer
     };
 
+    /**
+    \brief class that implements bubble sort algorithm, inheritant of Sorting
+    */
     template<
         typename Container,
         typename Visualizer = DefaultVisualizer<Container>,
         typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
     class BubbleSort : public Sorting<Container>{
-    public:
+    public:  
         BubbleSort(DefaultVisualizer<Container>* visualizer = nullptr):
             Sorting<Container>(visualizer){}
 
@@ -122,6 +179,9 @@ namespace Sortings{
         }
     };
 
+    /**
+    \brief class that implements insertion sort algorithm, inheritant of Sorting
+    */
     template<
         typename Container,
         typename Visualizer = DefaultVisualizer<Container>,
@@ -160,6 +220,9 @@ namespace Sortings{
         }
     };
 
+    /**
+    \brief class that implements selection sort algorithm, inheritant of Sorting
+    */
     template<
         typename Container,
         typename Visualizer = DefaultVisualizer<Container>,
@@ -201,6 +264,9 @@ namespace Sortings{
         }
     };
 
+    /**
+    \brief class that implements cycle sort algorithm, inheritant of Sorting
+    */
     template<
         typename Container,
         typename Visualizer = DefaultVisualizer<Container>,
@@ -256,6 +322,9 @@ namespace Sortings{
         }
     };
 
+    /**
+    \brief class that implements shaker sort algorithm, inheritant of Sorting
+    */
     template<
         typename Container,
         typename Visualizer = DefaultVisualizer<Container>,
@@ -299,6 +368,9 @@ namespace Sortings{
         }
     };
 
+    /**
+    \brief class that implements comb sort algorithm, inheritant of Sorting
+    */
     template<
         typename Container,
         typename Visualizer = DefaultVisualizer<Container>,
@@ -336,6 +408,9 @@ namespace Sortings{
         }
     };
 
+    /**
+    \brief class that implements gnome sort algorithm, inheritant of Sorting
+    */
     template<
         typename Container,
         typename Visualizer = DefaultVisualizer<Container>,
@@ -374,6 +449,9 @@ namespace Sortings{
         }
     };
 
+    /**
+    \brief class that implements odd even sort algorithm, inheritant of Sorting
+    */
     template<
         typename Container,
         typename Visualizer = DefaultVisualizer<Container>,
@@ -402,6 +480,11 @@ namespace Sortings{
         }
     };
 
+    /**
+    \brief abstract class for quick sort algorithm
+
+    \note Sorting inheritant
+    */
     template<
             typename Container,
             typename Visualizer = DefaultVisualizer<Container>,
@@ -426,8 +509,25 @@ namespace Sortings{
             }
         }
 
+        /**
+        \brief method that chooses pivot element
+
+        \param begin first iterator in sorted range
+        \param end next after last iterator of sorted range
+        \note pure virtual method
+        */
         virtual typename  Container::iterator ChoosePivot(typename Container::iterator begin, typename Container::iterator end) = 0;
 
+        /**
+        \brief method that chooses pivot element
+
+        \param begin first iterator in sorted range
+        \param end next after last iterator of sorted range
+        \param pivot pivot element iterator
+        \param cmp - optional function - comparator of elements, operator < by default
+        \note virtual method
+        \return iterator bound after partition
+        */
         virtual typename Container::iterator Partition(typename Container::iterator begin, typename Container::iterator end,
                           typename Container::iterator pivot,
                           std::function<bool (
@@ -456,6 +556,12 @@ namespace Sortings{
         }
     };
 
+    /**
+    \brief class that implements quicksort algorithm
+
+    \note inheritant of AbstractQuickSort
+    \note pivot - first element in range
+    */
     template<
             typename Container,
             typename Visualizer = DefaultVisualizer<Container>,
@@ -465,12 +571,25 @@ namespace Sortings{
         QuickSortPivotFirst(Visualizer* visualizer = nullptr):
             AbstractQuickSort<Container, Visualizer>(visualizer) {}
 
+        /**
+        \brief overrided method that chooses pivot
+
+        \param begin first iterator in sorted range
+        \param end next after last iterator of sorted range
+        \return begin
+        */
         virtual typename Container::iterator ChoosePivot(typename Container::iterator begin, typename Container::iterator end) override {
             if(this->visualizer) this->visualizer->Visualize(Operation::ACCESS, begin);
             return begin;
         }
     };
 
+    /**
+    \brief class that implements quicksort algorithm
+
+    \note inheritant of AbstractQuickSort
+    \note pivot - random element of range
+    */
     template<
             typename Container,
             typename Visualizer = DefaultVisualizer<Container>,
@@ -481,6 +600,13 @@ namespace Sortings{
             AbstractQuickSort<Container, Visualizer>(visualizer),
             mersenne(rd()) {}
 
+        /**
+        \brief overrided method that chooses pivot
+
+        \param begin first iterator in sorted range
+        \param end next after last iterator of sorted range
+        \return random iterator from the rabge [begin, end)
+        */
         virtual typename Container::iterator ChoosePivot(typename Container::iterator begin, typename Container::iterator end) override {
             size_t pivot = mersenne()%(end-begin);
             if(this->visualizer) this->visualizer->Visualize(Operation::ACCESS, begin+pivot);
@@ -492,6 +618,12 @@ namespace Sortings{
         std::mt19937 mersenne;
     };
 
+    /**
+    \brief class that implements quicksort algorithm
+
+    \note inheritant of AbstractQuickSort
+    \note pivot - last element in range
+    */
     template<
             typename Container,
             typename Visualizer = DefaultVisualizer<Container>,
@@ -501,12 +633,25 @@ namespace Sortings{
         QuickSortPivotLast(Visualizer* visualizer = nullptr):
             AbstractQuickSort<Container, Visualizer>(visualizer) {}
 
+        /**
+        \brief overrided method that chooses pivot
+
+        \param begin first iterator in sorted range
+        \param end next after last iterator of sorted range
+        \return end-1
+        */
         virtual typename Container::iterator ChoosePivot(typename Container::iterator begin, typename Container::iterator end) override {
             if(this->visualizer) this->visualizer->Visualize(Operation::ACCESS, end-1);
             return end-1;
         }
     };
 
+    /**
+    \brief class that implements quicksort algorithm
+
+    \note inheritant of AbstractQuickSort
+    \note pivot - middle element in range
+    */
     template<
             typename Container,
             typename Visualizer = DefaultVisualizer<Container>,
@@ -516,12 +661,24 @@ namespace Sortings{
         QuickSortPivotMiddle(Visualizer* visualizer = nullptr):
             AbstractQuickSort<Container, Visualizer>(visualizer) {}
 
+        /**
+        \brief overrided method that chooses pivot
+
+        \param begin first iterator in sorted range
+        \param end next after last iterator of sorted range
+        \return middle iterator in range [begin, end)
+        */
         virtual typename Container::iterator ChoosePivot(typename Container::iterator begin, typename Container::iterator end) override {
             if(this->visualizer) this->visualizer->Visualize(Operation::ACCESS, begin + (end-begin)/2);
             return begin + (end-begin)/2;
         }
     };
 
+    /**
+    \brief abstract class for merge sort algorithm
+
+    \note Sorting inheritant
+    */
     template<
         typename Container,
         typename Visualizer = DefaultVisualizer<Container>,
@@ -547,6 +704,15 @@ namespace Sortings{
             }
         }
 
+        /**
+        \brief method that chooses pivot element
+
+        \param begin first iterator of first part
+        \param begin first iterator of second part
+        \param end next after last iterator of second part
+        \param cmp - function - comparator of elements
+        \note pure virtual method
+        */
         virtual void Merge(typename Container::iterator begin, typename Container::iterator middle,
                    typename Container::iterator end,
                   std::function<bool (
@@ -554,6 +720,12 @@ namespace Sortings{
                   typename std::iterator_traits<typename Container::iterator>::value_type)> cmp) = 0;
     };
 
+    /**
+    \brief class that implements merge sort algorithm
+
+    \note inheritant of AbstractMergeSort
+    \note sorts not in place
+    */
     template<
         typename Container,
         typename Visualizer = DefaultVisualizer<Container>,
@@ -563,6 +735,9 @@ namespace Sortings{
         MergeSort(Visualizer* visualizer = nullptr):
             AbstractMergeSort<Container, Visualizer>(visualizer) {}
 
+        /**
+        \brief overrided merge method
+        */
         void Merge(typename Container::iterator begin, typename Container::iterator middle,
                    typename Container::iterator end,
                   std::function<bool (
@@ -604,6 +779,12 @@ namespace Sortings{
         }
     };
 
+    /**
+    \brief class that implements merge sort algorithm
+
+    \note inheritant of AbstractMergeSort
+    \note sorts in place
+    */
     template<
         typename Container,
         typename Visualizer = DefaultVisualizer<Container>,
@@ -613,6 +794,9 @@ namespace Sortings{
         MergeSortInPlace(Visualizer* visualizer = nullptr):
             AbstractMergeSort<Container, Visualizer>(visualizer) {}
 
+        /**
+        \brief overrided merge method
+        */
         void Merge(typename Container::iterator begin, typename Container::iterator middle,
                    typename Container::iterator end,
                   std::function<bool (
@@ -643,6 +827,9 @@ namespace Sortings{
         }
     };
 
+    /**
+    \brief class that implements heap sort algorithm, inheritant of Sorting
+    */
     template<
         typename Container,
         typename Visualizer = DefaultVisualizer<Container>,
@@ -703,7 +890,11 @@ namespace Sortings{
         }
     };
 
-    //Combine
+    /**
+    \brief class that implements tim sort algorithm, inheritant of Sorting
+
+    \note combines merge sort and insertion sort, base for insertion sort = 32
+    */
     template<
         typename Container,
         typename Visualizer = DefaultVisualizer<Container>,
@@ -739,7 +930,11 @@ namespace Sortings{
         }
     };
 
-    //Combine
+    /**
+    \brief class that implements intro sort algorithm, inheritant of Sorting
+
+    \note combined with heap sort, base for heap sort = 32
+    */
     template<
         typename Container,
         typename Visualizer = DefaultVisualizer<Container>,
@@ -791,6 +986,9 @@ namespace Sortings{
         HeapSort<Container> m_HeapSort;
     };
 
+    /**
+    \brief class that implements shell sort algorithm, inheritant of Sorting
+    */
     template<
         typename Container,
         typename Visualizer = DefaultVisualizer<Container>,
@@ -831,7 +1029,11 @@ namespace Sortings{
         }
     };
 
-    //cmp only for inheritance
+    /**
+    \brief class that implements pigeonhole sort algorithm, inheritant of Sorting
+
+    \note using cmp only for correct inheritance
+    */
     template<
         typename Container,
         typename Visualizer = DefaultVisualizer<Container>,
@@ -881,7 +1083,12 @@ namespace Sortings{
         }
     };
 
-    //cmp only for inheritance
+    /**
+    \brief class that implements bucket sort algorithm, inheritant of Sorting
+
+    \note using cmp only for correct inheritance
+    \note combined with insertion sort, base for insertion sort = 10
+    */
     template<
         typename Container,
         typename Visualizer = DefaultVisualizer<Container>,
@@ -946,7 +1153,11 @@ namespace Sortings{
         InsertionSort<Container>m_InsertionSort;
     };
 
-    //cmp only for inheritance
+    /**
+    \brief class that implements counting sort algorithm, inheritant of Sorting
+
+    \note using cmp only for correct inheritance
+    */
     template<
         typename Container,
         typename Visualizer = DefaultVisualizer<Container>,
@@ -997,7 +1208,11 @@ namespace Sortings{
         }
     };
 
-    //cmp only for inheritance
+    /**
+    \brief class that implements radix sort algorithm, inheritant of Sorting
+
+    \note using cmp only for correct inheritance
+    */
     template<
         typename Container,
         typename Visualizer = DefaultVisualizer<Container>,
@@ -1059,7 +1274,12 @@ namespace Sortings{
         }
     };
 
-    //cmp only for inheritance
+    /**
+    \brief class that implements flash sort algorithm, inheritant of Sorting
+
+    \note using cmp only for correct inheritance
+    \note combined with insertion sort, base for it = 32
+    */
     template<
         typename Container,
         typename Visualizer = DefaultVisualizer<Container>,
@@ -1168,8 +1388,13 @@ namespace Sortings{
 
     private:
         InsertionSort<Container> m_InsertionSort;
-    };
+    }; 
 
+    /**
+    \brief class that implements pancake sort algorithm, inheritant of Sorting
+
+    \note try to minimize flips, not comparisons
+    */
     template<
         typename Container,
         typename Visualizer = DefaultVisualizer<Container>,
@@ -1217,6 +1442,11 @@ namespace Sortings{
         }
     };
 
+    /**
+    \brief class that implements bogo sort algorithm, inheritant of Sorting
+
+    \note very slow
+    */
     template<
         typename Container,
         typename Visualizer = DefaultVisualizer<Container>,
@@ -1302,6 +1532,11 @@ namespace Sortings{
         }
     };
 
+    /**
+    \brief class that implements stooge sort algorithm, inheritant of Sorting
+
+    \note slow algorithm
+    */
     template<
         typename Container,
         typename Visualizer = DefaultVisualizer<Container>,
@@ -1334,6 +1569,11 @@ namespace Sortings{
         }
     };
 
+    /**
+    \brief class that implements slow sort algorithm, inheritant of Sorting
+
+    \note it's really slow:)
+    */
     template<
         typename Container,
         typename Visualizer = DefaultVisualizer<Container>,
