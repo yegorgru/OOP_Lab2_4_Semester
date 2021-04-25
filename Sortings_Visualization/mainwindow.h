@@ -47,6 +47,9 @@ private slots:
     /// </summary>
     void on_ComplexityButton_clicked();
 
+    /// <summary>
+    /// Visualization speed control function
+    /// </summary>
     void on_delay_sliderMoved(int position);
     /// <summary>
     /// The method is called when the "Stop" button is clicked in the ui
