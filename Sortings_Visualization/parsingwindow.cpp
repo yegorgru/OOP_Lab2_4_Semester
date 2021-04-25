@@ -21,7 +21,9 @@ ParsingWindow::~ParsingWindow()
 {
     delete ui;
 }
-
+/// <summary>
+/// Method for clicking a button which calculates computational complexity
+/// </summary>
 void ParsingWindow::on_pushButton_clicked()
 {
 
@@ -79,6 +81,12 @@ void ParsingWindow::on_pushButton_clicked()
 //    test(in,pos,complexity_quadr, complexity_log, temp_comp_quad);
 // ui->theorComplexity->setText("О(n^"  + QString::number(complexity_quadr) + ") " + QString::number(complexity_log) );
 }
+/// <summary>
+/// Method which parse the string.
+/// </summary>
+/// <returns>
+/// A value of computational complexity.
+/// </returns>
 int parser(const string& input)
 {
     int flag = 0;
