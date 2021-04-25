@@ -27,19 +27,34 @@ public:
     ~MainWindow();
 
 protected:
+    /// <summary>
+    /// Responsible for changing the window
+    /// </summary>
     void resizeEvent(QResizeEvent* event);
 
 private slots:
+    /// <summary>
+    /// The method is called when the "Sort" button is clicked in the ui
+    /// </summary>
     void on_SortButton_clicked();
-
+    /// <summary>
+    /// The method is called when the "Initiate" button is clicked in the ui
+    /// </summary>
     void on_InitiateButton_clicked();
 
-    void on_pushButton_clicked();
+    /// <summary>
+    /// The method is called when the "Computational complexity" button is clicked in the ui
+    /// </summary>
+    void on_ComplexityButton_clicked();
 
     void on_delay_sliderMoved(int position);
-
+    /// <summary>
+    /// The method is called when the "Stop" button is clicked in the ui
+    /// </summary>
     void on_StopButton_clicked();
-
+    /// <summary>
+    /// The method is called when the "Clear" button is clicked in the ui
+    /// </summary>
     void on_ClearButton_clicked();
 
 private:

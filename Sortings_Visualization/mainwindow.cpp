@@ -118,7 +118,7 @@ void MainWindow::on_InitiateButton_clicked()
     m_IsInitiated = true;
 }
 
-void MainWindow::on_pushButton_clicked()
+void MainWindow::on_ComplexityButton_clicked()
 {
     //hide();
     window = new ParsingWindow(this);

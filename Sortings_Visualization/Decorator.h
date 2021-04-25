@@ -8,14 +8,26 @@
 
 
 namespace Sortings{
+/// <summary>
+/// The class that implements the "Decorator" parser. Sortings are complemented by the time of their work and also the theoretical complexity.
+/// </summary>
     template<
         typename Container,
         typename std::enable_if<HaveRandomAccessIterator<Container>::value>::type* = nullptr>
     class SortingAndTiming{
     public:
+        /// <summary>
+        /// The constructor does only one thing: sets the SortingProxy pointer.
+        /// </summary>
         SortingAndTiming(SortingProxy<std::vector<uint32_t>>*sorting):
             m_Sorting(sorting) {}
 
+        /// <summary>
+        /// The method starts sorting and measures the running time.
+        /// </summary>
+        /// <returns>
+        ///  Returns the running time of sorting
+        /// </returns>
         float Sort(SortingName name, typename Container::iterator begin, typename Container::iterator end,
                   std::function<bool (
                   typename std::iterator_traits<typename Container::iterator>::value_type,
@@ -28,6 +40,12 @@ namespace Sortings{
             return (float)time.nsecsElapsed()/1000000;
         }
 
+        /// <summary>
+        /// The method is used to find out the theoretical complexity of a given sort.
+        /// </summary>
+        /// <returns>
+        ///  Returns a vector of 3 elements: the complexity of the best sort, average, and worst.
+        /// </returns>
         std::vector<std::string> ComplexityCheck(Sortings::SortingName name){
             std::vector<std::string> performance;
             if ((name == Sortings::SortingName::BUBBLESORT ) || (name == Sortings::SortingName::INSERTIONSORT) ||
@@ -45,9 +63,9 @@ namespace Sortings{
                 performance.push_back("Worst-case performance: O(n²)");
             }
             else if ( (name == Sortings::SortingName::STOOGESORT) ) {
-                performance.push_back("Best-case performance: ---");
-                performance.push_back("Average performance: ---");
-                performance.push_back("Worst-case performance: ---");
+                performance.push_back("Best-case performance: n^2,71");
+                performance.push_back("Average performance: n^2,71");
+                performance.push_back("Worst-case performance: n^2,71");
             }
             else if (name == Sortings::SortingName::COMBSORT)
             {
