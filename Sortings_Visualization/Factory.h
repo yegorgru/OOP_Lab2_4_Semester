@@ -126,6 +126,9 @@ public:
         case Sortings::SortingName::SLOWSORT:{
             return SortingFactory<Container,Sortings::SlowSort<Container>>::CreateSorting(visualizer);
         }
+        case Sortings::SortingName::TREESORT:{
+            return SortingFactory<Container,Sortings::TreeSort<Container>>::CreateSorting(visualizer);
+        }
         }
     }
 };

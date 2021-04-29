@@ -353,6 +353,11 @@
         <string>SlowSort</string>
        </property>
       </item>
+      <item>
+       <property name="text">
+        <string>TreeSort</string>
+       </property>
+      </item>
      </widget>
     </item>
     <item row="23" column="7">

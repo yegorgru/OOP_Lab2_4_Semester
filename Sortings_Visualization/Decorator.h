@@ -62,7 +62,7 @@ namespace Sortings{
                 performance.push_back("Average performance: O(n²)");
                 performance.push_back("Worst-case performance: O(n²)");
             }
-            else if ( (name == Sortings::SortingName::STOOGESORT) ) {
+            else if ( name == Sortings::SortingName::STOOGESORT ) {
                 performance.push_back("Best-case performance: n^2,71");
                 performance.push_back("Average performance: n^2,71");
                 performance.push_back("Worst-case performance: n^2,71");
@@ -88,7 +88,7 @@ namespace Sortings{
                 performance.push_back("Average performance: O(n log(n))");
                 performance.push_back("Worst-case performance: O(n²)");
             }
-            else if ((name == Sortings::SortingName::MERGESORT) || (name == Sortings::SortingName::MERGESORTINPLACE) ||
+            else if ((name == Sortings::SortingName::TREESORT) || (name == Sortings::SortingName::MERGESORT) || (name == Sortings::SortingName::MERGESORTINPLACE) ||
                      (name == Sortings::SortingName::HEAPSORT) || (name == Sortings::SortingName::INTROSORT)) {
                 performance.push_back("Best-case performance: O(n log(n))");
                 performance.push_back("Average performance: O(n log(n))");

@@ -194,6 +194,10 @@ TEST_CASE("testing sortings"){
     Sortings::SlowSort<std::vector<long>>slow;
     TestSorting<long>(slow, 100);
     TestSorting<long>(slow, 100, [](long x, long y){return x > y;});
+
+    Sortings::TreeSort<std::vector<long>>tree;
+    TestSorting<long>(tree, 100);
+    TestSorting<long>(tree, 100, [](long x, long y){return x > y;});
 }
 
 /// <summary>
