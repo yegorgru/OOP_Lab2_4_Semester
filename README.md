@@ -3,4 +3,4 @@
 Visualization of the most popular or funny sorting algorithms
 
 
-Documentation: https://yegorgru.github.io/OOP_Lab2_4_Semester/Documentation/html/index.html
+Documentation: https://yegorgru.github.io/Sortings_Visualization/Documentation/html/index.html
